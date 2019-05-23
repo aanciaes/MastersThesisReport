@@ -1,0 +1,94 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% chapter3.tex
+%% NOVA thesis document file
+%%
+%% Chapter with a short laext tutorial and examples
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{3.	Approach to Elaboration Phase}
+\label{cha:approach_to_elaboration_phase}
+
+This Chapter aims at exemplifying how to do common stuff with \LaTeX. We also show some stuff which is not that common! ;)
+
+Please, use these examples as a starting point, but you should always consider using the \emph{Big Oracle} (aka, \href{http://www.google.com}{Google}, your best friend) to search for additional information or alternative ways for achieving similar results.
+
+\section{Refinement of Objectives and Contributions} % (fold)
+\label{sec:refinement_of_objectives_and_contributions}
+
+Refinement of objectives and contributions
+
+% section document_structure (end)
+
+
+\section{System Model Approach} % (fold)
+\label{sec:system_model_approach}
+
+System model approach
+
+% section dealing_with_bibliogrpahy (end)
+
+
+\section{Planned Architecture and Implementation} % (fold)
+\label{sec:planned_architecture_and_implementation}
+
+Planned architecture and implementation
+
+% section inserting_tables (end)
+
+
+\section{Planned Testbench Environments} % (fold)
+\label{sec:planned_testbench_environments}
+
+Planned testbench environments
+
+% section importing_images (end)
+
+
+\section{Relevant Evaluation Criteria} % (fold)
+\label{sec:relevant_evaluation_criteria}
+
+% \subsection{Inserting Figures Wrapped with text} % (fold)
+% \label{ssec:inserting_images_wrapped_with_text}
+% 
+% You should only use this feature is \emph{really} necessary. This means, you have a very small image, that will look lonely just with text above and below.
+% 
+% In this case, you must use the \verb!wrapfiure! package.  To use \verb!wrapfig!, you must first add this to the preamble:
+% 
+% \begin{wrapfigure}{l}{2.5cm}
+%   \centering
+%     \includegraphics[width=2cm]{snowman-vectorial}
+%   \caption{A snow-man}
+% \end{wrapfigure}	
+% 
+% \noindent\verb!\usepackage{wrapfig}!\\
+% This then gives you access to:\\
+% \verb!\begin{wrapfigure}[lineheight]{alignment}{width}!\\
+% Alignment can normally be either ``l'' for left, or ``r'' for right. Lowercase ``l'' or ``r'' forces the figure to start precisely where specified (and may cause it to run over page breaks), while capital ``L'' or ``R'' allows the figure to float. If you defined your document as twosided, the alignment can also be ``i'' for inside or ``o'' for outside, as well as ``I'' or ``O''. The width is obviously the width of the figure. The example above was introduced with:
+% \lstset{language=TeX, morekeywords={\begin,\includegraphics,\caption}, caption=Wrapfig Example, label=lst:latex_example}
+% \begin{lstlisting}
+% 	\begin{wrapfigure}{l}{2.5cm}
+% 	  \centering
+% 	    \includegraphics[width=2cm]{snowman-vectorial}
+% 	  \caption{A snow-man}
+% 	\end{wrapfigure}	
+% \end{lstlisting}
+
+% subsection inserting_images_wrapped_with_text (end)
+
+% section floats_figures_and_captions (end)
+
+\lipsum[1-3]
+
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{One sub-figure\label{fig:leftsubfig}}%
+    {\includegraphics[width=0.5\linewidth]{knitting-vectorial}}%
+  \subcaptionbox{Another sub-figure\label{fig:rightsubfig}}%
+    {\includegraphics[width=0.5\linewidth]{knitting-vectorial}}%
+  \caption{A figure with two sub-figures!}
+  \label{fig:fig2subfig}
+\end{figure}
+
+\textbf{And this is a small text that references the Figure~\ref{fig:fig2subfig} and its Subfigures~\ref{fig:leftsubfig} and~\ref{fig:rightsubfig}.}
+
+\lipsum[1-3]
