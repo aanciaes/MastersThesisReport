@@ -35,7 +35,7 @@
 
 % The default option marked with (*)
 \documentclass[
-  docdegree=phd,        % phd(*), phdplan, phdprop, msc, mscplan, bsc
+  docdegree=msc,        % phd(*), phdplan, phdprop, msc, mscplan, bsc
   school=nova/fct,      % nova/fct(*), nova/fcsh, nova/ims, ul/ist, ul/fc
   lang=en,              % en(*), fr, it, pt
   % coverlang=en,         % defaults to main language
@@ -49,7 +49,7 @@
   secondcover=false,     % false=don't true=include the aftercover file (even if exists)
   aftercover=false,     % false=don't true=include the aftercover file (even if exists)
   linkscolor=darkblue,  % darkblue, black (Set to 'black' for PRINTING)
-  printcommittee=true,  % set to 'false' from submitted versins who should not have 
+  printcommittee=false,  % set to 'false' from submitted versins who should not have 
                         % the list of committee memebers
   spine=false,          % (Set to 'true' for PRINTING the book spine)
   cdcover=false,         % (Set to 'true' for PRINTING the CD cover)
@@ -160,12 +160,12 @@
 %%============================================================
 
 
-\title[Trusted and Privacy-Enhanced In-Memory Data Store]{Trusted and Privacy-Enhanced In-Memory Data Store}
+\title[Trusted and Privacy-Enhanced In-Memory Data Stores]{Trusted and Privacy-Enhanced In-Memory Data Stores}
 
 % Autor
 % use [f] for female and [m] for male
 \authorname[m]{Miguel de Lemos Dias Rosa Anciães}{Miguel Anciães}
-\authordegree{Master of Science (???)}
+\authordegree{Bachelor of Computer Science and Engineering}
 
 % Date
 \datemonth{\DTMmonthname{\month}}
@@ -175,7 +175,7 @@
 % Advisers
 % use "\\&" if necessary to break the lines in the apprpriate place
 % use [f] for female and [m] for male
-\adviser[f]{John Doe Adviser Name}{Full Professor}{\\& NOVA University of Lisbon} 
+\adviser[f]{Henrique João Lopes Domingos}{Full Professor}{\\& NOVA University of Lisbon} 
 % you may use "\newline" to force a new line
 % \adviser[m]{John Doe Male Adviser Name}{Associate\\& Professor}{Some University Somewhere}
 % \adviser[m]{John Doe Third Adviser Name}{Associate\\& Professor}{Some University Somewhere}
@@ -183,23 +183,23 @@
 
 % Co-Advisers (maximum of 9)
 % use [f] for female and [m] for male
-\coadviser[f]{John Doe Co-Adviser Name}{Associate\\& Professor}{NOVA University of Lisbon}
+%\coadviser[f]{John Doe Co-Adviser Name}{Associate\\& Professor}{NOVA University of Lisbon}
 % \coadviser[f]{[Nome da co-orientadora 2]}{[Profª.\ Auxiliar]}{[Universidade Nova de Lisboa]}
 
 
 % committee (maximum of 9 elements)
 % Use [c] for chair, [r] for raporteurs, [a] for advisers, [m] or nothing for remaining members
 % Chair of the committee
-\committee[c,m]{Name of the committee chairperson}
+%\committee[c,m]{Name of the committee chairperson}
 % Main raporteurs
-\committee[r,f]{Name of a raporteur}
-\committee[r,f]{Name of another raporteur}
+%\committee[r,f]{Name of a raporteur}
+%\committee[r,f]{Name of another raporteur}
 % Advisers
-\committee[a,f]{Name of an adviser}
-\committee[a,f]{Name of another adviser}
+%\committee[a,f]{Name of an adviser}
+%\committee[a,f]{Name of another adviser}
 % Other members of the committee - include the Adviser in this list
-\committee[m,m]{Another member of the committee}
-\committee[m,f]{Yet another member of the committee}
+%\committee[m,m]{Another member of the committee}
+%\committee[m,f]{Yet another member of the committee}
 
 %%------------------------------------------------------------
 %% All the names inside braces below sould correspond to a file
