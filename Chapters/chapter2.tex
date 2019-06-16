@@ -8,11 +8,11 @@
 \chapter{Related Work}
 \label{cha:related_work}
 
-This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisions between those exiting technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
+This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisons between those exiting technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
 
-First, in section 2.1 we explain and discuss for the first time the definition of a Key-Value Store. We  present some use cases, current technology available, their diferencies and most importantly their security models and concerns.
+First, in section 2.1 we explain and discuss for the first time the definition of a Key-Value Store. We  present some use cases, current technology available, their differences and most importantly their security models and concerns.
 
-Having discussed the software, section 2.2 will then address the environment on where the previously talked software will run, most specifically the hardware. It explains and present the diferent ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
+Having discussed the software, section 2.2 will then address the environment on where the previously talked software will run, most specifically the hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
 
 Section 2.3 will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. 
 This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module
@@ -26,12 +26,19 @@ Along the next chapter we summarize the main relevant ideas that can be retained
 \section{Key-Value Stores} % (fold)
 \label{sec:key-value_stores}
 
-bla bla bla
-% section introduction (end)
+Key value stores are the simplest form of what computer scientists call a database. The simplicity lies on associating a value to a certain key and storing that pair, as well as retrieving the values of known keys. \cite{db-engine:1}
 
-% ====================
-% = Folder Structure =
-% ====================
+\lstset{language=Bash, caption=Redis Set \& Get, label=lst:redisSetGet}
+\begin{lstlisting}
+redis> SET mykey "Hello"
+"OK"
+redis> GET mykey
+"Hello"
+redis> 
+\end{lstlisting}
+
+Is this simplicity that makes this technology very attractive to developers. The ease of use, its high performance and speed are key aspects in favour of this technologies. However, simply working with keys and values might not be enough to more complex applications, and that is why Key-Value store products are introducing new features in order to make them appealing to a broader mass of developers, always keeping them lightweight and fast.
+
 \subsection{Memcached} % (fold)
 \label{ssec:memcached}
 
