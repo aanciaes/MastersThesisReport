@@ -37,7 +37,22 @@ redis> GET mykey
 redis> 
 \end{lstlisting}
 
-Is this simplicity that makes this technology very attractive to developers. The ease of use, its high performance and speed are key aspects in favour of this technologies. However, simply working with keys and values might not be enough to more complex applications, and that is why Key-Value store products are introducing new features in order to make them appealing to a broader mass of developers, always keeping them lightweight and fast.
+Is this simplicity that makes this technology very attractive to developers. The ease of use, its high performance and speed are key aspects in favour of this technologies. However, simply working with keys and values might not be enough to more complex applications, and that is why Key-Value store product developers are introducing new features in order to make them appealing to a broader mass of users, always keeping them lightweight and fast.
+
+For that lightweight and fast attributes, most of the key-value stores work in the computer memory. This allows fast get and write operations as opposed to persistent disk storage. Although, they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
+
+\gls{KVS}s have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. That means that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
+
+\begin{itemize}
+	\item Document Store - \textit{"nonrelational database that is designed to store and query data as JSON-like documents"} \cite{aws-nosql:1}
+	\item a Graph \gls{DBMS} - \textit{"Graph databases are purpose-built to store and navigate relationships"} \cite{aws-nosql:2} 
+	\item Search Engine - \textit{"nonrelational database that is dedicated to the search of data content"} \cite{aws-nosql:3} 
+	\item Time Series \gls{DBMS} - \textit{"Provides optimum support for working with time-dependent data"} \cite{timeSeries:1}
+\end{itemize}
+
+So, the \gls{KVS} world is becoming more and more versatile as the years pass.
+
+In the next subsections its discussed and presented the overview of the current \gls{KVS} technology. We picked the some top KVSs technologies nowadays according to db-engines \cite{db-engine:2}.
 
 \subsection{Memcached} % (fold)
 \label{ssec:memcached}
@@ -370,9 +385,7 @@ Discussion
 %
 % \todo[inline]{A a note in a line by itself.}
 %
-This is the first occurrence of an abbreviation: \gls{abbrev}. And now the second occurrence of the same abbreviation: \gls{abbrev}. And a new acronym with capital letter: \Gls{xpt} and reused \gls{xpt}.  Let's also use a few other acronyms such as \gls{aaa}, \gls{aab}, \gls{aba}, \gls{bbb} and \gls{xpt}.
-In geometry, the area enclosed by a circle of radius \gls{r} is $\pi r^2$. Here the Greek letter \gls{pi} is equal to the ratio of the circumference of any circle to its diameter.
-Lets add ``\gls{computer}'' to the glossary!
+Foo Bar
 %
 % Please note that
 % \begin{center}
