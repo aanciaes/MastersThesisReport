@@ -72,9 +72,29 @@ As for its security context, Memcached spends very little, if any, effort in sec
 
 Redis \cite{redis:1} is an in-memory data structure store that can be used as a database, cache and also a message broker. Redis focuses on performance, so most of its decisions prioritize high performance and very low latency.
 
-It has been benchmarked as the world's fastest database \cite{redis:3} and together with a their multi-model and its rich set of operations that can be performed over data it has been the leading key-value store according to use and popularity for a multiple set of years now \cite{db-engine:2}.
+It has been benchmarked as the world's fastest database \cite{redis:3} and together with a their multi-model and its rich set of operations that can be performed over data it has been the leading key-value store according to use and popularity for a multiple set of years \cite{db-engine:2}.
 
+\lstset{language=Bash, caption=How Fast is Redis, label=lst:redisBenchmark}
+\begin{lstlisting}
+redis-benchmark -t set -r 100000 -n 1000000
+====== SET ======
+1000000 requests completed in 8.78 seconds
+50 parallel clients
+3 bytes payload
+keep alive: 1
 
+99.59% <= 1 milliseconds
+99.98% <= 2 milliseconds
+100.00% <= 2 milliseconds
+113934.14 requests per second
+\end{lstlisting}
+
+As said before, Redis is now not a simple \gls{KVS}. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. It also has built-in replication, server side scripting, \gls{LRU} eviction, concept of transactions and different levels of persistence. It provides high availability and automatic partitioning as well.
+
+Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimized for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be access by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis implements a simple authentication system with a password on the configuration file for client authentication.
+It is also advised to run it behind a proxy to enable some ACL policies and SSL network security.
+
+There are a few other security concerns that Redis addresses, but has we can now start to see, in this types of stores, security falls behind performance and usability.
 
 \subsection{Amazon Dynamo DB}
 \label{ssec:amazon_dynamo_db}
