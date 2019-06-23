@@ -44,10 +44,10 @@ For that lightweight and fast attributes, most of the key-value stores work in t
 \gls{KVS}s have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. That means that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
 
 \begin{itemize}
-	\item Document Store - \textit{"nonrelational database that is designed to store and query data as JSON-like documents"} \cite{aws-nosql:1}
-	\item Graph \gls{DBMS} - \textit{"Graph databases are purpose-built to store and navigate relationships. Use nodes to store data entities, and edges to store relationships between entities"} \cite{aws-nosql:2} 
-	\item Search Engine - \textit{"nonrelational database that is dedicated to the search of data content. Use indexes to categorize the similar characteristics among data"} \cite{aws-nosql:3} 
-	\item Time Series \gls{DBMS} - \textit{"Provides optimum support for working with time-dependent data. Each entry has a timestamp, the data arrives in time order and time represents a primary axis for the information."} \cite{timeSeries:1}
+	\item \textbf{Document Store} - \textit{"nonrelational database that is designed to store and query data as JSON-like documents"} \cite{aws-nosql:1}
+	\item \textbf{Graph \gls{DBMS}} - \textit{"Graph databases are purpose-built to store and navigate relationships. Use nodes to store data entities, and edges to store relationships between entities"} \cite{aws-nosql:2} 
+	\item \textbf{Search Engine} - \textit{"nonrelational database that is dedicated to the search of data content. Use indexes to categorize the similar characteristics among data"} \cite{aws-nosql:3} 
+	\item \textbf{Time Series \gls{DBMS}} - \textit{"Provides optimum support for working with time-dependent data. Each entry has a timestamp, the data arrives in time order and time represents a primary axis for the information."} \cite{timeSeries:1}
 \end{itemize}
 
 So, the \gls{KVS} world is becoming more and more versatile as the years pass.
@@ -92,19 +92,23 @@ keep alive: 1
 As said before, Redis is now not a simple \gls{KVS}. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. It also has built-in replication, server side scripting, \gls{LRU} eviction, concept of transactions and different levels of persistence. It provides high availability and automatic partitioning as well.
 
 Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimized for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be access by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis implements a simple authentication system with a password on the configuration file for client authentication.
-It is also advised to run it behind a proxy to enable some ACL policies and SSL network security.
+It is also advised to run it behind a proxy to enable some \gls{ACL} policies and \gls{SSL} network security.
 
 There are a few other security concerns that Redis addresses, but has we can now start to see, in this types of stores, security falls behind performance and usability.
 
 \subsection{Amazon Dynamo DB}
 \label{ssec:amazon_dynamo_db}
 
-Amazon Dynamo DB
+Amazon Dynamo DB \cite{dynamo:1} is a fully managed NoSQL database service. It is a key-value store and a document store that is built based on the dynamo paper \cite{dynamo:2}. This paper describes a \gls{P2P} (peer-to-peer) network with high availability, eventual consistency and very easily scalable. It also successful handles server and data center failures and network partitions.
+
+Amazon builds on this paper and offers DynamoDB as a service in their platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and fully managed. That means no need for low level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet -scale applications. It also offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on a given time. 
+
+This technology focuses more on high availability but also achieves very high performances and very low latency and being fully managed it also takes advantages of the \gls{AWS} infrastructure full power. It currently sits second on the db-engines \cite{db-engine:2} most popular ranking.
 
 \subsection{Microsoft Azure Cosmos DB}
 \label{ssec:microsoft_azure_cosmos_db}
 
-Microsoft Azure Cosmos DB
+Microsoft Azure Cosmos DB \cite{cosmos:1}
 
 \subsection{Microsoft Azure Redis Cache}
 \label{ssec:microsoft_azure_redis_cache}
