@@ -132,7 +132,11 @@ Being in the Azure ecosystem provides nice integration with all Azures' services
 \subsection{Aerospike}
 \label{ssec:aerospike}
 
-Aerospike \cite{aerospike:1}
+Aerospike \cite{aerospike:1} is an enterprise-grade, high performance Key-Value Store. It is another \gls{KVS} technology currently available today. It promises a philosophy of \textit{"no data loss" } through Strong Consistency. Normal systems trade requiring this type of consistency usually trade performance for data integrity but Aerospike allows it  with minimal performance loss. That means it can be used for example in banking payments, retail and telecommunications use cases.
+
+It also provides a dynamic cluster management and unique flexible storage. That enables very easy deployments and particularly very easy scalability, so it is able to meet any data volume needs and still maintaining low latencies across that wide range of data volumes, from low volumes until 100's \gls{TB} of data.
+
+As for security, it includes (the enterprese version) a database access management and audit trail logs. It also includes transport level rncryption for client-server traffic and cross-datacenter traffic \cite{aerospike:2}.
 
 \subsection{Discussion}
 \label{ssec:s1_discussion}
