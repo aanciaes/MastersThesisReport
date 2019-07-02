@@ -141,7 +141,13 @@ As for security, it includes (the enterprese version) a database access manageme
 \subsection{Discussion}
 \label{ssec:s1_discussion}
 
-Discussion
+In this chapter when gather information about the overview of th current Key-Value Store. We can conclude that the most important feature of this technology is the performance and all of the above products mentioned do focus on that characteristic. Some of them even compromise in another features to achieve the best performance possible. Security is not the main concern and the most used measures in the current technologies being securities implementations at the network and transport level by using \gls{TLS} and also full disk encryption. 
+
+Network and transport layer security is a must when implementing any system, and this thesis will also use those standards. 
+
+As for full disk encryption on the server, it opens up some attack vectors. Full disk encryption means that random users will not be able to query the data but credentialed users can. Although, anyone with full access to the database, for example database operators or/and administrators, can decrypt and access all information. This creates a risk of privacy breaking due to hackers wielding stolen credentials, rogue insiders who have been granted more access than they need or the well known honest-but-curious adversary model, where an administrator with full credentials does not have bad intentions, but, driven by curiosity, access information therefore breaking data privacy. A cloud based \gls{KVS} service like the ones talked above, this type of vulnerabilities can be a major concern for a use case with very sensitive data since the server would be off premises, there is no control over it when it comes to privacy of data.
+
+This thesis will implemented a system based on Redis, the most popular and used Key-Value Store currently used and will try to solve some of the problems with security described above. It will compare the principle feature of a \gls{KVS}, the performance, of a simple and normal Redis server and a privacy-enhanced Redis solution so the user can calculate the trade-off between performance and security and applied the correspondent solution to their own use case.
 
 \section{Trusted  Computing Environments} % (fold)
 \label{sec:trusted_computing _environments}
