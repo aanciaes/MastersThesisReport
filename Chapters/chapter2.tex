@@ -274,8 +274,24 @@ As we can see, isolated and trusted execution environments are an important feat
 \subsection{Circumvention of SGX Limitations}
 \label{ssec:circumvention_of_sgx_limitations}
 
-Performance, Memory, IO and syscalls, defining trusted and untrusted parts
-Circumvention of SGX Limitations
+There are a few limitations and challenges of the SGX platform that we address when programming for such technology.
+
+It starts with a big challenge of choosing and defining what parts of the program can benefit of the \gls{SGX} security. As it is known, it works with two major application components, the trusted and untrusted modules of or program. The limitations have to be thoroughly analyzed so we can make that definition.  
+
+The main limitations are: 
+
+\begin{itemize}
+	\item Performance
+	\item Memory
+	\item \gls{I/O}
+	\item \gls{syscall}s
+\end{itemize}
+
+In the \gls{KVS} world, as we extensively covered, performance is the major concern and there is no real way around this limitation. Using secure enclaves will definitely decrease the supposed blazing fast performance. Although, with intelligent partition between the untrusted code, which will be fast, and the trusted instructions, which will be slower we can limit the performance overhead. By separating and well defining both modules of the application, we can decrease the code that needs to run securely and find a fine compromised between security and performance.
+
+Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1}.
+
+\gls{I/O} and \gls{syscall}s are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \gls{syscall}s through the aforementioned \gls{ECALL}s and \gls{OCALL}s (section 2.2.5 of this thesis), but they have to be accounted for when implementing the application.
 
 \subsection{SGX-Enabled Secure Databases}
 \label{ssec:sgx_enabled_secure_databases}
