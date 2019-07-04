@@ -265,11 +265,16 @@ It will be more focused on the Intel SGX platform as it is the one that will be 
 \subsection{Trusted Execution with Intel SGX}
 \label{ssec:trusted_execution_with_sgx}
 
-Trusted Execution with Intel SGX
+As explained before, Intel SGX provides a trusted execution environment by running code inside the enclaves. It creates an isolated environment where we can run some instructions as securely as possible, without \gls{OS} intervention.
+
+Key-Value Stores and other database type systems can leverage this secure and isolated environment to perform queries on very sensitive data that would otherwise be vulnerable to some attacks. There are a few techniques currently implemented to use isolated environments. Maintaining an encrypted database and using enclaves cryptographic capabilities to decrypt data and perform queries on plain text with the assurance of no data leaking is a possible use case. Also, maintaining a database fully on enclave memory, where it cannot be access by anyone other than the CPU is another way to keep the data secure by leveraging isolated and trusted execution environments. Different techniques will be furthermore discussed bellow. 
+
+As we can see, isolated and trusted execution environments are an important feature when it comes to protecting the data from the \gls{OS} and Key-Values Store systems do benefit from them.
 
 \subsection{Circumvention of SGX Limitations}
 \label{ssec:circumvention_of_sgx_limitations}
 
+Performance, Memory, IO and syscalls, defining trusted and untrusted parts
 Circumvention of SGX Limitations
 
 \subsection{SGX-Enabled Secure Databases}
