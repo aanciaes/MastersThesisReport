@@ -98,13 +98,24 @@
 	note = "Accessed: 2019-06-16"
 }
 
-@report{
+@inproceedings{
 	dynamo:2,
+	author = "DeCandia, Giuseppe and Hastorun, Deniz and Jampani, Madan and Kakulapati, Gunavardhan and Lakshman, Avinash and Pilchin, Alex and Sivasubramanian, Swaminathan and Vosshall, Peter and Vogels, Werner",
 	title = "Dynamo: Amazon's Highly Available Key-value Store",
-	authors = "Giuseppe DeCandia, Deniz Hastorun, Madan Jampani, Gunavardhan Kakulapati, Avinash Lakshman, Alex Pilchin, Swaminathan Sivasubramanian, Peter Vosshall and Werner Vogels",
-	institution = "Amazon.com",
-	year = "2007"
-}
+	booktitle = "Proceedings of Twenty-first ACM SIGOPS Symposium on Operating Systems Principles",
+	series = "SOSP '07",
+	year = "2007",
+	isbn = "978-1-59593-591-5",
+	location = "Stevenson, Washington, USA",
+	pages = "205--220",
+	numpages = "16",
+	url = "http://doi.acm.org/10.1145/1294261.1294281",
+	doi = "10.1145/1294261.1294281",
+	acmid = "1294281",
+	publisher = "ACM",
+	address = "New York, NY, USA",
+	keywords = "performance, reliability, scalability",
+} 
 
 @MISC {
 	aws:1,
@@ -153,4 +164,16 @@
 	title = "Sgx Memory Limits",
 	howpublished = " \url https://software.intel.com/en-us/forums/intel-software-guard-extensions-intel-sgx/topic/670322",
 	note = "Accessed: 2019-06-16"
+}
+
+@InProceedings{
+	enclavedb:1,
+	author = "Priebe, Christian and Vaswani, Kapil and Costa, Manuel",
+	title = "EnclaveDB – A Secure Database using SGX",
+	booktitle = "To appear in the Proceedings of the IEEE Symposium on Security \& Privacy, May 2018",
+	year = "2018",
+	month = "May",
+	abstract = "We propose EnclaveDB, a database engine that guarantees confidentiality, integrity, and freshness for data and queries. EnclaveDB guarantees these properties even when the database administrator is malicious, when an attacker has compromised the operating system or the hypervisor, and when the database runs in an untrusted host in the cloud. EnclaveDB achieves this by placing sensitive data (tables, indexes and other metadata) in enclaves protected by trusted hardware (such as Intel SGX). EnclaveDB has a small trusted computing base, which includes an in-memory storage and query engine, a transaction manager and pre-compiled stored procedures. A key component of EnclaveDB is an efficient protocol for checking integrity and freshness of the database log. The protocol supports concurrent, asynchronous appends and truncation, and requires minimal synchronization between threads. Our experiments using standard database benchmarks and a performance model that simulates large enclaves show that EnclaveDB achieves strong security with low overhead (up to 40% for TPC-C) compared to an industry strength in-memory database engine.",
+	publisher = "IEEE",
+	url = "https://www.microsoft.com/en-us/research/publication/enclavedb-a-secure-database-using-sgx/"
 }
