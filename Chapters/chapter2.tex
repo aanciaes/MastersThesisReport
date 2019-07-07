@@ -300,10 +300,21 @@ Database management service developers are now implementing secure databases rea
 
 Next subsections present and discuss the overview of the current technology that leverages \gls{SGX} to provide a secure database.
 
-\subsubsection{Enclave DB}
+\subsubsection{EnclaveDB}
 \label{sssec:enclave_db}
 
-Enclave DB \cite{enclavedb:1}
+EnclaveDB \cite{enclavedb:1} is a privacy enhanced and secure database that works alongside with Intel \gls{SGX} and provides an Structured Query Language (SQL). It uses its technology to maintain all sensitive information inside \gls{SGX} enclaves in order to keep them secure from an threat model of strong adversaries that can control the entire software stack  on the database server. It resists attack from the administrator server, the database administrator and attacker who may compromised the operating system, the hypervisor or the database server.
+
+Following Intel's application guidelines, EnclaveDB has an two part architecture: trusted (running on the enclave) and untrusted modules. The enclave hosts a query processing engine, natively compiled stored procedures and a trusted kernel which provides API's for sealing and remote attestation. The untrusted host process runs all other compo- nents of the database server. Figure \ref{fig:enclaveDB_architecture} shows the architecture of the enclaveDB server-side.
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.5\linewidth]{enclaveDB_architecture}}%
+	\caption{Server-side components of EnclaveDB}
+	\label{fig:enclaveDB_architecture}
+\end{figure}
+
+Leveraging \gls{TEE}, EnclaveDB then provides a database with a \gls{SQL} interface and guarantees confidentiality and integrity with low overhead. With its design it also reduces the \gls{TCB} to a smaller set than any other "normal" database.
 
 \subsubsection{Pesos DB}
 \label{sssec:pesos_db}
