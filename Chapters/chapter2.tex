@@ -289,9 +289,9 @@ The main limitations are:
 
 In the \gls{KVS} world, as we extensively covered, performance is the major concern and there is no real way around this limitation. Using secure enclaves will definitely decrease the supposed blazing fast performance. Although, with intelligent partition between the untrusted code, which will be fast, and the trusted instructions, which will be slower we can limit the performance overhead. By separating and well defining both modules of the application, we can decrease the code that needs to run securely and find a fine compromised between security and performance.
 
-Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1}.
+Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}, being that only about 94 \gls{MB} are available to the application, with the rest reserved to metadata. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1}. Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections.
 
-\gls{I/O} and \gls{syscall}s are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \gls{syscall}s through the aforementioned \gls{ECALL}s and \gls{OCALL}s (section 2.2.5 of this thesis), but they have to be accounted for when implementing the application.
+\gls{I/O} and \gls{syscall}s are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \gls{syscall}s through the aforementioned \gls{ECALL}s and \gls{OCALL}s (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
 
 \subsection{SGX-Enabled Secure Databases}
 \label{ssec:sgx_enabled_secure_databases}
@@ -328,9 +328,9 @@ It enforces this policies by leveraging the Intel \gls{SGX} for trusted executio
 \subsubsection{Speicher}
 \label{sssec:speicher}
 
-Speicher \cite{speicher:1} is a secure \gls{LSM}-based Key-Value store that uses Intel \gls{SGX} and it ensures not only strong confidentiality and integrity properties, but also data freshness to protect against rollback/forking attacks. It leverages \gls{SGX} technology to achieve those security characteristics focusing on providing a persistent service, tolerant to system faults and securely recovering from crashes. It also tackles in interesting ways, two of the major limitations of \gls{SGX}: Memory Limits and Performance.
+Speicher \cite{speicher:1} is a secure \gls{LSM}-based Key-Value store that uses Intel \gls{SGX} and it ensures not only strong confidentiality and integrity properties, but also data freshness to protect against rollback/forking attacks. It leverages \gls{SGX} technology to achieve those security characteristics focusing on providing a \textbf{persistent} service, tolerant to system faults and securely recovering from crashes. It also tackles in interesting ways, two of the major limitations of \gls{SGX}: Memory Limits and Performance.
 
-Implementing a Key-Value Store has a major requirement - High performance and low latency queries for big data structures. As already discussed, \gls{SGX} has some memory limits. The enclave memory is located in the Enclave Page Cache (\gls{EPC}) which is limited to 128 \gls{MB} with about 94 \gls{MB} available for application use (the rest being reserved for metada). To allow creation of enclaves with bigger size than \gls{EPC}, the \gls{OS}  can use secure paging mechanism where it evicts pages to untrusted memory. Although with page encryption, decryption and integrity checks, this solution intruduces high overheads (2× - 2000×) \cite{scone:1}.
+Implementing a Key-Value Store has a major requirement - High performance and low latency queries for big data structures. As already discussed, \gls{SGX} has some memory limits. The enclave memory is located in the Enclave Page Cache (\gls{EPC}) which is limited to 128 \gls{MB} with about 94 \gls{MB} available for application use (the rest being reserved for metadata). To allow creation of enclaves with bigger size than \gls{EPC}, the \gls{OS}  can use secure paging mechanism where it evicts pages to untrusted memory. Although with page encryption, decryption and integrity checks, this solution introduces high overheads (2× - 2000×) \cite{scone:1}.
 
 To address this performance and memory problems, the developers of Speicher implemented the following custom features (from Speicher public paper):
 
@@ -347,7 +347,20 @@ The technology leverages \gls{SGX} with a clever partition between trusted and u
 \subsubsection{ShieldStore}
 \label{sssec:shieldstore}
 
-ShieldStore \cite{shieldstore:1}
+ShieldStore \cite{shieldstore:1} is a \textit{"(...) shielded in-memory Key-Value Storage with \gls{SGX}"}. It aims to provide a very fast and low latency queries over very large data trying to overcome the \gls{SGX} memory limitation. It accomplice's it by maintaining the majority of the data structures in the non-enclave memory region, addressing as well the performance issue by not relaying on the page-oriented enclave memory extension provided by \gls{SGX}.
+
+ShieldStore runs server-side in the enclave to protect encryption keys and for remote attestation and it is used to perform all the \gls{KVS} logic. It uses a hashed index structured but places it in the unprotected memory region instead of the enclave \gls{EPC}. As the main data structure is not protected by the \gls{SGX} hardware, each data entry must be encrypted by ShieldStore in the enclave, and written to the main hash table.
+
+The main flow and architecture is as described on figure \ref{fig:shieldstore_overview}.
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.5\linewidth]{shieldstore_flow}}%
+	\caption{Overview of ShieldStore}
+	\label{fig:shieldstore_overview}
+\end{figure}
+
+First the client remote attests the server-side (1) verifying \gls{SGX} support of the processor, the code, and other critical memory state of an enclave. In a second step, the client and the server exchange sessions keys (2) in order to establish a secure connection, using Intel \gls{SGX} libraries to do so. Using this newly generated session key, the client sends a request for an operation (3). The server deciphers and verifies the request and accesses the Key-Value Store (4). Clients do not access the server-side ciphertexts neither need to know the encryption key used by the server to encrypt the values. The server will then decrypt the data from the storage, encrypted it again with the session key and reply to the client (5). All accesses to the \gls{KVS} have integrity checks.
 
 \subsection{Discussion}
 \label{ssec:s3_discussion}
@@ -355,8 +368,6 @@ ShieldStore \cite{shieldstore:1}
 Discussion
 
 % section how_to_write_using_latex (end)
-
-
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
