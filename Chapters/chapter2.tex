@@ -319,7 +319,11 @@ Leveraging \gls{TEE}, EnclaveDB then provides a database with a \gls{SQL} interf
 \subsubsection{Pesos DB}
 \label{sssec:pesos_db}
 
-Pesos DB
+Pesos \cite{pesos:1} is a secure implementation of object storage services like Amazon S3 \cite{s3:1}, Azure Blob Storage \cite{azureStorage:1}, Google Cloud Storage \cite{googleStorage:1} among others. In these current large-scale services, due to their complexity, the risk of confidentiality and integrity violations increase significantly. This storage systems are characterized by multiple layers of software and hardware stacked together which means the access policies for ensuring confidentiality and integrity are scattered across different code paths and configurations, thus exposing the data to more security vulnerabilities. Furthermore, untrusted third-party cloud platforms expose an additional risk of unauthorized data access by a malicious administrator.
+
+Pesos allows clients to specify per-object security policies concisely and separately from the remaining storage stack. It also provides cryptographic attestation for the stored objects and their associated policies to verify the policy enforcement.
+
+It enforces this policies by leveraging the Intel \gls{SGX} for trusted execution environments and Kinetic Object Storage \cite{kinetic:1} for trusted storage (secure storage - not the focus of this thesis). It structures a policy-compiler, its binary-format interpreter, per-object policy metadata, and the enforcement logic into a single layer of the storage stack. With this unification, it drastically reduces the \gls{TCB} when compared to the order cloud services. Then it uses the trusted execution environment provided by \gls{SGX} to connect directly Kinetic disk through an encrypted Ethernet connection allowing for object transfer and policy enforcement securely without any intermediate layers in the storage stack.
 
 \subsubsection{Speicher}
 \label{sssec:speicher}
