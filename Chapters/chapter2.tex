@@ -328,7 +328,21 @@ It enforces this policies by leveraging the Intel \gls{SGX} for trusted executio
 \subsubsection{Speicher}
 \label{sssec:speicher}
 
-Speicher
+Speicher \cite{speicher:1} is a secure \gls{LSM}-based Key-Value store that uses Intel \gls{SGX} and it ensures not only strong confidentiality and integrity properties, but also data freshness to protect against rollback/forking attacks. It leverages \gls{SGX} technology to achieve those security characteristics focusing on providing a persistent service, tolerant to system faults and securely recovering from crashes. It also tackles in interesting ways, two of the major limitations of \gls{SGX}: Memory Limits and Performance.
+
+Implementing a Key-Value Store has a major requirement - High performance and low latency queries for big data structures. As already discussed, \gls{SGX} has some memory limits. The enclave memory is located in the Enclave Page Cache (\gls{EPC}) which is limited to 128 \gls{MB} with about 94 \gls{MB} available for application use (the rest being reserved for metada). To allow creation of enclaves with bigger size than \gls{EPC}, the \gls{OS}  can use secure paging mechanism where it evicts pages to untrusted memory. Although with page encryption, decryption and integrity checks, this solution intruduces high overheads (2× - 2000×) \cite{scone:1}.
+
+To address this performance and memory problems, the developers of Speicher implemented the following custom features (from Speicher public paper):
+
+\begin{itemize}
+	\item \textit{"\textbf{I/O library for shielded execution}: Direct \gls{I/O} library for shielded execution. The \gls{I/O} library performs the \gls{I/O} operations without exiting the secure enclave; thus it avoids expensive system calls on the data path."}
+	
+	\item \textit{"\textbf{Asynchronous trusted monotonic counter}: Trusted counters to ensure data freshness. The counters leverage the lag in the sync operations in modern \gls{KVS} to asynchronously update the counters. Thus, they overcome the limitations of the native \gls{SGX} counters."}
+	
+	\item \textit{"\textbf{Secure \gls{LSM} data structure}: Secure \gls{LSM} data structure that resides outside of the enclave memory while ensuring the integrity, confidentiality and freshness of the data. Thus, the \gls{LSM} data structure overcomes the memory and \gls{I/O} limitations of Intel \gls{SGX}."}
+\end{itemize}
+
+The technology leverages \gls{SGX} with a clever partition between trusted and untrusted modules of the application. By maintaining the encrypted data on untrusted memory hardware it addresses the memory and persistent limitations, and by keeping some information in secure enclave memory and with a good \gls{I/O} library it overcomes (to an extent) the performance issues.
 
 \subsubsection{ShieldStore}
 \label{sssec:shieldstore}
