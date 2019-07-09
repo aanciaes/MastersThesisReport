@@ -365,9 +365,13 @@ First the client remote attests the server-side (1) verifying \gls{SGX} support 
 \subsection{Discussion}
 \label{ssec:s3_discussion}
 
-Discussion
+Concluding, EnclaveDB (section \ref{sssec:enclave_db}) and Pesos (section \ref{sssec:pesos_db}) presents secure databases and objects storage systems respectively, using \gls{SGX}, but EnclaveDB assumes that \gls{SGX} supports large enclaves whose size is an order of several hundred \gls{GB}s and Pesos restricts the size of data structure to the size of \gls{EPC}. On the other hand, Speicher (section \ref{sssec:speicher}) and ShieldStore (section \ref{sssec:shieldstore}) proposes a store that alleviates the memory limitation of Intel \gls{SGX} by storing encrypted data on untrusted memory regions. Speicher and ShieldStore have similar architectures, but the former is primarily design for persistence storage and the latter is focused on a fast in-memory key-value store.
 
-% section how_to_write_using_latex (end)
+We can now conclude that the clever partitioning of the application into trusted and untrusted parts is really important when programming with Intel \gls{SGX}. It directly affects \gls{syscall}s and \gls{I/O}, performance and memory of the service. 
+
+The long goal of this thesis is to implement a system with characteristics from the databases present above. In terms of performance we plan to implement partial homomorphic encryption, so it allows to perform operations directly over in-memory encrypted data. This will be a challenge, as fully homomorphic encryption is not yet practical \cite{homomorphic:1}, so adaptations must be made, but performance increase are expected  over the databases presented above, by not needing to decrypt the data in secure execution. Persistence will also be a requirement just like some of the databases presented.
+
+For trusted execution with \gls{SGX}, extensive research is needed to partition the application in the two necessary modes to circumvent persistence, performance and memory \gls{SGX} limitations. It will also be researched and tested the ability to provide built-in replication and availability with \gls{SGX}.
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
