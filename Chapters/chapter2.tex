@@ -152,7 +152,15 @@ This thesis will implemented a system based on Redis, the most popular and used 
 \section{Trusted  Computing Environments} % (fold)
 \label{sec:trusted_computing _environments}
 
-In this section we will provide some additional considerations about some of the customizations available as class options.
+Modern data processing services hosted in the cloud are under constant attack from malicious system administrators, server administrators and hackers who exploit bugs on applications, operating systems or even the hypervisor. However, current days shows a massive trend of business moving to the cloud infrastructure looking for easy deployment, managed services with built-in replication and fault tolerance, fast and trivial scaling and predicted costs.
+
+With more and more data exposed in the cloud, hackers have a bigger desire to exploit and look for vulnerabilities. This results in frequent data breaches that reduce trust in online services. The need for cloud providers to ensure a level of security and trust to make the user comfortable of moving its data to the cloud has never been bigger, and with that need some solutions in the form of Trusted Computing Environments (\gls{TCE}) appeared.
+
+Trusted Computing is a concept that strives to provide strong confidentiality and integrity guarantees for applications running on untrusted platforms. It forces a certain machine to behave an expected way even if running on a remote or machine that is out of our control.
+
+\gls{TCE} will also provide a decrease of the Trusted Computing Base (\gls{TCB}) - the amount of components that the application needs to trust in order to run smoothly. By isolating the service running on this trusted environments (limiting the set of instructions available and encrypting data), it prevents the operating system, the hypervisor and even malicious system administrators (three components normally on the \gls{TCB}) to break data confidentiality and integrity within this environments.
+
+There are a few hardware/software based solutions to achieved a trusted computing environment, and they will be explained in the next sections.
 
 \subsection{TPM – Trusted Platform Modules } % (fold)
 \label{ssec:trusted_platform_modules}
