@@ -165,20 +165,15 @@ There are a few hardware/software based solutions to achieved a trusted computin
 \subsection{TPM – Trusted Platform Modules } % (fold)
 \label{ssec:trusted_platform_modules}
 
-The choice of the main language with the option “\texttt{lang=OPT}” affects:
+A Trusted Platform Module, also known as a \gls{TPM} is a technology proposed by the Trusted Computing Group (\gls{TCG}) designed to provide hardware-based security related functions. It's a chip embedded into the motherboard and includes multiple security mechanisms to make it tamper resistant to physical harm and malicious software is unable to mess with its security features \cite{tpm:1}. Some key advantages of using \gls{TPM}s are:
 
 \begin{itemize}
-	\item \textbf{The order of the summaries.} First is printed the abstract in the main language and then in the foreign language. This means that if your main language for the document in English, you will see first the “abstract” (in English) and then the “resumo” (in Portuguese). If you switch the main language for the document for Portuguese, it will also automatically switch the order of the summaries to “resumo” and then “abstract”.
-	\item \textbf{The names for document sectioning.} E.g., ``Chapter'' vs.\ ``Capítulo'', ``Table of Contents'' vs.\ ``Índice'', ``Figure'' vs.\ ``Figura'', etc.
-	\item \textbf{The type of documents in the bibliogrpahy.} E.g., ``Technical Report'' vs.\ ``Relatório Técnico'', ``PhD Thesis'' vs.\ ``Tese de Doutoramento'', etc.
-\end{itemize} 
+	\item Generate, store, and limit the use of cryptographic keys
+	\item Platform identity by using the TPM’s unique RSA key, which is burned into itself also known as Endorsement Key (\gls{EK}) and never leaves the \gls{TPM}.
+	\item Help ensure platform integrity by taking and storing security measurements.
+\end{itemize}
 
-No mater which language you chose, you will always have the appropriate hyphenation rules according to the language at that point. You always get Portuguese hyphenation rules in the ``Resumo'', english hyphenation rules in the ``Abstract'', and then the main language hyphenation rules for the rest of the document.
-
-% subsection the_main_language (end).
-
-% section additional_consideration (end)
-
+There are three main \gls{TPM} features: Encryption, Authenticated Boot and Attestation. The first feature is used for every security and confidentiality aspects. Authenticated Boot is the ability to boot the \gls{OS} in stages, assuring that each portion of OS, as it is loaded, is a version trusted and approved for use, detecting hardware and software changes on every stage to verify if the code loaded can be trusted. This boot sequence happens with the help Platform Configuration Registers (\gls{PCR}) that store the trusted software hashes. The attestation feature is a way for a client to remotely check the state of a machine and will be further explained in the next subsections.
 
 \subsection{TPM - Enabled Software Attestation} % (fold)
 \label{ssec:enabled _software_attestation}
