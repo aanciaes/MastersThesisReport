@@ -198,11 +198,30 @@ The attestation feature is a way for a client to remotely check the state of a m
 \subsection{TPM - Enabled Software Attestation} % (fold)
 \label{ssec:enabled _software_attestation}
 
-The use of remote attestation is an important feature of \gls{TPM}s.
+The remote attestation feature of a \gls{TPM} is the ability of a program to authenticate itself against external verifiers. Is a mechanism that allows a remote party to verify the internal state of the OS or another software and decided whether or not that piece of software is intact and trustworthy. The verifier can trust that the attestation data is accurate and not tampered with because it is signed by the internal key of the \gls{TPM}, a special key known as the Attestation Identity Key, known from now on as \gls{AIK} \cite{attestation:aik}.
+
+A remote attestation procedure is described in image \ref{fig:remote-attestation} \cite{attestation:1}: 
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.5\linewidth]{remote-attestation}}%
+	\caption{Remote Attestation Procedure}
+	\label{fig:remote-attestation}
+\end{figure}
+
+\begin{enumerate}
+	\item The application “A” generates a public/private key pair PK\textsubscript{A} \& SK\textsubscript{A} and asks the \gls{TPM} to certify it.
+	\item The TPM computes a hash value \#A of the executable code of program “A”.
+	\item The TPM creates a certification including PK\textsubscript{A} and \#A and signs it with the attestation identity key SK\textsubscript{AIK}.
+	\item When application “A” wishes to authenticate itself to a remote party, it sends the cert. of its public key and hash value \#A along with a cert. issued to the TPM by a trusted certification authority (\gls{CA}).
+	\item The remote party verifies the cert. chain.
+	\item The remote party looks \#A up in a database which maps hash values to trust levels.
+	\item If application “A” is deemed trustworthy, we continue the communication,
+	probably by using PK\textsubscript{A} to establish a session key.
+\end{enumerate}
 
 \subsection{HSM – Hardware Security Modules} % (fold)
 \label{ssec:hardware_security_modules}
-
 
 
 \subsection{Trusted Execution Environments} % (fold)
