@@ -8,14 +8,14 @@
 \chapter{Related Work}
 \label{cha:related_work}
 
-This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisons between those exiting technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
+This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisons between those existing technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
 
-First, in section 2.1 we explain and discuss for the first time the definition of a Key-Value Store. We  present some use cases, current technology available, their differences and most importantly their security models and concerns.
+First, in section 2.1 we explain and discuss for the first time the definition of a Key-Value Store. We present some use cases, current technology available, their differences and most importantly their security models and concerns.
 
-Having discussed the software, section 2.2 will then address the environment on where the previously talked software will run, most specifically the hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
+Having discussed the software, section 2.2 will then address the environment on where that software will run on, most specifically the hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
 
-Section 2.3 will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. 
-This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module
+Section 2.3 will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure application.
+This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module.
 
 To conclude the chapter, section 2.4... 
 
@@ -41,7 +41,7 @@ Is this simplicity that makes this technology very attractive to developers. The
 
 For that lightweight and fast attributes, most of the key-value stores work in the computer memory. This allows fast get and write operations as opposed to persistent disk storage. Although, they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
 
-\gls{KVS}s have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. That means that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
+\gls{KVS}s have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. Meaning that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
 
 \begin{itemize}
 	\item \textbf{Document Store} - \textit{"nonrelational database that is designed to store and query data as JSON-like documents"} \cite{aws-nosql:1}
@@ -52,7 +52,7 @@ For that lightweight and fast attributes, most of the key-value stores work in t
 
 So, the \gls{KVS} world is becoming more and more versatile as the years pass.
 
-In the next subsections its discussed and presented the overview of the current \gls{KVS} technology. We picked the some top KVSs technologies nowadays according to db-engines \cite{db-engine:2}.
+In the next subsections its discussed and presented the overview of the current \gls{KVS} technology. We picked the some top KVSs technologies nowadays according to db-engines \cite{db-engine:2} website.
 
 \subsection{Memcached} % (fold)
 \label{ssec:memcached}
@@ -61,9 +61,9 @@ Memcached \cite{memcached:1} is a free and open source key-value store released 
 
 It is design to hold small chunks of data (strings and objects) to work as a cache for results of database calls, API calls, or page rendering. Its biggest use case is for use in speeding up dynamic web applications by alleviating database load.
 
-This system lies on the simpler key-value store spectrum. It takes advantages of the simplicity of a key-value store to edge ease of development, and solving many problems facing large data caches. Its API is available for most popular languages. It has a \gls{LRU} eviction technique which means that items will expire a specified amount of time. 
+This system lies on the simpler key-value store spectrum. It takes advantages of the simplicity of a key-value store to edge ease of development, and solving many problems facing large data caches. Its API is available for most popular languages. It has a \gls{LRU} eviction technique which means that items will expire after a specified amount of time if not used. 
 
-When it comes to system availability and reliability, Memcached has an interesting approach. In order to keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronization, no broadcasting, no replication. Adding servers will only increase the available memory.
+When it comes to system replication, availability and reliability, Memcached has an interesting approach. In order to keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronization, no broadcasting, no replication. Adding servers will only increase the available memory.
 
 As for its security context, Memcached spends very little, if any, effort in securing the systems for random internet connections. The servers only have support for SASL \cite{sasl:1} authentication mechanism. This method of authentication is not implemented as end-to-end encryption, it only provides restriction access to the daemon, but it does not hide communications over the network. That means it is not meant to be exposed to the internet or to any untrusted users \cite{memcached:2}.
 
@@ -76,7 +76,7 @@ It has been benchmarked as the world's fastest database \cite{redis:3} and toget
 
 \lstset{language=Bash, caption=How Fast is Redis, label=lst:redisBenchmark}
 \begin{lstlisting}
-redis-benchmark -t set -r 100000 -n 1000000
+$ redis-benchmark -t set -r 100000 -n 1000000
 ====== SET ======
 1000000 requests completed in 8.78 seconds
 50 parallel clients
@@ -91,6 +91,8 @@ keep alive: 1
 
 As said before, Redis is now not a simple \gls{KVS}. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. It also has built-in replication, server side scripting, \gls{LRU} eviction, concept of transactions and different levels of persistence. It provides high availability and automatic partitioning as well.
 
+Redis provides replication in form of a master-slave model. This form of replication works with a single node (master node) where all writes occurring will be replicated to the other Redis instances (slave nodes). Writes on nodes other than the master will not be replicated. Redis provides a read-only setting that can be applied to slave nodes to prevent states differences between instances.
+
 Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimized for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be access by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis implements a simple authentication system with a password on the configuration file for client authentication.
 It is also advised to run it behind a proxy to enable some \gls{ACL} policies and \gls{SSL} network security.
 
@@ -101,7 +103,7 @@ There are a few other security concerns that Redis addresses, but has we can now
 
 Amazon Dynamo DB \cite{dynamo:1} is a fully managed NoSQL database service. It is a key-value store and a document store that is built based on the dynamo paper \cite{dynamo:2}. This paper describes a \gls{P2P} (peer-to-peer) network with high availability, eventual consistency and very easily scalable. It also successful handles server and data center failures and network partitions.
 
-Amazon builds on this paper and offers DynamoDB as a service in their platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and fully managed. That means no need for low level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet -scale applications. It also offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on a given time. 
+Amazon builds on this paper and offers DynamoDB as a service in their platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and it is fully managed. That means no need for low level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet-scale applications. It also offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on any given time. 
 
 This technology focuses more on high availability but also achieves very high performances and very low latency and being fully managed it also takes advantages of the \gls{AWS} infrastructure full power. It currently sits second on the db-engines \cite{db-engine:2} most popular ranking.
 
@@ -121,12 +123,13 @@ Microsoft Azure Cache for Redis \cite{cache-for-redis:1} is a service provided b
 
 It uses at its core the Redis server technology and provides ease of deployment and management, built-in global replication, Azures' infrastructure security and flexible scaling and Redis superior throughput and low latency performance.
 
-Being in the Azure ecosystem provides nice integration with all Azures' services as shown is the picture bellow:
+Being in the Azure ecosystem provides nice integration with all Azures' services as shown in figure \ref{fig:azure_ecosystem}.
 
 \begin{figure}[htbp]
 	\centering
 	{\includegraphics[width=0.5\linewidth]{cacheForRedis-integration}}%
 	\caption{Azure Environment Integration}
+	\label{fig:azure_ecosystem}
 \end{figure}
 
 \subsection{Aerospike}
@@ -134,9 +137,9 @@ Being in the Azure ecosystem provides nice integration with all Azures' services
 
 Aerospike \cite{aerospike:1} is an enterprise-grade, high performance Key-Value Store. It is another \gls{KVS} technology currently available today. It promises a philosophy of \textit{"no data loss" } through Strong Consistency. Normal systems trade requiring this type of consistency usually trade performance for data integrity but Aerospike allows it  with minimal performance loss. That means it can be used for example in banking payments, retail and telecommunications use cases.
 
-It also provides a dynamic cluster management and unique flexible storage. That enables very easy deployments and particularly very easy scalability, so it is able to meet any data volume needs and still maintaining low latencies across that wide range of data volumes, from low volumes until 100's \gls{TB} of data.
+It also provides a dynamic cluster management and unique flexible storage. That enables very easy deployments and particularly very easy scalability, so it is able to meet any data volume needs and still maintaining low latencies across that wide range of data volumes, from low volumes until hundreds \gls{TB} of data.
 
-As for security, it includes (the enterprese version) a database access management and audit trail logs. It also includes transport level rncryption for client-server traffic and cross-datacenter traffic \cite{aerospike:2}.
+As for security, it includes (the enterprise version) a database access management and audit trail logs. It also includes transport level encryption for client-server traffic and cross-datacenter traffic \cite{aerospike:2}.
 
 \subsection{Discussion}
 \label{ssec:s1_discussion}
@@ -173,77 +176,49 @@ A Trusted Platform Module, also known as a \gls{TPM} is a technology proposed by
 	\item Help ensure platform integrity by taking and storing security measurements.
 \end{itemize}
 
-There are three main \gls{TPM} features: Encryption, Authenticated Boot and Attestation. The first feature is used for every security and confidentiality aspects. Authenticated Boot is the ability to boot the \gls{OS} in stages, assuring that each portion of OS, as it is loaded, is a version trusted and approved for use, detecting hardware and software changes on every stage to verify if the code loaded can be trusted. This boot sequence happens with the help Platform Configuration Registers (\gls{PCR}) that store the trusted software hashes. The attestation feature is a way for a client to remotely check the state of a machine and will be further explained in the next subsections.
+Figure \ref{fig:tpm_architecture} shows the mains components and services provided by a \gls{TPM} module. As shown in the figure, all of them only have one access point \gls{I/O} which is protected and safely managed by the \gls{TPM} execution engine.
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.5\linewidth]{tpm-architecture}}%
+	\caption{TPM insides}
+	\label{fig:tpm_architecture}
+\end{figure}
+
+
+With all the components described by figure \ref{fig:tpm_architecture}, \gls{TPM}s provide there main \gls{TPM} features: Encryption, Authenticated Boot and Attestation. 
+
+The first feature is used for every security and confidentiality aspects, mainly generating cryptographic keys, encrypting, signing and hashing data with secure standard algorithms melted in the module.
+
+Authenticated Boot is the ability to boot the \gls{OS} in stages, assuring that each portion of OS, as it is loaded, is a version trusted and approved for use, detecting hardware and software changes on every stage to verify if the code loaded can be trusted. This boot sequence happens with the help Platform Configuration Registers (\gls{PCR}) that store the trusted software hashes.
+
+The attestation feature is a way for a client to remotely check the state of a machine and will be further explained in the next subsection.
+
 
 \subsection{TPM - Enabled Software Attestation} % (fold)
 \label{ssec:enabled _software_attestation}
 
-You must choose the class of text for the document. The available options are:
+The use of remote attestation is an important feature of \gls{TPM}s.
 
-\begin{enumerate}
-	\item \textbf{bsc} --- BSc graduation report.
-	\item \textbf{*mscplan} --- Preparation of MSc dissertation. This is a preliminary report graduate students at DI-FCT-NOVA must prepare to conclude the first semester of the two-semesters MSc work. The files specified by \verb!\dedicatoryfile! and \verb!\acknowledgmentsfile! are ignored, even if present, for this class of document.
-	\item \textbf{msc} --- MSc dissertation.
-	\item \textbf{phdprop} ---  Proposal for a PhD work. The files specified by \verb!\dedicatoryfile! and \verb!\acknowledgmentsfile! are ignored, even if present, for this class of document.
-	\item \textbf{prepphd} ---  Preparation of a PhD thesis. This is a preliminary report PhD students at DI-FCT-NOVA must prepare before the end of the third semester of PhD work. The files specified by \verb!\dedicatoryfile! and \verb!\acknowledgmentsfile! are ignored, even if present, for this class of document.
-	\item \textbf{phd} --- PhD dissertation.
-\end{enumerate}
-% subsection class_of_text (end)
-
-% ============
-% = Printing =
-% ============
 \subsection{HSM – Hardware Security Modules} % (fold)
 \label{ssec:hardware_security_modules}
 
-You must choose how your document will be printed. The available options are:
-\begin{enumerate}
-	\item \textbf{oneside} --- Single side page printing.
-	\item \textbf{*twoside} --- Double sided page printing.
-\end{enumerate}
-% subsection printing (end)
 
-% =============
-% = Font Size =
-% =============
+
 \subsection{Trusted Execution Environments} % (fold)
 \label{ssec:trusted_execution_environments}
 
-You must select the encoding for your text. The available options are:
-\begin{enumerate}
-	\item \textbf{11pt} --- Eleven (11) points font size.
-	\item \textbf{*12pt} --- Twelve (12) points font size. You should really stick to 12pt\ldots
-\end{enumerate}
-% subsection font_size (end)
 
-% =================
-% = Text encoding =
-% =================
+
 \subsection{Intel SGX} % (fold)
 \label{ssec:Intel_sgx}
 
-You must choose the font size for your document. The available options are:
-\begin{enumerate}
-	\item \textbf{latin1} --- Use Latin-1 (\href{http://en.wikipedia.org/wiki/ISO/IEC_8859-1}{ISO 8859-1}) encoding.  Most probably you should use this option if you use Windows;
-	\item \textbf{utf8} --- Use \href{http://en.wikipedia.org/wiki/UTF-8}{UTF8} encoding.    Most probably you should use this option if you are not using Windows.
-\end{enumerate}
-% subsection font_size (end)
 
-% ============
-% = Examples =
-% ============
+
 \subsection{Sanctum} % (fold)
 \label{ssec:sanctum}
 
-Let's have a look at a couple of examples:
 
-\begin{itemize}
-	\item Preparation of PhD thesis, in portuguese, with 11pt size and to be printed single sided (I wonder why one would do this!)\\
-	\verb!\documentclass[prepphd,pt,11pt,oneside,latin1]{thesisdifct-nova}!
-	\item MSc dissertation, in english, with 12pt size and to be printed double sided\\
-	\verb!\documentclass[msc,en,12pt,twoside,utf8]{thesisdifct-nova}!
-\end{itemize}
-% subsection examples (end)
 
 \subsection{ARM Trust Zone} % fold
 \label{ssec:arm_trust_zone}
