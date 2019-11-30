@@ -223,10 +223,14 @@ A remote attestation procedure is described in image \ref{fig:remote-attestation
 \subsection{HSM – Hardware Security Modules} % (fold)
 \label{ssec:hardware_security_modules}
 
+An (\gls{HSM}) hardware security module is normally an external module that can be added to a system, in form of a \gls{USB} device or a component living in a secure network as a trusted server, instead of being embedded into the motherboard like a \gls{TPM}. It provides a dedicated system of hardware enable accelerated cryptographic functions like encryption, decryption, key generation and signing capabilities \cite{hsm:1}
+
+What makes this devices so secure, like the \gls{TPM}, is it can´t be interfered with by external code, and it provides an array of protective mechanisms to detect and prevent external physical tampering like drill protection foil, resin-embedded chips as well as temperature and voltage sensors. Any detection of tampering will result in an alarm as well as countermeasures by the applications installed inside. \cite{hsm:2}.
+
+\gls{HSM} can have various applications and can be used in simple forms for example a specific bank dongle that generates \gls{OTP} (one-time password) for accessing your account or be a big corporation and enterprise appliance in various industries, e-health, automotive and \gls{IoT} systems.
 
 \subsection{Trusted Execution Environments} % (fold)
 \label{ssec:trusted_execution_environments}
-
 
 
 \subsection{Intel SGX} % (fold)
