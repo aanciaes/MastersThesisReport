@@ -232,15 +232,30 @@ What makes this devices so secure, like the \gls{TPM}, is it can´t be interfere
 \subsection{Trusted Execution Environments} % (fold)
 \label{ssec:trusted_execution_environments}
 
+A Trusted Execution Environment (\gls{TEE}) is an abstraction that describes a machine
+capable of executing a given program P in isolation, i.e. whose output is determined by
+the initial state of P and a set of defined inputs given into the \gls{TEE} (Barbosa et al., 2016).
+
+It is a secure area of the main processor that ensures sensitive data and code loaded inside is stored, processed and protected in an isolated and trusted environment. As such, it offers protection from software attacks even the ones generated in the operating system.
+
+A \gls{TEE} guarantees that: 
+\begin{itemize}
+	\item The code loaded in the environment is authentic and was not tampered by an attacker.
+	\item All system state is correct (CPU registers, memory and sensitive I/O).
+	\item The code, all data generated and runtime state is confidential and stored persistently.
+\end{itemize}
+
+The threat model of a \gls{TEE} should include all software attacks and the physical attacks performed on the main memory and its non-volatile memory.
+
+"There are many interpretations of what is meant by Trust. In the \gls{TEE} it is used to imply that you may have a higher level of trust in validity, isolation and access control in items (assets) stored in this space, when compared to more general purpose software environments" \cite{tee:1}.
 
 \subsection{Intel SGX} % (fold)
 \label{ssec:Intel_sgx}
 
-
+A \gls{SGX} can be though as a reverse sandbox. With a sandbox you are trying to protect the system from your application, but with \gls{SGX} you are trying to do the opposite and protect the application from the system. The system can be the OS, the hypervisor, the BIOS, the firmware or the drivers \cite{sgx:2}.
 
 \subsection{Sanctum} % (fold)
 \label{ssec:sanctum}
-
 
 
 \subsection{ARM Trust Zone} % fold
