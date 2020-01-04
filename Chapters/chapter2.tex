@@ -252,7 +252,21 @@ The threat model of a \gls{TEE} should include all software attacks and the phys
 \subsection{Intel SGX} % (fold)
 \label{ssec:Intel_sgx}
 
+"Intel® Software Guard Extensions (Intel® SGX) is a set of instructions that increases the security of application code and data, giving them more protection from disclosure or modification." \cite{sgx:3}.
+
+These set of instructions are one of the latest iterations of trusted computing solution and designs and tries to tackle the problem of securing remote computations by leveraging secure hardware on the remote host machine. The SGX processor enables a secure container called enclave which protects the confidentiality and integrity of the execution, such as code and data while relying on software attestation mechanisms.
+
 A \gls{SGX} can be though as a reverse sandbox. With a sandbox you are trying to protect the system from your application, but with \gls{SGX} you are trying to do the opposite and protect the application from the system. The system can be the OS, the hypervisor, the BIOS, the firmware or the drivers \cite{sgx:2}.
+
+It provides this kind of security from the hardware by isolating all the private data from the outside, placing them into the \gls{EPC} (Enclave Page Cache), which is memory zone with guaranteed access management by the CPU where it will deny every external access and only allow access through the associated enclave. This region of the memory is also known as the private/protected memory or the trusted part of the application.
+
+A \gls{SGX} enabled application is broken into two parts, the untrusted and trusted parts. The trusted part of the application is all the processing that deals with any sensitive data the application is handling. This part will be run inside enclaves and be stored in protected memory The rest will live in normal memory and not be protected.
+
+The \gls{SGX} will create an enclave when sensitive code needs to run by a specific \gls{SGX} CPU instruction and will load the sensitive code into an \gls{EPC} inside the protected memory. Once all pages are loaded into the EPC, and the loading in complete, an authentication hash is computed and is available for remote attestation so an user can verify that the code running in the enclave has not been tampered with.
+
+When running, the execution always happens in protected mode, and to prevent data leaking, the CPU will not directly address an interrupt, fault or VM exit, but will instead emit another specific instruction to properly exit the enclave, save CPU state into the enclave and only then will service the fault.
+
+With all this properties, Intel® through \gls{SGX} set of instructions and implementation tries to achieve a secure and trusted environment with guarantees of code and data isolation, confidentiality and integrity from attackers such as the \gls{OS}, hypervisor, any hardware and even physical attacks \cite{cryptoeprint:2016:086}.
 
 \subsection{Sanctum} % (fold)
 \label{ssec:sanctum}
@@ -305,7 +319,7 @@ The main limitations are:
 
 In the \gls{KVS} world, as we extensively covered, performance is the major concern and there is no real way around this limitation. Using secure enclaves will definitely decrease the supposed blazing fast performance. Although, with intelligent partition between the untrusted code, which will be fast, and the trusted instructions, which will be slower we can limit the performance overhead. By separating and well defining both modules of the application, we can decrease the code that needs to run securely and find a fine compromised between security and performance.
 
-Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}, being that only about 94 \gls{MB} are available to the application, with the rest reserved to metadata. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1}. Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections.
+Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}, being that only about 94 \gls{MB} are available to the application, with the rest reserved to metadata. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1} by swapping pages from the \gls{EPC} to main untrusted memory, with guaranteed of confidentiality, integrity and data freshness. Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections.
 
 \gls{I/O} and \gls{syscall}s are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \gls{syscall}s through the aforementioned \gls{ECALL}s and \gls{OCALL}s (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
 
