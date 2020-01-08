@@ -271,11 +271,20 @@ With all this properties, Intel® through \gls{SGX} set of instructions and impl
 \subsection{Sanctum} % (fold)
 \label{ssec:sanctum}
 
+Sanctum \cite{cryptoeprint:2015:564} is an open-source project that shares the same as goal as Intel \gls{SGX}, providing strong provable software isolation to protected the data from external hardware and software, but claims to be simpler and protect against indirect attacks called side channel attacks \cite{Khan2014} such as cache timing attacks \cite{cachetimingattaks:1} that have been know to exist in \gls{SGX} \cite{Gtzfried2017} \cite{2017arXiv170208719S}. These are additional software attacks that can infer private information by analyzing a program’s memory access patterns.
+
+Following the minimal and simple concepts, it uses minimal invasive hardware and it does not required any modifications to the CPU major blocks, but only adds hardware to the interfaces between blocks. This allows for a respectable overhead by maintaining normal clock speeds as it does not modify the CPU core critical execution path.
+
+Sanctum project builds on the \gls{SGX} programming model and implements an architecture that deviates as little as possible from the one built by Intel. Although it differs from \gls{SGX} by implementing the enclaves via a small combination of hardware extensions to RISC-V (an open source set of CPU instructions \cite{Waterman14therisc-v}) and a trusted piece of software called the security model, as SGX implements them via hardware microcode and presents a set of CPU instructions to manage the enclaves.
+
+This security monitor is the core of the project and configures the hardware to enforce low-level rules that controls the enclaves's access policies. As explained in the Sanctum paper, "\textit{the security monitor checks the system software’s allocation decisions for correctness and commits them into the hardware’s configuration registers}". One of the examples and the main points of upgrade compared to \gls{SGX} is that Sanctum keeps the enclave page tables inside enclaves memory, protecting the system against the timing attacks referred above by keeping the page table dirty and accessed bits private. Their hardware extensions make sure that enclaves page tables only point to enclave memory and untrusted OS tables only point to Os memory regions and never to enclave private memory.
+
+Sanctum is also open to the public which makes easier for security researchers to audit and find vulnerabilities and to further encourage the analysis of the code, Sanctum security monitor is written in portable C++ code and can be used across different CPU implementations.
 
 \subsection{ARM Trust Zone} % fold
 \label{ssec:arm_trust_zone}
 
-ARM Trust Zone
+ARM Trust Zone \cite{armtrustzone:1} \cite{armtrustzone:2}
 
 \subsection{Discussion}
 \label{ssec:s2_discussion}

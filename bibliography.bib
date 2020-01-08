@@ -172,7 +172,7 @@
 	title = "EnclaveDB – A Secure Database using SGX",
 	booktitle = "To appear in the Proceedings of the IEEE Symposium on Security \& Privacy, May 2018",
 	year = "2018",
-	month = "May",
+	month = "05",
 	abstract = "We propose EnclaveDB, a database engine that guarantees confidentiality, integrity, and freshness for data and queries. EnclaveDB guarantees these properties even when the database administrator is malicious, when an attacker has compromised the operating system or the hypervisor, and when the database runs in an untrusted host in the cloud. EnclaveDB achieves this by placing sensitive data (tables, indexes and other metadata) in enclaves protected by trusted hardware (such as Intel SGX). EnclaveDB has a small trusted computing base, which includes an in-memory storage and query engine, a transaction manager and pre-compiled stored procedures. A key component of EnclaveDB is an efficient protocol for checking integrity and freshness of the database log. The protocol supports concurrent, asynchronous appends and truncation, and requires minimal synchronization between threads. Our experiments using standard database benchmarks and a performance model that simulates large enclaves show that EnclaveDB achieves strong security with low overhead (up to 40% for TPC-C) compared to an industry strength in-memory database engine.",
 	publisher = "IEEE",
 	url = "https://www.microsoft.com/en-us/research/publication/enclavedb-a-secure-database-using-sgx/"
@@ -337,4 +337,80 @@
 	howpublished = "Cryptology ePrint Archive, Report 2016/086",
 	year = "2016",
 	note = "\url'https://eprint.iacr.org/2016/086'",
+}
+
+@misc{cryptoeprint:2015:564,
+	author = "Victor Costan and Ilia Lebedev and Srinivas Devadas",
+	title = "Sanctum: Minimal Hardware Extensions for Strong Software Isolation",
+	howpublished = "Cryptology ePrint Archive, Report 2015/564",
+	year = "2015",
+	note = "\url'https://eprint.iacr.org/2015/564'",
+}
+
+@inproceedings{Khan2014,
+	doi = "10.1109/aces.2014.6807983",
+	url = "https://doi.org/10.1109/aces.2014.6807983",
+	year = "2014",
+	month = "02",
+	publisher = "IEEE",
+	author = "Ajoy Kumar Khan and Hridoy Jyoti Mahanta",
+	title = "Side channel attacks and their mitigation techniques",
+	booktitle = "2014 First International Conference on Automation,  Control,  Energy and Systems ('ACES')"
+}
+
+@dataset{cachetimingattaks:1,
+	author = "Banescu, Sebastian",
+	year = "2011",
+	month = "07",
+	title = "Cache Timing Attacks"
+}
+
+@inproceedings{Gtzfried2017,
+	doi = "10.1145/3065913.3065915",
+	url = "https://doi.org/10.1145/3065913.3065915",
+	year = "2017",
+	publisher = "'ACM' Press",
+	author = "Johannes G{\"o}tzfried and Moritz Eckert and Sebastian Schinzel and Tilo M{\"u}ller",
+	title = "Cache Attacks on Intel 'SGX'",
+	booktitle = "Proceedings of the 10th European Workshop on Systems Security - 'EuroSec' '17"
+}
+
+@ARTICLE{2017arXiv170208719S,
+	author = "Schwarz, Michael and Weiser, Samuel and Gruss, Daniel and
+	Maurice, Cl{\'e}mentine and Mangard, Stefan",
+	title = "Malware Guard Extension: Using SGX to Conceal Cache Attacks",
+	journal = "arXiv e-prints",
+	keywords = "Computer Science - Cryptography and Security",
+	year = "2017",
+	month = "02",
+	eid = "arXiv:1702.08719",
+	pages = "arXiv:1702.08719",
+	archivePrefix = "arXiv",
+	eprint = "1702.08719",
+	primaryClass = "cs.CR",
+	adsurl = "https://ui.adsabs.harvard.edu/abs/2017arXiv170208719S",
+	adsnote = "Provided by the SAO/NASA Astrophysics Data System"
+}
+
+@MISC{Waterman14therisc-v,
+	author = "Andrew Waterman and Yunsup Lee and David A. Patterson and Krste Asanovic and Volume I User-level Isa and Andrew Waterman and Yunsup Lee and David Patterson",
+	title = "The RISC-V Instruction Set Manual",
+	year = "2014"
+}
+
+@TECHREPORT{
+	armtrustzone:1,
+	title =  "ARM TrustZone Security Whitepaper",
+	number = "PRD29-GENC-009492C",
+	institution =  "ARM Lmited",
+	month = "12",
+	year = "2008",
+	url = "http://infocenter.arm.com/help/topic/com.arm.doc.prd29-genc-009492c/PRD29-GENC-009492C_trustzone_security_whitepaper.pdf"
+}
+
+@MISC {
+	armtrustzone:2,
+	title = "ARM TrustZone",
+	url = "https://developer.arm.com/ip-products/security-ip/trustzone",
+	note = "Accessed: 2020-01-08"
 }
