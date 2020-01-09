@@ -284,7 +284,20 @@ Sanctum is also open to the public which makes easier for security researchers t
 \subsection{ARM Trust Zone} % fold
 \label{ssec:arm_trust_zone}
 
-ARM Trust Zone \cite{armtrustzone:1} \cite{armtrustzone:2}
+ARM Trust Zone \cite{armtrustzone:1} is a technology that offers a system wide approach to security based on hardware enforced isolation built into the CPU \cite{armtrustzone:2}. The principle of the technology is to separate the trusted and untrusted by two virtual processors backed by hardware access control. The two states are referred as worlds, where the first is called the secure world (SW) and the other is the normal world (NW) like figure \ref{fig:armtrustzone_stack} shows.
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.5\linewidth]{ArmTrustZone_Stack}}%
+	\caption{Arm TrustZone Stack \cite{armtrustzone:3}}
+	\label{fig:armtrustzone_stack}
+\end{figure}
+
+The non-secure world (or normal world) is where the \gls{OS} and most of the software and applications will be running, as for the secure world is where more secure and sensitive software will run and will ensures that vital information is not intercepted by a third party. The security is enforced because each of the worlds acts isolated from the other as a runtime environment with separated resources such as memory, processor, cache, controllers, interrupts. The ARM hardware has separate copies of the registers for each worlds and cross-world register access is blocked. However the Secure Monitor shown in figure \ref{fig:armtrustzone_stack} can access non secure registers while running in secure world. This means that the monitor can then implement context switching between both worlds.
+
+When in Normal World, the application calls a specific ARM instruction call SMC (Secure Monitor Call) to call back inside the secure world and execute in code in a secure manner.
+
+By keeping the worlds separated from each other, the ARM TrustZone can keep applications running in secure mode isolated from the normal world applications such as the OS and thus achieving another implementation of a \gls{TEE}.
 
 \subsection{Discussion}
 \label{ssec:s2_discussion}
