@@ -17,9 +17,7 @@ Having discussed the software, section 2.2 will then address the environment on 
 Section 2.3 will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure application.
 This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module.
 
-To conclude the chapter, section 2.4... 
-
-//TODO: complete
+To conclude the chapter, section 2.4 will combine the information of every sub-chapter and analyze it with a bigger perspective and better knowledge of the theme.
 
 Along the next chapter we summarize the main relevant ideas that can be retained from each section for our objectives and expected goals.
 
@@ -302,7 +300,14 @@ By keeping the worlds separated from each other, the ARM TrustZone can keep appl
 \subsection{Discussion}
 \label{ssec:s2_discussion}
 
-Discussion
+The \gls{TCB} (Trusted Computing Base) is the of set computer components (hardware), software and data that we need to trust and deem as not malicious in order to use a system. It's a group of various elements that are critical to a systems security in a way that any bug or vulnerability occurring from inside the \gls{TCB} components might compromise the security and privacy of the entire system. On the other hand, security flaws and bugs from outside of the ~\gls{TCB} should not become a security issue.
+
+Hardware security like \gls{TPM}s and \gls{TEE} technologies have the goal to drastically reduce the \gls{TCB} of a system, for example, remove the \gls{OS} from the trusted base to make sure that a remote compromised machine vulnerability does not affect the security and privacy of a application or system.
+
+By isolating the program from outside and uncontrollable sources like cloud infrastructures \gls{OS}s, hypervisors and hardware we can more safely deploy sensitive applications to those cloud providers.
+That is the goal of all different implementations of trusted execution environments like the Intel \gls{SGX} and the ARM TrustZone.
+
+Although not free of some problems, \gls{SGX} implementation of a \gls{TEE} seems to be the most accepted technology, with serious and skilled developers and security researches always working to mitigate any vulnerability in order to create a truly trusted and isolated environment.
 
 \section{TEE/SGX Enabled Key Value Stores} % (fold)
 \label{sec:sgx_enabled_key_value_stores}
