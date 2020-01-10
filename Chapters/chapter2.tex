@@ -250,6 +250,8 @@ The threat model of a \gls{TEE} should include all software attacks and the phys
 \subsection{Intel SGX} % (fold)
 \label{ssec:Intel_sgx}
 
+% todo: Rewrite this chatper
+
 "Intel® Software Guard Extensions (Intel® SGX) is a set of instructions that increases the security of application code and data, giving them more protection from disclosure or modification." \cite{sgx:3}.
 
 These set of instructions are one of the latest iterations of trusted computing solution and designs and tries to tackle the problem of securing remote computations by leveraging secure hardware on the remote host machine. The SGX processor enables a secure container called enclave which protects the confidentiality and integrity of the execution, such as code and data while relying on software attestation mechanisms.
@@ -432,12 +434,7 @@ For trusted execution with \gls{SGX}, extensive research is needed to partition 
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
-%
-% \todo[inline]{A a note in a line by itself.}
-%
-Foo Bar
-%
-% Please note that
-% \begin{center}
-%   \textbf{\large this package and template are not official for FCT/NOVA}.
-% \end{center}
+
+In the current days, computer scientists are always looking for a secure, fast and cheap environment to develop applications. As we know, it is not feasible to have all three of this elements working flawlessly without any compromises. Although, by combining in-memory key value stores, trusted remote execution environments and cloud providers, developers can now have a practical example of what would be to develop for a privacy enhanced secure system with reduce costs by using cloud providers and with better reassurances that the hardware and software that it's out of the control of the user will have a minimal impact on sensitive data and code of an application. By adding the performance benefits of an in-memory key value store and all of its technology, like built-in security, built-in replication and persistence we can in the best of our abilities today, combine the best of the three worlds without compromising too much on any of them.
+
+In this thesis we will compare different kinds of approaches to implement a fast system with the assurance of a secure data flow that can easily be deployed into the cloud without fear of any components out of our control.
