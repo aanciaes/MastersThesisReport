@@ -45,11 +45,20 @@ The problem behind the goals and objectives of this dissertation can be summaris
 \section{Objectives and Planned Contributions} % (fold)
 \label{sec:objectives_and_planned_contributions}
 
-It is up to you, the student, to read the FCT and/or NOVA regulations on how to format and submit your MSc or PhD dissertation.  
+The main goal of this dissertation if to implement and analyse a solution of a privacy enhanced in-memory key-value store deployed in the cloud leveraging the hardware based security features offered by Intel's \gls{SGX} technology. It will analyse and compare the overhead introduced by the additional security guarantees, with different types of replication solutions.
 
-This template is endorsed by the FCT-NOVA and even linked from its web pages, but it is not an official template.
-%
-This template exists to make your life easier, but in the end of the line you are accountable for both the looks and the contents of the document you submit as your dissertation.
+In this thesis we plan to achieve the following contributions:
+
+\begin{itemize}
+  \item \textbf{Support for a privacy enhanced in memory key-value store} with all the in-the-box features offered by the chosen key-value store technology including high availability, built-in replication, a \gls{LRU} eviction model, support for transactions and options for on-disk persistence.
+  \item \textbf{Partial homomorphic encryption} to help with performance by allowing operations to be made directly over encrypted data. By sparing cycles of encryption and decryption in the system it can dramatically increase performance. Although, fully homomorphic encryption is still not reliable and secure enough to adopt.
+  \item \textbf{Smart client} capable of interacting with the system via secure channels in order to protect data in traffic in and out of the system. 
+  \item \textbf{Different replication mechanisms} analysed performance and security wise.
+  \item \textbf{Remote attestation} performed by the client of the system running in the cloud provider to make sure that the none of the components running have been tampered with or changed in any way not foreseen.
+  \item \textbf{Easy deployment} of the services by implementing containerised solutions using docker.
+  \item \textbf{Drastically reduce TCB} in the remote cloud provider by removing the millions and millions of lines of code implementing the hypervisors and operating systems used in their infrastructures thus creating a \textbf{truly isolated system} by leveraging Intel's \gls{SGX} technology to create a shielded and trusted execution environment in a remote cloud provider.
+  \item \textbf{Complete analyse report} of the different solutions of replication and security levels, comparing a normal non-secure solution with the the privacy-enhanced implementation along with evaluation of overheads and trade-offs introduced by the additional security mechanisms
+\end{itemize}
 
 \section{Report Organization}
 \label{report_organization}
