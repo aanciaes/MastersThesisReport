@@ -27,7 +27,7 @@ Over the past decade, cloud computing has evolve from something service provider
 
 Recent studies are foreseeing that 83{\%} of enterprise workloads will be on the cloud by 2020 \cite{cloud_statistic:1}. The array of services provided now are endless and the costs are attractive to businesses. These services allow developers to only pay for resource usage, and to take advantage of all the power of very large companies. Scalability at request, reliability with daily backups and seamless integration with a lot of other services are some advantages of moving to the cloud. And all of these functionalities without having to manage big infrastructures and a lot of servers, networks, disks, etc... \cite{cloud_benefits:1}.
 
-All of this of that data and processing happening in someone else's machine started to raise privacy and security concerns. It has become a very attractive target for malicious hackers to attack cloud providers due to the amount of data they process and hold on their services. The best security researchers are always working with the providers to try and mitigate all bugs and vulnerabilities on their very large platforms which has become also a big attack vector. It has been reported by Microsoft, that \textit{"There was a 300 percent increase in Microsoft cloud-based user accounts attacked year-over-year (Q1-2016 to Q1-2017)."} and \textit{"The number of account sign-ins attempted from malicious IP addresses has increased by 44 percent year over year in Q1-2017."} \cite{cloud_attacks:1}. Another example published on the Washington Post describes a sophisticated Man-in-the-Middle (\gls{MIM}) cyber-attack that has targeted Apple’s iCloud service in China, in an apparent attempt to collect user names, passwords and other private information. Also, Amazon Web Services has been in 2019 hit by a massive \gls{DDoS} (Distributed Denial of Service) attack that kept the system down for about 8 hours straight, which can mean thousands of dollars lost by clients \cite{cloud_attacks:3}.
+All of this data and processing happening in someone else's machine started to raise privacy and security concerns. It has become a very attractive target for malicious hackers to attack cloud providers due to the amount of data they process and hold on their services. The best security researchers are always working with the providers to try and mitigate all bugs and vulnerabilities on their very large platforms which has become also a big attack vector. It has been reported by Microsoft, that \textit{"There was a 300 percent increase in Microsoft cloud-based user accounts attacked year-over-year (Q1-2016 to Q1-2017)."} and \textit{"The number of account sign-ins attempted from malicious IP addresses has increased by 44 percent year over year in Q1-2017."} \cite{cloud_attacks:1}. Another example published on the Washington Post describes a sophisticated Man-in-the-Middle (\gls{MIM}) cyber-attack that has targeted Apple’s iCloud service in China, in an apparent attempt to collect user names, passwords and other private information. Also, Amazon Web Services has been in 2019 hit by a massive \gls{DDoS} (Distributed Denial of Service) attack that kept the system down for about 8 hours straight, which can mean thousands of dollars lost by clients \cite{cloud_attacks:3}.
 
 The well known Edward Snowden scandal \cite{snowden:1}, although not directly related, gave the world another perspective about the the security provided by the cloud providers, that keep the user's data secure from other hackers, but could technically be accessed by the respective provider, or by any system administrator with physical or remote access to the machines.
 
@@ -35,18 +35,15 @@ A previously mentioned study also reflects that \textit{"66{\%} of IT profession
 
 % section a_bit_of_history (end)
 
+\section{Problem Statement} % (fold)
+\label{sec:problem_statement}
 
-\section{Objective} % (fold)
-\label{sec:objective}
+The problem behind the goals and objectives of this dissertation can be summarised in the following statements and questions:
 
-It is up to you, the student, to read the FCT and/or NOVA regulations on how to format and submit your MSc or PhD dissertation.  
+\textit{Is it feasible to implement a solution for a remote cloud system with strong security features and policies with a good trade-off with performance? Can we combine and the performance of a key-value store with the security provided by an hardware based security solution? Can we isolate a system to the point where the hypervisor and operating system of the remote provider can be removed from the \gls{TCB}? Is it possible to remove the threat of administrators of a cloud platform breaking data privacy? How do different types of replication affect performance and security?}
 
-This template is endorsed by the FCT-NOVA and even linked from its web pages, but it is not an official template.
-%
-This template exists to make your life easier, but in the end of the line you are accountable for both the looks and the contents of the document you submit as your dissertation.
-
-\section{Planned Contributions} % (fold)
-\label{sec:planned_contributions}
+\section{Objectives and Planned Contributions} % (fold)
+\label{sec:objectives_and_planned_contributions}
 
 It is up to you, the student, to read the FCT and/or NOVA regulations on how to format and submit your MSc or PhD dissertation.  
 

@@ -39,7 +39,7 @@ Is this simplicity that makes this technology very attractive to developers. The
 
 For that lightweight and fast attributes, most of the key-value stores work in the computer memory. This allows fast get and write operations as opposed to persistent disk storage. Although, they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
 
-\gls{KVS}s have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. Meaning that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
+\glspl{KVS} have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. Meaning that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
 
 \begin{itemize}
 	\item \textbf{Document Store} - \textit{"nonrelational database that is designed to store and query data as JSON-like documents"} \cite{aws-nosql:1}
@@ -166,7 +166,7 @@ There are a few hardware/software based solutions to achieved a trusted computin
 \subsection{TPM – Trusted Platform Modules } % (fold)
 \label{ssec:trusted_platform_modules}
 
-A Trusted Platform Module, also known as a \gls{TPM} is a technology proposed by the Trusted Computing Group (\gls{TCG}) designed to provide hardware-based security related functions. It's a chip embedded into the motherboard and includes multiple security mechanisms to make it tamper resistant to physical harm and malicious software is unable to mess with its security features \cite{tpm:1}. Some key advantages of using \gls{TPM}s are:
+A Trusted Platform Module, also known as a \gls{TPM} is a technology proposed by the Trusted Computing Group (\gls{TCG}) designed to provide hardware-based security related functions. It's a chip embedded into the motherboard and includes multiple security mechanisms to make it tamper resistant to physical harm and malicious software is unable to mess with its security features \cite{tpm:1}. Some key advantages of using \glspl{TPM} are:
 
 \begin{itemize}
 	\item Generate, store, and limit the use of cryptographic keys
@@ -184,7 +184,7 @@ Figure \ref{fig:tpm_architecture} shows the mains components and services provid
 \end{figure}
 
 
-With all the components described by figure \ref{fig:tpm_architecture}, \gls{TPM}s provide there main \gls{TPM} features: Encryption, Authenticated Boot and Attestation. 
+With all the components described by figure \ref{fig:tpm_architecture}, \glspl{TPM} provide there main \gls{TPM} features: Encryption, Authenticated Boot and Attestation. 
 
 The first feature is used for every security and confidentiality aspects, mainly generating cryptographic keys, encrypting, signing and hashing data with secure standard algorithms melted in the module.
 
@@ -304,9 +304,9 @@ By keeping the worlds separated from each other, the ARM TrustZone can keep appl
 
 The \gls{TCB} (Trusted Computing Base) is the of set computer components (hardware), software and data that we need to trust and deem as not malicious in order to use a system. It's a group of various elements that are critical to a systems security in a way that any bug or vulnerability occurring from inside the \gls{TCB} components might compromise the security and privacy of the entire system. On the other hand, security flaws and bugs from outside of the ~\gls{TCB} should not become a security issue.
 
-Hardware security like \gls{TPM}s and \gls{TEE} technologies have the goal to drastically reduce the \gls{TCB} of a system, for example, remove the \gls{OS} from the trusted base to make sure that a remote compromised machine vulnerability does not affect the security and privacy of a application or system.
+Hardware security like \glspl{TPM} and \gls{TEE} technologies have the goal to drastically reduce the \gls{TCB} of a system, for example, remove the \gls{OS} from the trusted base to make sure that a remote compromised machine vulnerability does not affect the security and privacy of a application or system.
 
-By isolating the program from outside and uncontrollable sources like cloud infrastructures \gls{OS}s, hypervisors and hardware we can more safely deploy sensitive applications to those cloud providers.
+By isolating the program from outside and uncontrollable sources like cloud infrastructures \glspl{OS}, hypervisors and hardware we can more safely deploy sensitive applications to those cloud providers.
 That is the goal of all different implementations of trusted execution environments like the Intel \gls{SGX} and the ARM TrustZone.
 
 Although not free of some problems, \gls{SGX} implementation of a \gls{TEE} seems to be the most accepted technology, with serious and skilled developers and security researches always working to mitigate any vulnerability in order to create a truly trusted and isolated environment.
@@ -343,14 +343,14 @@ The main limitations are:
 	\item Performance
 	\item Memory
 	\item \gls{I/O}
-	\item \gls{syscall}s
+	\item \glspl{syscall}
 \end{itemize}
 
 In the \gls{KVS} world, as we extensively covered, performance is the major concern and there is no real way around this limitation. Using secure enclaves will definitely decrease the supposed blazing fast performance. Although, with intelligent partition between the untrusted code, which will be fast, and the trusted instructions, which will be slower we can limit the performance overhead. By separating and well defining both modules of the application, we can decrease the code that needs to run securely and find a fine compromised between security and performance.
 
 Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}, being that only about 94 \gls{MB} are available to the application, with the rest reserved to metadata. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1} by swapping pages from the \gls{EPC} to main untrusted memory, with guaranteed of confidentiality, integrity and data freshness. Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections.
 
-\gls{I/O} and \gls{syscall}s are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \gls{syscall}s through the aforementioned \gls{ECALL}s and \gls{OCALL}s (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
+\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{ECALL} and \glspl{OCALL} (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
 
 \subsection{SGX-Enabled Secure Databases}
 \label{ssec:sgx_enabled_secure_databases}
@@ -424,9 +424,9 @@ First the client remote attests the server-side (1) verifying \gls{SGX} support 
 \subsection{Discussion}
 \label{ssec:s3_discussion}
 
-Concluding, EnclaveDB (section \ref{sssec:enclave_db}) and Pesos (section \ref{sssec:pesos_db}) presents secure databases and objects storage systems respectively, using \gls{SGX}, but EnclaveDB assumes that \gls{SGX} supports large enclaves whose size is an order of several hundred \gls{GB}s and Pesos restricts the size of data structure to the size of \gls{EPC}. On the other hand, Speicher (section \ref{sssec:speicher}) and ShieldStore (section \ref{sssec:shieldstore}) proposes a store that alleviates the memory limitation of Intel \gls{SGX} by storing encrypted data on untrusted memory regions. Speicher and ShieldStore have similar architectures, but the former is primarily design for persistence storage and the latter is focused on a fast in-memory key-value store.
+Concluding, EnclaveDB (section \ref{sssec:enclave_db}) and Pesos (section \ref{sssec:pesos_db}) presents secure databases and objects storage systems respectively, using \gls{SGX}, but EnclaveDB assumes that \gls{SGX} supports large enclaves whose size is an order of several hundred \glspl{GB} and Pesos restricts the size of data structure to the size of \gls{EPC}. On the other hand, Speicher (section \ref{sssec:speicher}) and ShieldStore (section \ref{sssec:shieldstore}) proposes a store that alleviates the memory limitation of Intel \gls{SGX} by storing encrypted data on untrusted memory regions. Speicher and ShieldStore have similar architectures, but the former is primarily design for persistence storage and the latter is focused on a fast in-memory key-value store.
 
-We can now conclude that the clever partitioning of the application into trusted and untrusted parts is really important when programming with Intel \gls{SGX}. It directly affects \gls{syscall}s and \gls{I/O}, performance and memory of the service. 
+We can now conclude that the clever partitioning of the application into trusted and untrusted parts is really important when programming with Intel \gls{SGX}. It directly affects \glspl{syscall} and \gls{I/O}, performance and memory of the service. 
 
 The long goal of this thesis is to implement a system with characteristics from the databases present above. In terms of performance we plan to implement partial homomorphic encryption, so it allows to perform operations directly over in-memory encrypted data. This will be a challenge, as fully homomorphic encryption is not yet practical \cite{homomorphic:1}, so adaptations must be made, but performance increase are expected  over the databases presented above, by not needing to decrypt the data in secure execution. Persistence will also be a requirement just like some of the databases presented.
 
