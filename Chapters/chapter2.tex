@@ -32,12 +32,11 @@ redis> SET mykey "Hello"
 "OK"
 redis> GET mykey
 "Hello"
-redis> 
 \end{lstlisting}
 
 Is this simplicity that makes this technology very attractive to developers. The ease of use, its high performance and speed are key aspects in favour of this technologies. However, simply working with keys and values might not be enough to more complex applications, and that is why Key-Value store product developers are introducing new features in order to make them appealing to a broader mass of users, always keeping them lightweight and fast.
 
-For that lightweight and fast attributes, most of the key-value stores work in the computer memory. This allows fast get and write operations as opposed to persistent disk storage. Although, they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
+For that lightweight and fast attributes, most of the key-value stores work in the computer memory. This allows fast get and write operations as opposed to persistent disk storage. Although they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
 
 \glspl{KVS} have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. Meaning that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
 
