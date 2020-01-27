@@ -253,13 +253,20 @@ The threat model of a \gls{TEE} should include all software attacks and the phys
 
 "Intel® Software Guard Extensions (Intel® SGX) is a set of instructions that increases the security of application code and data, giving them more protection from disclosure or modification." \cite{sgx:3}.
 
-These set of instructions are one of the latest iterations of trusted computing solution and designs and tries to tackle the problem of securing remote computations by leveraging secure hardware on the remote host machine. The SGX processor enables a secure container called enclave which protects the confidentiality and integrity of the execution, such as code and data while relying on software attestation mechanisms.
+These set of instructions are one of the latest iterations of trusted computing solutions and designs that tries to tackle the problem of securing remote computations by leveraging secure hardware on the remote host machine. The SGX processor enables a secure container called enclave which protects the confidentiality and integrity of the execution, such as code and data while relying on software attestation mechanisms.
 
-A \gls{SGX} can be though as a reverse sandbox. With a sandbox you are trying to protect the system from your application, but with \gls{SGX} you are trying to do the opposite and protect the application from the system. The system can be the OS, the hypervisor, the BIOS, the firmware or the drivers \cite{sgx:2}.
+A \gls{SGX} can be though as a reverse sandbox. With a sandbox you are trying to protect the system from your application, but with \gls{SGX} you are trying to do the opposite and protect the application from the system. The system can be the \gls{OS}, the hypervisor, the BIOS, the firmware or even the drivers \cite{sgx:2}.
+
+A \gls{SGX} enabled application is broken into two parts, the untrusted and trusted parts. The trusted part of the application is all the processing that deals with any sensitive data the application is handling. This part will be run inside enclaves and be stored in protected memory. The rest will live in normal memory and not be protected.
 
 It provides this kind of security from the hardware by isolating all the private data from the outside, placing them into the \gls{EPC} (Enclave Page Cache), which is memory zone with guaranteed access management by the CPU where it will deny every external access and only allow access through the associated enclave. This region of the memory is also known as the private/protected memory or the trusted part of the application.
 
-A \gls{SGX} enabled application is broken into two parts, the untrusted and trusted parts. The trusted part of the application is all the processing that deals with any sensitive data the application is handling. This part will be run inside enclaves and be stored in protected memory The rest will live in normal memory and not be protected.
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.7\linewidth]{sgx_memory_architecture}}%
+	\caption{\gls{SGX} Memory Archicecture \cite{sgx:4}}
+	\label{fig:sgx_memory_architecture}
+\end{figure}
 
 The \gls{SGX} will create an enclave when sensitive code needs to run by a specific \gls{SGX} CPU instruction and will load the sensitive code into an \gls{EPC} inside the protected memory. Once all pages are loaded into the EPC, and the loading in complete, an authentication hash is computed and is available for remote attestation so an user can verify that the code running in the enclave has not been tampered with.
 
