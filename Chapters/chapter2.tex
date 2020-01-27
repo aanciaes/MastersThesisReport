@@ -249,8 +249,6 @@ The threat model of a \gls{TEE} should include all software attacks and the phys
 \subsection{Intel SGX} % (fold)
 \label{ssec:Intel_sgx}
 
-% todo: Rewrite this chatper
-
 "Intel® Software Guard Extensions (Intel® SGX) is a set of instructions that increases the security of application code and data, giving them more protection from disclosure or modification." \cite{sgx:3}.
 
 These set of instructions are one of the latest iterations of trusted computing solutions and designs that tries to tackle the problem of securing remote computations by leveraging secure hardware on the remote host machine. The SGX processor enables a secure container called enclave which protects the confidentiality and integrity of the execution, such as code and data while relying on software attestation mechanisms.
@@ -259,18 +257,31 @@ A \gls{SGX} can be though as a reverse sandbox. With a sandbox you are trying to
 
 A \gls{SGX} enabled application is broken into two parts, the untrusted and trusted parts. The trusted part of the application is all the processing that deals with any sensitive data the application is handling. This part will be run inside enclaves and be stored in protected memory. The rest will live in normal memory and not be protected.
 
-It provides this kind of security from the hardware by isolating all the private data from the outside, placing them into the \gls{EPC} (Enclave Page Cache), which is memory zone with guaranteed access management by the CPU where it will deny every external access and only allow access through the associated enclave. This region of the memory is also known as the private/protected memory or the trusted part of the application.
+It provides this kind of security from the hardware by isolating all the private data from the outside, placing it into a restricted area of the memory called the \gls{PRM} more specifically in the \gls{EPC} (Enclave Page Cache) as shown on figure \ref{fig:sgx_memory_architecture}. The \gls{PRM} is a zone of the \gls{RAM} with guaranteed access management by the CPU where it will deny every external access and only allow access through the associated enclave. This region of the memory is also known as the private/protected memory or the trusted part of the application.
 
 \begin{figure}[htbp]
 	\centering
-	{\includegraphics[width=0.7\linewidth]{sgx_memory_architecture}}%
+	{\includegraphics[width=1.0\linewidth]{sgx_memory_architecture}}%
 	\caption{\gls{SGX} Memory Archicecture \cite{sgx:4}}
 	\label{fig:sgx_memory_architecture}
 \end{figure}
 
-The \gls{SGX} will create an enclave when sensitive code needs to run by a specific \gls{SGX} CPU instruction and will load the sensitive code into an \gls{EPC} inside the protected memory. Once all pages are loaded into the EPC, and the loading in complete, an authentication hash is computed and is available for remote attestation so an user can verify that the code running in the enclave has not been tampered with.
+Because the \gls{SGX} enclaves execute within the virtual address space of a process, the translation of enclave addresses must be trusted. However, since it is the \gls{OS} that manages the translation between physical and virtual addresses (and the \gls{OS} cannot be trusted), \gls{SGX} maintains an internal data structure called the \gls{EPCM} (Enclave Page Cache Mapping) which tracks the referred mapping as well as the information described on figure \ref{fig:sgx_memory_architecture} \cite{sgx:5}.
 
-When running, the execution always happens in protected mode, and to prevent data leaking, the CPU will not directly address an interrupt, fault or VM exit, but will instead emit another specific instruction to properly exit the enclave, save CPU state into the enclave and only then will service the fault.
+With all this information about enclave pages, the processor can now performed a controlled access management to the enclave page cache described in figure \ref{fig:sgx_access_control}, where it will denied access  not only from outside the enclave but as well as from enclaves that do not own the page of memory request creating then, an isolated memory region.
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.8\linewidth]{sgx_access_control}}%
+	\caption{\gls{SGX} Access Control \cite{sgx:4}}
+	\label{fig:sgx_access_control}
+\end{figure}
+
+The \gls{SGX} will create an enclave when sensitive code needs to run by a specific \gls{SGX} CPU instruction (ECREATE) and will create a unique instance of an enclave, establishing the linear address range and load the sensitive code into an \gls{EPC} inside the protected memory. Once all pages are loaded into the EPC, and the loading in complete, an authentication hash is computed and is available for remote attestation so a user can verify that the code running in the enclave has not been tampered with.
+
+An enclave must expose an \gls{API} for the application to call in and advertise what services provided by the untrusted domain are needed. This is the definition of an interface boundary between the untrusted part of the code and the enclave and it is how they communicate. An \gls{Ecall} is a function that the untrusted part application can call to execute some code inside the enclave and since it exposes a sensitive interface, to reduce the enclave attack surface, the number of \glspl{Ecall} should be limited. On the other hand, the \gls{Ocall} is a function that a enclave can call to reach a service/interface outside the enclave, on the untrusted \gls{OS}. Again, calling some service out of the enclave can carry additional security risks and should be as minimal as possible \cite{sgx:6}.
+
+When running, the execution always happens in protected mode, and to prevent data leaking, the CPU will not directly address an interrupt, fault or VM exit, but will instead emit another specific instruction (EEXIT) to properly exit the enclave, save CPU state into the enclave and only then will service the fault.
 
 With all this properties, Intel® through \gls{SGX} set of instructions and implementation tries to achieve a secure and trusted environment with guarantees of code and data isolation, confidentiality and integrity from attackers such as the \gls{OS}, hypervisor, any hardware and even physical attacks \cite{cryptoeprint:2016:086}.
 
@@ -356,7 +367,7 @@ In the \gls{KVS} world, as we extensively covered, performance is the major conc
 
 Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}, being that only about 94 \gls{MB} are available to the application, with the rest reserved to metadata. Now, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1} by swapping pages from the \gls{EPC} to main untrusted memory, with guaranteed of confidentiality, integrity and data freshness. Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections.
 
-\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{ECALL} and \glspl{OCALL} (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
+\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{Ecall} and \glspl{Ocall} (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
 
 \subsection{SGX-Enabled Secure Databases}
 \label{ssec:sgx_enabled_secure_databases}
