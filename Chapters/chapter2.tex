@@ -11,13 +11,12 @@
 This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisons between those existing technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
 
 First, in section \ref{sec:key-value_stores} we explain and discuss for the first time the definition of a Key-Value Store. We present some use cases, current technology available, their differences and most importantly their security models and concerns.
-
 Having discussed the software, section \ref{sec:trusted_computing _environments} will then address the environment on where that software will run on, most specifically the hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
-
 Section \ref{sec:sgx_enabled_key_value_stores} will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure application.
 This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module.
-
 To conclude the chapter, section \ref{sec:related_work_balance_and_critical_analysis} will combine the information of every sub-chapter and analyze it with a bigger perspective and better knowledge of the theme.
+
+Section \ref{sec:sgx_enabled_key_value_stores} is considered to be the \textbf{main core} investigation and directly related to the work planned for this thesis. As for the other sections, they provide a background knowledge necessary for understanding of the core of this dissertation.
 
 Along the next chapter we summarize the main relevant ideas that can be retained from each section for our objectives and expected goals.
 
@@ -336,7 +335,6 @@ There has been an increase trend from developers to move their applications to t
 To mitigate this use case, and after studying and discussing the Key-Value stores technologies and also the trusted platform modules as well as the trusted execution environments, in this chapter, it will be presented how are this two topics being combined and used together. 
 
 It will be more focused on the Intel SGX platform as it is the one that will be used throughout this thesis. Currently, there are a number of databases who leverage this technology to provide a more secure environment and service. In the this chapter it's presented how they work and operate, discussed the differences between them and also the how the work planned to be performed on this thesis will solve some of the problems and caveats. 
-
 
 \subsection{Trusted Execution with Intel SGX}
 \label{ssec:trusted_execution_with_sgx}
