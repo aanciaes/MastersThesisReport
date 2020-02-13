@@ -23,7 +23,7 @@ Then, around 1970's the concept of the virtual machine (\gls{VM}) started to gai
 
 One of the first major cloud computing moments was the arrival of \textit{salesforce.com} that pioneered the concept of delivering enterprise applications via a simple website. Later, around the 2000's, current big names like Oracle, SAP, Google, Amazon and Microsoft joined the trend and made the cloud world as it is today. \cite{cloud_history:1} \cite{cloud_history:2}
 
-Over the past decade, cloud computing has evolve from something service providers told companies they should adopt to becoming the technology heart of not only major companies, but medium sized enterprises, small start-ups, personal projects and pretty much anyone who works in the computer science world. 
+Over the past decade, cloud computing has evolve from something service providers told companies they should adopt, to becoming the technology heart of not only major companies, but medium sized enterprises, small start-ups, personal projects and pretty much anyone who works in the computer science world. 
 
 Recent studies are foreseeing that 83{\%} of enterprise workloads will be on the cloud by 2020 \cite{cloud_statistic:1}. The array of services provided now are endless and the costs are attractive to businesses. These services allow developers to only pay for resource usage, and to take advantage of all the power of very large companies. Scalability at request, reliability with daily backups and seamless integration with a lot of other services are some advantages of moving to the cloud. And all of these functionalities without having to manage big infrastructures and a lot of servers, networks, disks, etc... \cite{cloud_benefits:1}.
 
@@ -45,18 +45,20 @@ The problem behind the goals and objectives of this dissertation can be summaris
 \section{Objectives and Planned Contributions} % (fold)
 \label{sec:objectives_and_planned_contributions}
 
-The main goal of this dissertation if to implement and analyse a solution of a privacy enhanced in-memory key-value store deployed in the cloud leveraging the hardware based security features offered by Intel's \gls{SGX} technology. It will analyse and compare the overhead introduced by the additional security guarantees, with different types of replication solutions.
+The main goal of this dissertation if to implement and analyse a solution of a privacy enhanced in-memory key-value store deployed in the cloud leveraging the hardware based security features offered by Intel's \gls{SGX} technology. Is to provide a system as shown on figure \ref{fig:system_model} where it can deployed on any cloud provider and will guarantee protection from attackers at any level \textbf{from within} the cloud provider. It will analyse and compare the overhead introduced by the additional security guarantees, with different types of replication solutions.
+
+\begin{figure}[htbp]
+	\centering
+	{\includegraphics[width=0.7\linewidth]{SystemModel}}%
+	\caption{General System Model}
+	\label{fig:system_model}
+\end{figure}
 
 In this thesis we plan to achieve the following contributions:
 
 \begin{itemize}
-  \item \textbf{Support for a privacy enhanced in memory key-value store} with all the in-the-box features offered by the chosen key-value store technology including high availability, built-in replication, a \gls{LRU} eviction model, support for transactions and options for on-disk persistence.
-  \item \textbf{Partial homomorphic encryption} to help with performance by allowing operations to be made directly over encrypted data. By sparing cycles of encryption and decryption in the system it can dramatically increase performance. Although, fully homomorphic encryption is still not reliable and secure enough to adopt.
-  \item \textbf{Smart client} capable of interacting with the system via secure channels in order to protect data in traffic in and out of the system. 
-  \item \textbf{Different replication mechanisms} analysed performance and security wise.
-  \item \textbf{Remote attestation} performed by the client of the system running in the cloud provider to make sure that the none of the components running have been tampered with or changed in any unforeseen way.
-  \item \textbf{Easy deployment} of the services by implementing containerised solutions using docker.
-  \item \textbf{Detailed benchmark tester} implementation to gather performance metrics of all interactions with the remote system, from the client, to in-transit metrics, and backend computations.
+  \item \textbf{Support for a privacy enhanced in memory key-value store} with all the in-the-box features offered by the chosen storage technology including high availability, built-in replication, a \gls{LRU} eviction model, support for transactions and options for on-disk persistence.
+  \item \textbf{Multiple Replication Mechanisms} based on the same secure solution to analise how these types of replication (centralised solution, a Master-Slave architecture and a clustering solution) will be impacted by the additional security features.
   \item \textbf{Drastically reduce TCB} in the remote cloud provider by removing the millions and millions of lines of code implementing the hypervisors and operating systems used in their infrastructures thus creating a \textbf{truly isolated system} by leveraging Intel's \gls{SGX} technology to create a shielded and trusted execution environment in a remote cloud provider.
   \item \textbf{Complete analysis report} of the different solutions of replication and security levels, comparing a normal non-secure solution with the the privacy-enhanced implementation along with evaluation of overheads and trade-offs introduced by the additional security mechanisms.
 \end{itemize}
