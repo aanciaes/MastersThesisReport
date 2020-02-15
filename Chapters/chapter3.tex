@@ -49,7 +49,17 @@ The system planned has certain assumptions and aspects that are considered to be
 \section{System Model Approach} % (fold)
 \label{sec:system_model_approach}
 
-System model approach
+The main goal of this project is modelled in figure \ref{fig:syste_model_detailed}. As shown, the model can be divided in three main components - the \textbf{client} which was already defined as out of scope, the \textbf{communications} and the \textbf{backend service}. 
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=0.8\linewidth]{SystemModelDetailed}}%
+  \caption{System Model Details}
+  \label{fig:syste_model_detailed}
+\end{figure}
+
+The main focus of this project is the backend service which will be divided in two phases. Phase One will envolve two different types of replication (no replication and Master-Slave solution) and phase two, will implement another, although a more complex one, replication algorithm called the cluster solution.
+
+The system should comply with the adversary and threat model explained in section \ref{ssec:adversary_model}. The user should not be aware and should be abstracted from any implementation provided by the backend, meaning that all solution should provide the same \gls{API} and support an interface as equal as possible to the unprotected version of the Key-Value Store.
 
 \section{Planned Architecture and Implementation} % (fold)
 \label{sec:planned_architecture_and_implementation}
