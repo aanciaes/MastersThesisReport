@@ -1,83 +1,60 @@
 %!TEX root = ../template.tex
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% chapter3.tex
-%% NOVA thesis document file
-%%
-%% Chapter with a short laext tutorial and examples
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \chapter{3.	Approach to Elaboration Phase}
 \label{cha:approach_to_elaboration_phase}
 
-This Chapter aims at exemplifying how to do common stuff with \LaTeX. We also show some stuff which is not that common! ;)
+This chapter will discuss and present an overview of the elaboration phase. It will describe in fine detail the objective and contributions of this dissertation and how it is planned to archive those goals. It should provide a detailed and clear roadmap to implement a system that will comply with all the objectives goals and requirements of this thesis.
 
-Please, use these examples as a starting point, but you should always consider using the \emph{Big Oracle} (aka, \href{http://www.google.com}{Google}, your best friend) to search for additional information or alternative ways for achieving similar results.
+In section \ref{sec:refinement_of_objectives_and_contributions} the objectives and contributions are refined and exposed clearly and matched against the related work performed and discussed in chapter \ref{cha:related_work}. It will discuss the scenario and environment under where the system should fall.
+
+Section \ref{sec:system_model_approach} its presented the general system model of the contributions and objectives. It describes the model of the planned system implementation.
+
+The architecture and implementation details of the solution are present in section \ref{sec:planned_architecture_and_implementation}. This section will dive in more detail on how and with what technologies the system will be implemented with.
+
+Having discussed the solution implementation, section \ref{sec:planned_testbench_environments} explains how and where it is planned to test the system, whereas section \ref{sec:relevant_evaluation_criteria} will complement it with what metrics will be gathered and how they will be compared with each other.
 
 \section{Refinement of Objectives and Contributions} % (fold)
 \label{sec:refinement_of_objectives_and_contributions}
 
-Refinement of objectives and contributions
+To achieve the objectives proposed in chapter \ref{cha:introduction}, we will work under a specific scenario, that can be described using an adversary model and some system assumptions. The goal of creating a secure in-memory storage based on secure hardware technologies must have a well defined scope and be thorough across that same scope. The system adversary/threat model and assumptions will be described in sections \ref{ssec:adversary_model} and \ref{ssec:system_assumptions} respectively.
 
-% section document_structure (end)
+\subsection{Adversary Model}
+\label{ssec:adversary_model}
 
+The threat model basis for the system will lie on the gls{SGX}'s model. We will assume their model and protection overview stated in \gls{SGX}'s paper \cite{sgx:7}.
+
+\textit{SGX prevents all other software from accessing the code and data located inside an enclave including system software and access from other enclaves. Attempts to modify an enclave’s contents are detected and either prevented or execution is aborted}, \cite{sgx:7} which falls in the following adversary model:
+
+\textbf{Malicious applications or code:} The system protects its data from an attacker capable of compromising the system through another application installed on the same system. This includes code from the \gls{OS} hypervisor or any other code in the machine.
+
+\textbf{Honest but Curious (or Malicious System Administrator):} The system must be able to protect from an attacker with root access to the machine. Data deployed on the cloud should only be read by the user and not by any cloud system administrators with ability to examine and modify the system.
+
+\textbf{Network Attacks:} All communication to and from the system should be secure. We assume attacker capable of intercepting, replaying and tamper with messages in the transport layer. 
+
+\textbf{File system and memory access attacks:} All sensitive data residing outside protected memory should be encrypted. An attacker can access the physical disks and hardware without the data being exposed.
+
+\subsection{System Assumptions}
+\label{ssec:system_assumptions}
+
+System Assumptions - trusted clients, no ddos, side channel attacks
 
 \section{System Model Approach} % (fold)
 \label{sec:system_model_approach}
 
 System model approach
 
-% section dealing_with_bibliogrpahy (end)
-
-
 \section{Planned Architecture and Implementation} % (fold)
 \label{sec:planned_architecture_and_implementation}
 
 Planned architecture and implementation
-
-% section inserting_tables (end)
-
 
 \section{Planned Testbench Environments} % (fold)
 \label{sec:planned_testbench_environments}
 
 Planned testbench environments
 
-% section importing_images (end)
-
-
 \section{Relevant Evaluation Criteria} % (fold)
 \label{sec:relevant_evaluation_criteria}
-
-% \subsection{Inserting Figures Wrapped with text} % (fold)
-% \label{ssec:inserting_images_wrapped_with_text}
-% 
-% You should only use this feature is \emph{really} necessary. This means, you have a very small image, that will look lonely just with text above and below.
-% 
-% In this case, you must use the \verb!wrapfiure! package.  To use \verb!wrapfig!, you must first add this to the preamble:
-% 
-% \begin{wrapfigure}{l}{2.5cm}
-%   \centering
-%     \includegraphics[width=2cm]{snowman-vectorial}
-%   \caption{A snow-man}
-% \end{wrapfigure}	
-% 
-% \noindent\verb!\usepackage{wrapfig}!\\
-% This then gives you access to:\\
-% \verb!\begin{wrapfigure}[lineheight]{alignment}{width}!\\
-% Alignment can normally be either ``l'' for left, or ``r'' for right. Lowercase ``l'' or ``r'' forces the figure to start precisely where specified (and may cause it to run over page breaks), while capital ``L'' or ``R'' allows the figure to float. If you defined your document as twosided, the alignment can also be ``i'' for inside or ``o'' for outside, as well as ``I'' or ``O''. The width is obviously the width of the figure. The example above was introduced with:
-% \lstset{language=TeX, morekeywords={\begin,\includegraphics,\caption}, caption=Wrapfig Example, label=lst:latex_example}
-% \begin{lstlisting}
-% 	\begin{wrapfigure}{l}{2.5cm}
-% 	  \centering
-% 	    \includegraphics[width=2cm]{snowman-vectorial}
-% 	  \caption{A snow-man}
-% 	\end{wrapfigure}	
-% \end{lstlisting}
-
-% subsection inserting_images_wrapped_with_text (end)
-
-% section floats_figures_and_captions (end)
-
-Chapter 3
 
 \begin{figure}[htbp]
   \centering
