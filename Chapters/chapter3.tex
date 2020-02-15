@@ -36,7 +36,15 @@ The threat model basis for the system will lie on the gls{SGX}'s model. We will 
 \subsection{System Assumptions}
 \label{ssec:system_assumptions}
 
-System Assumptions - trusted clients, no ddos, side channel attacks
+The system planned has certain assumptions and aspects that are considered to be out of scope for this dissertation:
+
+\begin{itemize}
+	\item \textbf{Trusted Client} - The client side is assumed to be completely trusted and correct.
+	\item \gls{DoS} and \gls{DDoS} attacks are out of scope.
+	\item Side Channel Attacks - It is out of scope any side channel attacks or any related attack not present in \gls{SGX}'s threat model.
+	\item Physical and Hardware attacks - It is out of scope any physical or hardware attacks or any related attack not present in the \gls{SGX} threat model.
+	\item \gls{SGX} limitations or security issues - Any limitation or security issues known to the technology, either present on the \gls{SGX}'s paper and/or explain in section \ref{ssec:circumvention_of_sgx_limitations}.
+\end{itemize}
 
 \section{System Model Approach} % (fold)
 \label{sec:system_model_approach}
