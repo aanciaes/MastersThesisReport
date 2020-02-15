@@ -52,19 +52,28 @@ The system planned has certain assumptions and aspects that are considered to be
 The main goal of this project is modelled in figure \ref{fig:syste_model_detailed}. As shown, the model can be divided in three main components - the \textbf{client} which was already defined as out of scope, the \textbf{communications} and the \textbf{backend service}. 
 
 \begin{figure}[htbp]
-  \centering{\includegraphics[width=0.8\linewidth]{SystemModelDetailed}}%
+  \centering{\includegraphics[width=0.9\linewidth]{SystemModelDetailed}}%
   \caption{System Model Details}
   \label{fig:syste_model_detailed}
 \end{figure}
 
 The main focus of this project is the backend service which will be divided in two phases. Phase One will envolve two different types of replication (no replication and Master-Slave solution) and phase two, will implement another, although a more complex one, replication algorithm called the cluster solution.
 
-The system should comply with the adversary and threat model explained in section \ref{ssec:adversary_model}. The user should not be aware and should be abstracted from any implementation provided by the backend, meaning that all solution should provide the same \gls{API} and support an interface as equal as possible to the unprotected version of the Key-Value Store.
+The system should comply with the adversary and threat model explained in section \ref{ssec:adversary_model}. The user should not be aware and should have seamless interaction with the system despiste the implementation provided by the backend, meaning that all solution should provide the same \gls{API} and support an interface as equal as possible to the unprotected version of the Key-Value Store.
 
 \section{Planned Architecture and Implementation} % (fold)
 \label{sec:planned_architecture_and_implementation}
 
-Planned architecture and implementation
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{IaaS Stack\label{fig:iaas_stack}}%
+    {\includegraphics[width=0.2\linewidth]{IaaS_stack}}%
+    \hspace{5em}
+  \subcaptionbox{PaaS Stack\label{fig:paas_stack}}%
+    {\includegraphics[width=0.2\linewidth]{PaaS_stack}}%
+  \caption{Computing Stacks}
+  \label{fig:fig2subfig}
+\end{figure}
 
 \section{Planned Testbench Environments} % (fold)
 \label{sec:planned_testbench_environments}
@@ -73,17 +82,5 @@ Planned testbench environments
 
 \section{Relevant Evaluation Criteria} % (fold)
 \label{sec:relevant_evaluation_criteria}
-
-\begin{figure}[htbp]
-  \centering
-  \subcaptionbox{One sub-figure\label{fig:leftsubfig}}%
-    {\includegraphics[width=0.5\linewidth]{knitting-vectorial}}%
-  \subcaptionbox{Another sub-figure\label{fig:rightsubfig}}%
-    {\includegraphics[width=0.5\linewidth]{knitting-vectorial}}%
-  \caption{A figure with two sub-figures!}
-  \label{fig:fig2subfig}
-\end{figure}
-
-\textbf{And this is a small text that references the Figure~\ref{fig:fig2subfig} and its Subfigures~\ref{fig:leftsubfig} and~\ref{fig:rightsubfig}.}
 
 Chapter 3
