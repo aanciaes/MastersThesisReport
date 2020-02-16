@@ -367,7 +367,7 @@ Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. 
 
 Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections.
 
-\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{Ecall} and \glspl{Ocall} (section \ref{ssec:Intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
+\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{Ecall} and \glspl{Ocall} (section \ref{ssec:intel_sgx} of this thesis), but they have to be accounted for when implementing the application.
 
 \subsection{SGX-Enabled Secure Databases}
 \label{ssec:sgx_enabled_secure_databases}
