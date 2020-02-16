@@ -5,30 +5,16 @@
 %%
 %% Abstract in Portuguese
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Independentemente da língua em que está escrita a dissertação, é necessário um resumo na língua do texto principal e um resumo noutra língua.  Assume-se que as duas línguas em questão serão sempre o Português e o Inglês.
+Nos últimos tempos, tem havido um grande aumento de aplicações sendo movidos para a \textit{cloud}. A facilidade de uso e configuração em ambientes de produção, os recursos ilimitados e os custos reduzidos convenceram diferente tipos de corporações, startups e empresas a mover a sua infraestrutura, aplicações e serviços para um provedor \textit{cloud}. O aumento do fluxo de dados na \textit{Web}, bem como o aumento de dados armazenados e processados ​​longe dos espaços físicos das empresas, ganhou a atenção dos utilizadores maliciosos e, portanto, suscita grandes preocupações sobre a comunidade de investigadores de segurança. Para manter todos os dados em segurança, as empresas de hardware e segurança têm trabalhado para fornecer tecnologias e soluções baseadas em componentes de hardware que garantam que as aplicações sejam executados num ambiente seguro contra ataques externos ou internos.
 
-O \emph{template} colocará automaticamente em primeiro lugar o resumo na língua do texto principal e depois o resumo na outra língua.  Por exemplo, se a dissertação está escrita em Português, primeiro aparecerá o resumo em Português, depois em Inglês, seguido do texto principal em Português. Se a dissertação está escrita em Inglês, primeiro aparecerá o resumo em Inglês, depois em Português, seguido do texto principal em Inglês.
+O recente advento de ambientes de execução confiáveis ​​baseados em hardware fornece execução isolada mesmo a partir de um sistema operacional não confiável e possíveis ataques baseados em hardware. Como o processador fornece esses ambientes de execução "protegidos", o seu uso permitirá que os utilizadores da \textit{cloud} executem aplicações com segurança, por exemplo, nos servidores remotos na \textit{cloud}, cujos sistemas operacionais e hardware estão expostos a atacantes remotos potencialmente maliciosos e a equipe de administradores de sistemas não controlados.
 
-O resumo não deve exceder uma página e deve responder às seguintes questões:
-\begin{itemize}
-% What's the problem?
-	\item Qual é o problema?
-% Why is it interesting?
-	\item Porque é que ele é interessante?
-% What's the solution?
-	\item Qual é a solução?
-% What follows from the solution?
-	\item O que resulta (implicações) da solução?
-\end{itemize}
+Esta dissertação irá projetar, implementar e avaliar experimentalmente um Armazenamento de Estrutura de Dados em Memória Confiável e Focado na Privacidade. A proposta será projetada para ser executada num ambiente de execução confiável suportado pela tecnologia Intel SGX e fornecerá uma API não modificada e completamente abstrata para o utilizador, apesar de todos os recursos de segurança adicionais. Vai concentrar-se na implementação de um sistema de armazenamento que será mantido cifrado na memória do computador durante todo o ciclo de vida dos dados e garantirá que operações com prováveis problemas críticos de segurança sejam executadas de forma isolada e segura.
 
-E agora vamos fazer um teste com uma quebra de linha no hífen a ver se a \LaTeX\ duplica o hífen na linha seguinte…
-
-zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz zzz zzzz comentar"-lhe zzz zzzz zzz zzzz 
-
-Sim!  Funciona! :)
+Esta dissertação propõe uma comparação entre vários níveis de replicação segura para fornecer um sistema disponível e confiável, oferecendo alta disponibilidade para acesso ao armazenamento de dados, replicação integrada, um modelo de despejo LRU (Menos Usado Recentemente), suporte para transações e opções para persistência em disco.
 
 % Palavras-chave do resumo em Português
 \begin{keywords}
-Palavras-chave (em Português) \ldots
-\end{keywords}
+Segurança de Hardware; Armazenamento de Estrutura de Dados em Memória Confiável e Focado na Privacidade; Ambientes Confiáveis; Computação Segura; Provedores \textit{Cloud}; Disponibilidade; Confiabilidade.
+\end{keywords} 
 % to add an extra black line
