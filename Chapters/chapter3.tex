@@ -64,6 +64,8 @@ The system should comply with the adversary and threat model explained in sectio
 \section{Planned Architecture and Implementation} % (fold)
 \label{sec:planned_architecture_and_implementation}
 
+Cloud providers these days offer their services and applications in different stacks and computing infrastructures. They can be categorised in three main and most common: \gls{IaaS} (Infrastructure as a Service), \gls{PaaS} (Platform as a Service), and \gls{SaaS} (Software as a Service). These are terms to represent how much of the stack is available for user customisation and how much is managed by the cloud provider. Figure \ref{fig:computing_stacks} shows the two stacks that were a possibility for the deployment of this service where the shaded components represent the ones managed by the provider.
+
 \begin{figure}[htbp]
   \centering
   \subcaptionbox{IaaS Stack\label{fig:iaas_stack}}%
@@ -72,8 +74,28 @@ The system should comply with the adversary and threat model explained in sectio
   \subcaptionbox{PaaS Stack\label{fig:paas_stack}}%
     {\includegraphics[width=0.2\linewidth]{PaaS_stack}}%
   \caption{Computing Stacks}
-  \label{fig:fig2subfig}
+  \label{fig:computing_stacks}
 \end{figure}
+
+Figure \ref{fig:iaas_stack} is the stack chosen because it is the simpler to customise and change to our needs especially for development. Everything besides the physical hardware can be customisable and it is managed by the user. As for figure \ref{fig:paas_stack} it provides to the user a more abstracted environment, requiring less knowledge of computing bases and setups. Although, the offering of \glspl{PaaS} with the software needed for this project is very limited and the lack of customisation would work against the effort that the development phase will need \cite{computing_stacks:1}.
+
+As shown on figure \ref{fig:computing_stacks} and to achieve the objectives and goals of the project (\ref{sec:objectives_and_planned_contributions}), the hardware chosen was Intel's \gls{SGX} secure module. As explained in section \ref{ssec:intel_sgx}, this technology has the means and the reach to provide a truly isolated environment has required in this dissertation. The stack will be running a Linux Ubuntu Server \cite{ubuntu_server:1} operating system as the Host \gls{OS}, version 18.04 LTS. this version has compatibility with Intel's \gls{SGX} hardware and with some software needed in another layer of the stack.
+
+For the reasons explained in section \ref{ssec:redis}, Redis will be the key-value store application that will be worked on. This is the most used and most known \gls{KVS} technology, written in C language and will be deployed on the application component of the stack. To make Redis a trusted in-memory store, three main and crtitical components were identified and are candidates to run in an isolated environment inside the \gls{SGX}'s secure enclave (\ref{ssec:intel_sgx}):
+
+\begin{itemize}
+	\item Authentication and Access Control
+	\item Memory Read/Write Operations
+	\item Encryption/Decryption Mechanisms
+\end{itemize}
+
+The result of these critical components running inside an enclave, is the data stored in memory will be encrypted thus not available to the public eye (i.e: Cloud providers system administrators), and the flow of encrypting this data and storing this data will be performed isolated from any external attacker, therefore achieving several objectives proposed for this dissertation.
+
+To help with \gls{SGX} integration a middleware software called Graphene \cite{graphene:1} will be used. This technology is a library \gls{OS} that \textit{"with \gls{SGX} support (...) can secure a critical application in a hardware-encrypted memory region. Graphene can protect applications from a malicious system stack with minimal porting effort"}. This library has already been tested with Linux Ubuntu Server 18.04 running as the \gls{OS}.
+
+Communications will be secure with the help of SGXStunnel \cite{sgxstunnel:1}, a prototype proxy to support TLS tunnelling with endpoints executed in a trusted execution environment provided by Intel SGX. \gls{SGX} termination means that the packets will be decrypted inside the secure module, which allows the network drivers, modules and physical cards to be removed from the \gls{TCB}.
+
+The solution for phase one (centralised and master-slave) will be implemented using the built-in mechanisms provided by Redis itself. Phase 2 will make use of an external module that provides clustering capabilities using an event bus. Kafka \cite{kafka:1} is the technology use to disseminate events across all Redis instances. The security of the event bus will be critical and all event should be transmitted in encrypted form.
 
 \section{Planned Testbench Environments} % (fold)
 \label{sec:planned_testbench_environments}
