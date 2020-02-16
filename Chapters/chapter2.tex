@@ -18,7 +18,7 @@ To conclude the chapter, section \ref{sec:related_work_balance_and_critical_anal
 
 Section \ref{sec:sgx_enabled_key_value_stores} is considered to be the \textbf{main core} investigation and directly related to the work planned for this thesis. As for the other sections, they provide a background knowledge necessary for understanding of the core of this dissertation.
 
-Along the next chapter we summarize the main relevant ideas that can be retained from each section for our objectives and expected goals.
+Along the next chapter we summarise the main relevant ideas that can be retained from each section for our objectives and expected goals.
 
 \section{Key-Value Stores} % (fold)
 \label{sec:key-value_stores}
@@ -89,7 +89,7 @@ As said before, Redis is now not a simple \gls{KVS}. It supports data structures
 
 Redis provides replication in form of a master-slave model. This form of replication works with a single node (master node) where all writes occurring will be replicated to the other Redis instances (slave nodes). Writes on nodes other than the master will not be replicated. Redis provides a read-only setting that can be applied to slave nodes to prevent states differences between instances.
 
-Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimized for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be access by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis implements a simple authentication system with a password on the configuration file for client authentication.
+Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimised for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be access by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis implements a simple authentication system with a password on the configuration file for client authentication.
 It is also advised to run it behind a proxy to enable some \gls{ACL} policies and \gls{SSL} network security.
 
 There are a few other security concerns that Redis addresses, but has we can now start to see, in this types of stores, security falls behind performance and usability.
@@ -192,7 +192,7 @@ The attestation feature is a way for a client to remotely check the state of a m
 
 
 \subsection{TPM - Enabled Software Attestation} % (fold)
-\label{ssec:enabled _software_attestation}
+\label{ssec:enabled_software_attestation}
 
 The remote attestation feature of a \gls{TPM} is the ability of a program to authenticate itself against external verifiers. Is a mechanism that allows a remote party to verify the internal state of the OS or another software and decided whether or not that piece of software is intact and trustworthy. The verifier can trust that the attestation data is accurate and not tampered with because it is signed by the internal key of the \gls{TPM}, a special key known as the Attestation Identity Key, known from now on as \gls{AIK} \cite{attestation:aik}.
 
@@ -278,7 +278,7 @@ With all this information about enclave pages, the processor can now performed a
 
 The \gls{SGX} will create an enclave when sensitive code needs to run by a specific \gls{SGX} CPU instruction (ECREATE) and will create a unique instance of an enclave, establishing the linear address range and load the sensitive code into an \gls{EPC} inside the protected memory. Once all pages are loaded into the EPC, and the loading in complete, an authentication hash is computed and is available for remote attestation so a user can verify that the code running in the enclave has not been tampered with.
 
-An enclave must expose an \gls{API} for the application to call in and advertise what services provided by the untrusted domain are needed. This is the definition of an interface boundary between the untrusted part of the code and the enclave and it is how they communicate. An \gls{Ecall} is a function that the untrusted part application can call to execute some code inside the enclave and since it exposes a sensitive interface, to reduce the enclave attack surface, the number of \glspl{Ecall} should be limited. On the other hand, the \gls{Ocall} is a function that a enclave can call to reach a service/interface outside the enclave, on the untrusted \gls{OS}. Again, calling some service out of the enclave can carry additional security risks and should be as minimal as possible \cite{sgx:6}.
+An enclave must expose an \gls{API} for the application to call in and advertise what services provided by the untrusted domain are needed. This is the definition of an interface boundary between the untrusted part of the code and the enclave and it is how they communicate. An \gls{Ecall} is a function that the untrusted part application can call to execute some code inside the enclave and since it exposes a sensitive interface, to reduce the enclave attack surface, the number of \glspl{Ecall} should be limited. On the other hand, the \gls{Ocall} is a function that an enclave can call to reach a service/interface outside the enclave, on the untrusted \gls{OS}. Again, calling some service out of the enclave can carry additional security risks and should be as minimal as possible \cite{sgx:6}.
 
 When running, the execution always happens in protected mode, and to prevent data leaking, the CPU will not directly address an interrupt, fault or VM exit, but will instead emit another specific instruction (EEXIT) to properly exit the enclave, save CPU state into the enclave and only then will service the fault.
 
@@ -287,7 +287,7 @@ With all this properties, Intel® through \gls{SGX} set of instructions and impl
 \subsection{Sanctum} % (fold)
 \label{ssec:sanctum}
 
-Sanctum \cite{cryptoeprint:2015:564} is an open-source project that shares the same as goal as Intel \gls{SGX}, providing strong provable software isolation to protected the data from external hardware and software, but claims to be simpler and protect against indirect attacks called side channel attacks \cite{Khan2014} such as cache timing attacks \cite{cachetimingattaks:1} that have been know to exist in \gls{SGX} \cite{Gtzfried2017} \cite{2017arXiv170208719S}. These are additional software attacks that can infer private information by analyzing a program’s memory access patterns.
+Sanctum \cite{cryptoeprint:2015:564} is an open-source project that shares the same as goal as Intel \gls{SGX}, providing strong provable software isolation to protected the data from external hardware and software, but claims to be simpler and protect against indirect attacks called side channel attacks \cite{Khan2014} such as cache timing attacks \cite{cachetimingattaks:1} that have been know to exist in \gls{SGX} \cite{Gtzfried2017} \cite{2017arXiv170208719S}. These are additional software attacks that can infer private information by analysing a program’s memory access patterns.
 
 Following the minimal and simple concepts, it uses minimal invasive hardware and it does not required any modifications to the CPU major blocks, but only adds hardware to the interfaces between blocks. This allows for a respectable overhead by maintaining normal clock speeds as it does not modify the CPU core critical execution path.
 
@@ -350,7 +350,7 @@ As we can see, isolated and trusted execution environments are an important feat
 
 There are a few limitations and challenges of the SGX platform that we address when programming for such technology.
 
-It starts with a big challenge of choosing and defining what parts of the program can benefit of the \gls{SGX} security. As it is known, it works with two major application components, the trusted and untrusted modules of or program. The limitations have to be thoroughly analyzed so we can make that definition.  
+It starts with a big challenge of choosing and defining what parts of the program can benefit of the \gls{SGX} security. As it is known, it works with two major application components, the trusted and untrusted modules of or program. The limitations have to be thoroughly analysed so we can make that definition.  
 
 The main limitations are: 
 
@@ -379,9 +379,9 @@ Next subsections present and discuss the overview of the current technology that
 \subsubsection{EnclaveDB}
 \label{sssec:enclave_db}
 
-EnclaveDB \cite{enclavedb:1} is a privacy enhanced and secure database that works alongside with Intel \gls{SGX} and provides an Structured Query Language (SQL). It uses its technology to maintain all sensitive information inside \gls{SGX} enclaves in order to keep them secure from an threat model of strong adversaries that can control the entire software stack  on the database server. It resists attack from the administrator server, the database administrator and attacker who may compromised the operating system, the hypervisor or the database server.
+EnclaveDB \cite{enclavedb:1} is a privacy enhanced and secure database that works alongside with Intel \gls{SGX} and provides a Structured Query Language (SQL). It uses its technology to maintain all sensitive information inside \gls{SGX} enclaves in order to keep them secure from a threat model of strong adversaries that can control the entire software stack  on the database server. It resists attack from the administrator server, the database administrator and attacker who may compromised the operating system, the hypervisor or the database server.
 
-Following Intel's application guidelines, EnclaveDB has an two part architecture: trusted (running on the enclave) and untrusted modules. The enclave hosts a query processing engine, natively compiled stored procedures and a trusted kernel which provides API's for sealing and remote attestation. The untrusted host process runs all other compo- nents of the database server. Figure \ref{fig:enclaveDB_architecture} shows the architecture of the enclaveDB server-side.
+Following Intel's application guidelines, EnclaveDB has a two part architecture: trusted (running on the enclave) and untrusted modules. The enclave hosts a query processing engine, natively compiled stored procedures and a trusted kernel which provides API's for sealing and remote attestation. The untrusted host process runs all other components of the database server. Figure \ref{fig:enclaveDB_architecture} shows the architecture of the enclaveDB server-side.
 
 \begin{figure}[htbp]
 	\centering
@@ -395,7 +395,7 @@ Leveraging \gls{TEE}, EnclaveDB then provides a database with a \gls{SQL} interf
 \subsubsection{Pesos DB}
 \label{sssec:pesos_db}
 
-Pesos \cite{pesos:1} is a secure implementation of object storage services like Amazon S3 \cite{s3:1}, Azure Blob Storage \cite{azureStorage:1}, Google Cloud Storage \cite{googleStorage:1} among others. In these current large-scale services, due to their complexity, the risk of confidentiality and integrity violations increase significantly. This storage systems are characterized by multiple layers of software and hardware stacked together which means the access policies for ensuring confidentiality and integrity are scattered across different code paths and configurations, thus exposing the data to more security vulnerabilities. Furthermore, untrusted third-party cloud platforms expose an additional risk of unauthorized data access by a malicious administrator.
+Pesos \cite{pesos:1} is a secure implementation of object storage services like Amazon S3 \cite{s3:1}, Azure Blob Storage \cite{azureStorage:1}, Google Cloud Storage \cite{googleStorage:1} among others. In these current large-scale services, due to their complexity, the risk of confidentiality and integrity violations increase significantly. This storage systems are characterised by multiple layers of software and hardware stacked together which means the access policies for ensuring confidentiality and integrity are scattered across different code paths and configurations, thus exposing the data to more security vulnerabilities. Furthermore, untrusted third-party cloud platforms expose an additional risk of unauthorised data access by a malicious administrator.
 
 Pesos allows clients to specify per-object security policies concisely and separately from the remaining storage stack. It also provides cryptographic attestation for the stored objects and their associated policies to verify the policy enforcement.
 
