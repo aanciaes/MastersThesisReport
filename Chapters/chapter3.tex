@@ -1,6 +1,6 @@
 %!TEX root = ../template.tex
 
-\chapter{3.	Approach to Elaboration Phase}
+\chapter{Approach to Elaboration Phase}
 \label{cha:approach_to_elaboration_phase}
 
 This chapter will discuss and present an overview of the elaboration phase. It will describe in fine detail the objective and contributions of this dissertation and how it is planned to archive those goals. It should provide a detailed and clear roadmap to implement a system that will comply with all the objectives goals and requirements of this thesis.
@@ -95,14 +95,16 @@ To help with \gls{SGX} integration a middleware software called Graphene \cite{g
 
 Communications will be secure with the help of SGXStunnel \cite{sgxstunnel:1}, a prototype proxy to support TLS tunnelling with endpoints executed in a trusted execution environment provided by Intel SGX. \gls{SGX} termination means that the packets will be decrypted inside the secure module, which allows the network drivers, modules and physical cards to be removed from the \gls{TCB}.
 
-The solution for phase one (centralised and master-slave) will be implemented using the built-in mechanisms provided by Redis itself. Phase 2 will make use of an external module that provides clustering capabilities using an event bus. Kafka \cite{kafka:1} is the technology use to disseminate events across all Redis instances. The security of the event bus will be critical and all event should be transmitted in encrypted form.
+The solution for phase one (centralised and master-slave) will be implemented using the built-in mechanisms provided by Redis itself. Phase 2 will make use of an external module that provides clustering capabilities using an event bus. Kafka \cite{kafka:1} is the technology use to disseminate events across all Redis instances. The security of the event bus will be critical and all event transmitted should be encrypted.
 
 \section{Planned Testbench Environments} % (fold)
 \label{sec:planned_testbench_environments}
 
-Planned testbench environments
+The services will be deployed and tested in two different environments. The first one will be called the \textbf{development environment}, which translates to a local virtual machine that aims to simulate and be as close as possible to the production environment, with the ease of development and rapid deployments. The \textbf{production environment} will be a deployment of the services on a cloud provider that offers \gls{SGX} dedicated hardware, like OVHcloud \cite{ovhcloud:1}.
+
+The tests will pe performed by a combination of the built-in Redis-Client benchmark tests \cite{redis_benchmark:1} and to eliminate any bias claims, an external tester like the Yahoo! Cloud Serving Benchmark \cite{yahoo_benchmark:1}.
 
 \section{Relevant Evaluation Criteria} % (fold)
 \label{sec:relevant_evaluation_criteria}
 
-Chapter 3
+The testers and benchmark clients will evaluate metrics that can be compared with a non secure solution on the network side as well as the server side. On the network, latency, throughput, and operations per seconds (ops/s) and on the server side it will monitor the resources of the machines, like memory consumption and CPU load during the performance tests. It will also monitor and evaluate the concurrency problems that can be introduced by the replication mechanisms, like data loss, dirty reads and the time for the system to achieve a correct state among all replicas.
