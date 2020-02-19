@@ -51,19 +51,17 @@ The problem behind the goals and objectives of this dissertation can be summaris
 \section{Objectives and Planned Contributions} % (fold)
 \label{sec:objectives_and_planned_contributions}
 
-The main goal of this dissertation if to implement and analyse a solution of a privacy enhanced in-memory key-value store deployed in the cloud leveraging the hardware based security features offered by Intel's \gls{SGX} technology. Is to provide a system as shown on figure \ref{fig:system_model} where it can deployed on any cloud provider and will guarantee protection from attackers at any level \textbf{from within} the cloud provider. It will analyse and compare the overhead introduced by the additional security guarantees, with different types of replication solutions.
-
-\begin{figure}[htbp]
-	\centering
-	{\includegraphics[width=0.7\linewidth]{SystemModel}}%
-	\caption{General System Model}
-	\label{fig:system_model}
-\end{figure}
+The main goal of this dissertation is to design implement and evaluate a privacy enhanced in-memory key-value store to be used as a trusted cloud service with hardware based security features running in a trusted execution environment supported by Intel’s \gls{SGX} technology. To overcome the protected memory limitations and coarse-grained paging as basically supported in SGX memory-management facilities, our solution must support flexible big data sets in a hybrid approach using SGX-mapped protected memory and unprotected memory. Data in unprotected memory will be encrypted and operated in the encrypted form, using partial homomorphic encryption techniques.
+For implementation purposes we will address our solution to be leveraged from the REDIS technology, enhanced in a architecture using isolated and containerised services running in isolated Intel-SGX trusted-execution-enclaves but supporting all the variations of REDIS-based architectural deployments, e.g.: as a single REDIS server instance, or using replicated instances (with master-slave and master-slave tree-chains, as well as, clustered instances). We will analyse and compare the designed solution in terms of the introduced security benefits and measuring the overheads introduced by the additional security, privacy and trust-ability guarantees.
 
 In this thesis we plan to achieve the following contributions:
 
 \begin{itemize}
-  \item \textbf{Support for a privacy enhanced in memory key-value store} with all the in-the-box features offered by the chosen storage technology including high availability, built-in replication, a \gls{LRU} eviction model, support for transactions and options for on-disk persistence.
+  \item \textbf{Design and implementation of the cloud-enabled privacy-enhanced solution}, with all-in-the-box planned features as described above, and able to be used as a “cloud-platform as a service” solution, providing:
+ 	\begin{itemize}
+ 		\item \textbf{Trust-ability, security and privacy} properties with the following guarantees: high availability, built-in replication, LRU eviction model, in-memory operations on encrypted big data sets and complementary options for protected on-disk persistence.
+ 		\item \textbf{Software attestation} guarantees provided to clients (users) in order to validate the correctness and integrity of the remote software stack providing the solution.
+ 	\end{itemize}
   \item \textbf{Multiple Replication Mechanisms} based on the same secure solution to analise how these types of replication (centralised solution, a Master-Slave architecture and a clustering solution) will be impacted by the additional security features.
   \item \textbf{Drastically reduce TCB} in the remote cloud provider by removing the millions and millions of lines of code implementing the hypervisors and operating systems used in their infrastructures thus creating a \textbf{truly isolated system} by leveraging Intel's \gls{SGX} technology to create a shielded and trusted execution environment in a remote cloud provider.
   \item \textbf{Complete analysis report} of the different solutions of replication and security levels, comparing a normal non-secure solution with the the privacy-enhanced implementation along with evaluation of overheads and trade-offs introduced by the additional security mechanisms.
