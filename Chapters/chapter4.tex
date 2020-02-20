@@ -3,29 +3,25 @@
 \chapter{Elaboration Plan}
 \label{cha:elaboration_plan}
 
-This chapter proposes a work plan for the elaboration phase of this dissertation. First, in section \ref{sec:workplan}, we summarise the planned tasks as well as their planned time frames. Then, in section \ref{sec:workplan_details} the tasks are described in better detail and more in depth as well as referring the relevant related dependencies and risk-management options. A Gantt chart and a better detailing of the tasks are presented in figures in the Annexxes.
-
+This chapter proposes a work plan for the elaboration phase of this dissertation. First, in section \ref{sec:workplan}, we summarise the planned tasks as well as their planned time frames. On the annexes it is presented a Gantt chart and a better detailing of the tasks, as well as referring the relevant related dependencies and risk-management options.
 
 \section{Work Plan}
 \label{sec:workplan}
 
-This section presents the work plan and given timeline of tasks, with start and finish predictions. This estimated times already contain a certain margin to allow for some unforeseen events and complications to the planned work. Figure \ref{fig:work_plan} shows 11 main tasks that are divided in subtasks for a better discrimination and a better detail of the task.
+Our work plan for the elaboration phase will be conducted during the period from 2/Mar/2020 to 15/Sep/2020, summarised as follow:
 
-\begin{figure}[htbp]
-	\centerline{\includegraphics[angle=90, width=1.2\linewidth]{workplan}}%
-	\caption{Work Plan}
-	\label{fig:work_plan}
-\end{figure}
-
-\section{Work Plan Detailed Tasks}
-\label{sec:workplan_details}
+\begin{itemize}
+	\item \textbf{2-13/Mar}: System model and architecture refinements and implementation specifications (2 weeks).
+	\item \textbf{9/Mar-8/Apr}: Setup of the development environment and implementation and test of a pilot-prototype for a SGX docker-based  small-scale and single REDIS instance.
+	\item \textbf{13/Apr-22/May}: Development of the planned solution (first prototype)
+	\item \textbf{4/May-29/May}: Functional, architectural and initial performance evaluation tests with the first prototype.
+	\item \textbf{1/Jun-3/Jul}: Development of the planned solution (second prototype, including a replicated solution full-compliant with the primary-backup and cluster model as provided by the original REDIS solution).
+	\item \textbf{22/Jun-10/Jul}: Functional, architectural and initial performance evaluation tests with the first prototype.
+	\item \textbf{13/Jul-25/Jul}: Deployment of the final Prototype as a Cloud-Based Solution as a Service (running in OVH dedicated instances and datacenters).
+	\item \textbf{22/Jul-8/Aug} and \textbf{22/Aug-18/Sep}: Final tests in the Cloud Prototype.
+	\item \textbf{30/Mar-18/Sep}: Thesis report writing (in distributed cycles addressing different chapters and the final review phase planned for 11-18 Sep)
+\end{itemize}
 
 Figure \ref{fig:workplan_details} details the tasks shown in the work plan Gantt Chart (figure \ref{fig:work_plan}). For each task a description is available to better explain the work planned for the task, and a dependency to another task if relevant.
 
-There are 10 main categories, called milestones that were identified, and each task will be appointed to one.
-
-\begin{figure}[htbp]
-	\centerline{\includegraphics[width=0.99\linewidth]{workplandetails}}%
-	\caption{Work Plan Details}
-	\label{fig:workplan_details}
-\end{figure}
+There are 10 main categories, called milestones or epics, that were identified: \textbf{System Specification}, \textbf{Development Environment}, \textbf{Production Environment}, \textbf{Prototype Setup}, \textbf{Prototype}, \textbf{Prototype Communication}, \textbf{Experimental Evaluation}, \textbf{Prototype Publication}, \textbf{Dissertation Writing} and \textbf{Dissertation Presentation}. Each task will be appointed to epic task.
