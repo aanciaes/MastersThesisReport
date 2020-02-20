@@ -14,7 +14,7 @@ First, in section \ref{sec:key-value_stores} we explain and discuss for the firs
 Having discussed the software, section \ref{sec:trusted_computing _environments} will then address the environment on where that software will run, most specifically the hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
 Section \ref{sec:sgx_enabled_key_value_stores} will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure application.
 This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module.
-To conclude the chapter, section \ref{sec:related_work_balance_and_critical_analysis} will combine the information of every sub-chapter and analyze it with a bigger perspective and better knowledge of the theme.
+To conclude the chapter, section \ref{sec:related_work_balance_and_critical_analysis} will combine the information of every sub-chapter and analyse it with a bigger perspective and better knowledge of the theme.
 
 Section \ref{sec:sgx_enabled_key_value_stores} is considered to be the \textbf{main core} investigation and directly related to the work planned for this thesis. As for the other sections, they provide a background knowledge necessary for understanding of the core of this dissertation.
 
@@ -59,14 +59,14 @@ It is design to hold small chunks of data (strings and objects) to work as a cac
 
 This system lies on the simpler key-value store spectrum. It takes advantages of the simplicity of a key-value store to edge ease of development, and solving many problems facing large data caches. Its API is available for most popular languages. It has a \gls{LRU} eviction technique which means that items will expire after a specified amount of time if not used. 
 
-When it comes to system replication, availability and reliability, Memcached has an interesting approach. In order to keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronization, no broadcasting, no replication. Adding servers will only increase the available memory.
+When it comes to system replication, availability and reliability, Memcached has an interesting approach. In order to keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronisation, no broadcasting, no replication. Adding servers will only increase the available memory.
 
 As for its security context, Memcached spends very little, if any, effort in securing the systems for random internet connections. The servers only have support for SASL \cite{sasl:1} authentication mechanism. This method of authentication is not implemented as end-to-end encryption, it only provides restriction access to the daemon, but it does not hide communications over the network. That means it is not meant to be exposed to the internet or to any untrusted users \cite{memcached:2}.
 
 \subsection{Redis} % (fold)
 \label{ssec:redis}
 
-Redis \cite{redis:1} is an in-memory data structure store that can be used as a database, cache and also a message broker. Redis focuses on performance, so most of its decisions prioritize high performance and very low latency.
+Redis \cite{redis:1} is an in-memory data structure store that can be used as a database, cache and also a message broker. Redis focuses on performance, so most of its decisions prioritise high performance and very low latency.
 
 It has been benchmarked as the world's fastest database \cite{redis:3} and together with a their multi-model and its rich set of operations that can be performed over data it has been the leading key-value store according to use and popularity for a multiple set of years \cite{db-engine:2}.
 
@@ -210,7 +210,7 @@ A remote attestation procedure is described in image \ref{fig:remote-attestation
 	\item The TPM computes a hash value \#A of the executable code of program “A”.
 	\item The TPM creates a certification including PK\textsubscript{A} and \#A and signs it with the attestation identity key SK\textsubscript{AIK}.
 	\item When application “A” wishes to authenticate itself to a remote party, it sends the certificate of its public key and hash value \#A along with a certificate issued to the TPM by a trusted certification authority (\gls{CA}).
-	\item The remote party verifies the cert.ificate chain.
+	\item The remote party verifies the certificate chain.
 	\item The remote party looks \#A up in a database which maps hash values to trust levels.
 	\item If application “A” is deemed trustworthy, we continue the communication,
 	probably by using PK\textsubscript{A} to establish a session key.
