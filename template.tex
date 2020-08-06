@@ -35,7 +35,7 @@
 
 % The default option marked with (*)
 \documentclass[
-  docdegree=mscplan,        % phd(*), phdplan, phdprop, msc, mscplan, bsc
+  docdegree=msc,        % phd(*), phdplan, phdprop, msc, mscplan, bsc
   school=nova/fct,      % nova/fct(*), nova/fcsh, nova/ims, ul/ist, ul/fc
   lang=en,              % en(*), fr, it, pt
   % coverlang=en,         % defaults to main language
@@ -105,6 +105,7 @@
 
 %force-texpad-dependency: Chapters/abstract-pt.tex
 %force-texpad-dependency: Chapters/abstract-en.tex
+%force-texpad-dependency: Chapters/quote.tex
 %force-texpad-dependency: Chapters/glossary.tex
 %force-texpad-dependency: Chapters/acronyms.tex
 %force-texpad-dependency: Chapters/chapter1.tex
@@ -227,7 +228,7 @@
 \acknowledgementsfile{acknowledgements}
 
 
-% \quotefile{quote}    % Quote
+\quotefile{quote}    % Quote
 \abstractfile[pt]{abstract-pt}  % Abstract in Portuguese
 \abstractfile[en]{abstract-en}  % Abstract in English
 %%\abstractfile[fr]{abstract-fr}  % Abstract in French
