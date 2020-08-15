@@ -11,10 +11,8 @@
 This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisons between those existing technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
 
 First, in section \ref{sec:key-value_stores} we explain and discuss for the first time the definition of a Key-Value Store. We present some use cases, current technology available, their differences and most importantly their security models and concerns.
-Having discussed the software, section \ref{sec:trusted_computing _environments} will then address the environment on where that software will run, most specifically the hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
-Section \ref{sec:sgx_enabled_key_value_stores} will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure application.
-This chapter will be focused on the Intel SGX secure model and explain the advantages and disadvantages of this module.
-To conclude the chapter, section \ref{sec:related_work_balance_and_critical_analysis} will combine the information of every sub-chapter and analyse it with a bigger perspective and better knowledge of the theme.
+Having discussed the software, section \ref{sec:trusted_computing _environments} will then address the environment on where that software will run - hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
+Section \ref{sec:sgx_enabled_key_value_stores} will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure environment for an application to run. Section \ref{sec:virtualization_and_sgx_enabled_frameworks} will discuss how virtualisation can allow for faster deployments and easier implementation of secure code for the complicated frameworks of secure hardware such as Intel's SGX processors. To conclude the chapter, section \ref{sec:related_work_balance_and_critical_analysis} will combine the information of every sub-chapter and analyse it with a bigger perspective and better knowledge of the theme.
 
 Section \ref{sec:sgx_enabled_key_value_stores} is considered to be the \textbf{main core} investigation and directly related to the work planned for this thesis. As for the other sections, they provide a background knowledge necessary for understanding of the core of this dissertation.
 
@@ -61,7 +59,7 @@ This system lies on the simpler key-value store spectrum. It takes advantages of
 
 When it comes to system replication, availability and reliability, Memcached has an interesting approach. In order to keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronisation, no broadcasting, no replication. Adding servers will only increase the available memory.
 
-As for its security context, Memcached spends very little, if any, effort in securing the systems for random internet connections. The servers only have support for SASL \cite{sasl:1} authentication mechanism. This method of authentication is not implemented as end-to-end encryption, it only provides restriction access to the daemon, but it does not hide communications over the network. That means it is not meant to be exposed to the internet or to any untrusted users \cite{memcached:2}.
+As for its security context, Memcached spends very little, if any, effort in securing the systems for random internet connections. The servers only have support for \gls{SASL} \cite{sasl:1} authentication mechanism. This method of authentication is not implemented as end-to-end encryption, it only provides restriction access to the daemon, but it does not hide communications over the network. That means it is not meant to be exposed to the internet or to any untrusted users \cite{memcached:2}.
 
 \subsection{Redis} % (fold)
 \label{ssec:redis}
@@ -87,10 +85,9 @@ keep alive: 1
 
 As said before, Redis is now not a simple \gls{KVS}. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. It also has built-in replication, server side scripting, \gls{LRU} eviction, concept of transactions and different levels of persistence. It provides high availability and automatic partitioning as well.
 
-Redis provides replication in form of a master-slave model. This form of replication works with a single node (master node) where all writes occurring will be replicated to the other Redis instances (slave nodes). Writes on nodes other than the master will not be replicated. Redis provides a read-only setting that can be applied to slave nodes to prevent states differences between instances.
+Redis provides two modes of replication/availability. The master slave form of replication works with a single node (master node) where all writes occurring will be replicated to the other Redis instances (slave nodes). Writes on nodes other than the master will not be replicated. Redis provides a read-only setting that can be applied to slave nodes to prevent states differences between instances. The cluster mode of replication consists on partitioning the data between multiple master nodes. This mechanism does not provide replication as each data object is stored on one master node only, but will allow for lower dataset sizes on each node and therefor faster response times. This method is usually mixed with the first one to provide both performance and replication features, by adding slave node to each of the masters.
 
-Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimised for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be accessed by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis implements a simple authentication system with a password on the configuration file for client authentication.
-It is also advised to run it behind a proxy to enable some \gls{ACL} policies and \gls{SSL} network security.
+Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimised for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be accessed by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis (in its latest release 6.0.6 \cite{redis:5}) now implements an \gls{ACL} policy that allow the configuration of multiple users with different permissions over the dataset. It also added support for \gls{SSL} network communication security.
 
 There are a few other security concerns that Redis addresses, but has we can now start to see, in this types of stores, security falls behind performance and usability.
 
@@ -99,7 +96,7 @@ There are a few other security concerns that Redis addresses, but has we can now
 
 Amazon Dynamo DB \cite{dynamo:1} is a fully managed NoSQL database service. It is a key-value store and a document store that is built based on the dynamo paper \cite{dynamo:2}. This paper describes a \gls{P2P} (peer-to-peer) network with high availability, eventual consistency and very easily scalable. It also successful handles server and data center failures and network partitions.
 
-Amazon builds on this paper and offers DynamoDB as a service in their platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and it is fully managed. That means no need for low level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet-scale applications. It also offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on any given time. 
+Amazon builds on this paper and offers DynamoDB as a service in their platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and it is fully managed. That means no need for low level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet-scale applications. Also, it offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on any given time. 
 
 This technology focuses more on high availability but also achieves very high performances and very low latency and being fully managed it also takes advantages of the \gls{AWS} infrastructure full power. It currently sits second on the db-engines \cite{db-engine:2} most popular ranking.
 
@@ -450,6 +447,11 @@ We can now conclude that the clever partitioning of the application into trusted
 The long goal of this thesis is to implement a system with characteristics from the databases present above. In terms of performance we plan to implement partial homomorphic encryption, so it allows to perform operations directly over in-memory encrypted data. This will be a challenge, as fully homomorphic encryption is not yet practical \cite{homomorphic:1}, so adaptations must be made, but performance increase are expected  over the databases presented above, by not needing to decrypt the data in secure execution. Persistence will also be a requirement just like some of the databases presented.
 
 For trusted execution with \gls{SGX}, extensive research is needed to partition the application in the two necessary modes to circumvent persistence, performance and memory \gls{SGX} limitations. It will also be researched and tested the ability to provide built-in replication and availability with \gls{SGX}.
+
+\section{Virtualisation and SGX-Enabled Frameworks}
+\label{sec:virtualization_and_sgx_enabled_frameworks}
+
+bla bla bla
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
