@@ -451,7 +451,37 @@ For trusted execution with \gls{SGX}, extensive research is needed to partition 
 \section{Virtualisation and SGX-Enabled Frameworks}
 \label{sec:virtualization_and_sgx_enabled_frameworks}
 
-bla bla bla
+Virtualisation is the mechanism that relies on software to simulate hardware components and with the objective of creating a simulated ("virtual") computer system. It means that multiple virtual machines can run inside the same physical machine, and although sharing psychical resources between them - cpu, memory, disks, run completely separated from one another.
+
+With the broader adoption of virtualisation and \gls{SGX} over the years, developers are working on ways to leverage virtualisation with the secure enclave technologies.
+
+Also, container-based virtualisation has become very popular in the last few years. Container can use the capabilities of a secure and trusted environment to achieve a fast, highly portable, faster to deploy, and small \gls{SGX} environment that can run mainly unmodified applications without a big performance overhead.
+
+\subsection{SCONE}
+\label{ssec:scone}
+
+The SCONE \cite{scone:1} (Secure CONtainer Environment) platform facilitates always encrypted execution using Intel's \gls{SGX} secure enclaves to run encrypted code not even accessible to system administrators or root users. It supports this kind of execution running inside Docker containers and even managed Kubernetes clusters.
+
+Although containers can have a big \gls{TCB} and a weaker isolation, the design of scones leads to a small \gls{TCB} by exposing a small C standard library that allows for system call to execute outside the enclave, but maintaining security guarantees by seamlessly and transparently encrypting/decrypting application data. Files stored outside of the enclave are therefore encrypted, and network communication is protected by \gls{TLS}. SCONE also implements a \textit{user-level} threading that maximizes the time that the thread spends inside the enclave. Combined with the asynchronous system where OS threads outside the enclave execute system calls, it minimises a big enclave overhead - \textbf{enclave entry/exit}.
+
+\subsection{Asylo}
+\label{ssec:asylo}
+
+Asylo \cite{asylo:1} is an open and flexible framework for developing enclave secured applications. Developed by Google, Asylo provides \cite{asylo:2}:
+
+\begin{itemize}
+  \item The ability to execute trusted workloads in an untrusted environment, inheriting the confidentiality and integrity guarantees from the security backend, i.e., the underlying enclave technology.
+  \item Ready-to-use containers, an open source API, libraries, and tools so you can develop and run applications that use one or more enclaves.
+  \item A choice of security backends.
+  \item Portability of your application's source code across security backends
+\end{itemize}
+
+Asylo does not lock their technology with Intel's \gls{SGX}, but instead leaves it open to multiple secure enclave frameworks. In Asylo, the majority of user developed logic lives inside the enclave. However, due to security and portability reasons, this framework does not support direct interactions between the enclave and the \gls{OS}. All of enclave-to-OS interactions must be mediated through code that runs on the outside of the enclave but Asylo provides most of the code for creating, exiting and interacting with the enclave and the \gls{OS}.
+
+\subsection{KVM-SGX}
+\label{ssec:KVM-SGX}
+
+
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
