@@ -481,6 +481,12 @@ Asylo does not lock their technology with Intel's \gls{SGX}, but instead leaves 
 \subsection{KVM-SGX}
 \label{ssec:KVM-SGX}
 
+\textit{"\gls{KVM} (for Kernel-based Virtual Machine) is a full virtualisation solution for Linux on x86 hardware containing virtualisation extensions (Intel VT or AMD-V). It consists of a loadable kernel module, kvm.ko, that provides the core virtualisation infrastructure and a processor specific module, kvm-intel.ko or kvm-amd.ko"} \cite{kvm:1}.
+
+The \gls{KVM} framework allows to run multiple virtual machines with unmodified Linux or Windows images. Each \gls{VM} will be assign their own virtual private resources like the network cards, disks graphic adapters, etc...
+
+The KVM-SGX project is a module KVM/Linux module to support SGX virtualisation on \gls{KVM}. It exposes a private virtual SGX.
+
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
