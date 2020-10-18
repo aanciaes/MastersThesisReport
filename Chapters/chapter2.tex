@@ -457,6 +457,29 @@ With the broader adoption of virtualisation and \gls{SGX} over the years, develo
 
 Also, container-based virtualisation has become very popular in the last few years. Container can use the capabilities of a secure and trusted environment to achieve a fast, highly portable, faster to deploy, and small \gls{SGX} environment that can run mainly unmodified applications without a big performance overhead.
 
+\subsection{KVM-SGX}
+\label{ssec:KVM-SGX}
+
+\textit{"\gls{KVM} (for Kernel-based Virtual Machine) is a full virtualisation solution for Linux on x86 hardware containing virtualisation extensions (Intel VT or AMD-V). It consists of a loadable kernel module, kvm.ko, that provides the core virtualisation infrastructure and a processor specific module, kvm-intel.ko or kvm-amd.ko"} \cite{kvm:1}.
+
+The \gls{KVM} framework allows to run multiple virtual machines with unmodified Linux or Windows images. Each \gls{VM} will be assign their own virtual private resources like the network cards, disks graphic adapters, etc...
+
+The KVM-SGX project is a module KVM/Linux module to support SGX virtualisation on \gls{KVM}. It exposes a private virtual SGX that can be used by the guest \gls{OS}.
+To fully virtualise \gls{SGX}, \gls{EPC} must be assigned to the guest \gls{OS}. Although, since the \gls{EPC} is a system resource, the management of this physical \gls{EPC} - that backs the virtual \gls{EPC}, its owned by the kernel. The kernel exposes a device /dev/sgx/virt\_epc that allows the guest \gls{VM} to make a system call that creates and assigns its own virtual \gls{EPC} section.
+
+To recap, the guest \gls{VM} does not have to deal with \gls{PRM} or even \gls{EPCM} because those resources ares sitting below it on the hardware. The guest has a virtual Enclave Page Cache managed by the hardware that it can use at will to store secure code and data.
+
+The Linux \gls{SGX} \gls{KVM} module is still in its development phase but can already be used to virtualise \gls{SGX} platforms onto virtual machines \cite{kvm-sgx:1, kvm-sgx:2, kvm-sgx:3}.
+
+\subsection{Graphene-SGX}
+\label{ssec:graphene-sgx}
+
+Graphene \cite{graphene:1, graphene:2, graphene:4} is a guest OS design to run a single unmodified application with minimal host requirements. It bridges the gap of portability by abstracting the \gls{OS} making it easier to port applications to different \glspl{OS}. Like a \gls{VM}, Graphene provides an isolated environment for application to run in, and, by not running a complete operating system it has a much lighter footprint, and generally low memory requirements and performance overheads. Also, developers are working to supply graphene as a containerised application \cite{graphene_container:1}. 
+
+As an extension, Graphene is working to provide integration with Intel's \gls{SGX} processors where applications could run unmodified with the additional security guarantees of the secure enclave technology \cite{graphene:2}.
+
+Since it is a library OS, Graphene takes advantage of its lightweight form factor to serve as a compatibility layer between the hardware and the application where normally, they do not work out of the box, with small performance overheads high portability and minimal or even no code modifications.
+
 \subsection{SCONE}
 \label{ssec:scone}
 
@@ -478,28 +501,10 @@ Asylo \cite{asylo:1} is an open and flexible framework for developing enclave se
 
 Asylo does not lock their technology with Intel's \gls{SGX}, but instead leaves it open to multiple secure enclave frameworks. In Asylo, the majority of user developed logic lives inside the enclave. However, due to security and portability reasons, this framework does not support direct interactions between the enclave and the \gls{OS}. All of enclave-to-OS interactions must be mediated through code that runs on the outside of the enclave but Asylo provides most of the code for creating, exiting and interacting with the enclave and the \gls{OS}.
 
-\subsection{KVM-SGX}
-\label{ssec:KVM-SGX}
+\subsection{Discussion}
+\label{ssec:s4_discussion}
 
-\textit{"\gls{KVM} (for Kernel-based Virtual Machine) is a full virtualisation solution for Linux on x86 hardware containing virtualisation extensions (Intel VT or AMD-V). It consists of a loadable kernel module, kvm.ko, that provides the core virtualisation infrastructure and a processor specific module, kvm-intel.ko or kvm-amd.ko"} \cite{kvm:1}.
-
-The \gls{KVM} framework allows to run multiple virtual machines with unmodified Linux or Windows images. Each \gls{VM} will be assign their own virtual private resources like the network cards, disks graphic adapters, etc...
-
-The KVM-SGX project is a module KVM/Linux module to support SGX virtualisation on \gls{KVM}. It exposes a private virtual SGX that can be used by the guest \gls{OS}.
-To fully virtualise \gls{SGX}, \gls{EPC} must be assigned to the guest \gls{OS}. Although, since the \gls{EPC} is a system resource, the management of this physical \gls{EPC} - that backs the virtual \gls{EPC}, its owned by the kernel. The kernel exposes a device /dev/sgx/virt\_epc that allows the guest \gls{VM} to make a system call that creates and assigns its own virtual \gls{EPC} section.
-
-To recap, the guest \gls{VM} does not have to deal with \gls{PRM} or even \gls{EPCM} because those resources ares sitting below it on the hardware. The guest has a virtual Enclave Page Cache managed by the hardware that it can use at will to store secure code and data.
-
-The Linux \gls{SGX} \gls{KVM} module is still in its development phase but can already be used to virtualise \gls{SGX} platforms onto virtual machines \cite{kvm-sgx:1, kvm-sgx:2, kvm-sgx:3}.
-
-\subsection{Graphene-SGX}
-\label{ssec:graphene-sgx}
-
-Graphene is a library OS (...)
-
-Graphene paper: \cite{graphene:2}
-
-Graphene github: \cite{graphene:1}
+Discussion
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
