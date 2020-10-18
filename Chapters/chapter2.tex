@@ -504,7 +504,9 @@ Asylo does not lock their technology with Intel's \gls{SGX}, but instead leaves 
 \subsection{Discussion}
 \label{ssec:s4_discussion}
 
-Discussion
+Virtualisation was a game changing technology when it was first created and, to this day, its still evolving and it has become the core of cloud computing. With each iteration, more and more components can be virtualised and simulated to be used freely by their guest \glspl{OS} and virtualised SGX's processors are starting to appear. The \gls{KVM} \gls{SGX} module and Graphene are a more low level types of virtualisation that can use \gls{SGX} to provide a even more isolated an secure environment for application to run. However, with its fast shipping and deployment and highly portable applications, containerisation follows the same path, as it becomes more and more popular to developers and SCONE and the Asylo frameworks work beautifully to combine the power of a secure enclave with the characteristics of a container-based application.
+
+In this thesis, we will use SCONE technology to run an unmodified Redis system secured with Intel's latest Software Guard Extensions (\gls{SGX}) to expose a seamless secure application to the client with fast deployment speeds and high portability and scalability.
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
