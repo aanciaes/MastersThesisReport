@@ -1,20 +1,25 @@
 %!TEX root = ../template.tex
 
-\chapter{Approach to Elaboration Phase}
-\label{cha:approach_to_elaboration_phase}
+\chapter{System Model and Design Options}
+\label{cha:system_model_and_design_options}
 
-This chapter presents an overview of the planned elaboration phase. 
-In section \ref{sec:refinement_of_objectives_and_contributions} the objectives and contributions are more refined and matched against the related work discussed in chapter \ref{cha:related_work}, also discussing the scenario and environment where the system should fall.
-Section \ref{sec:system_model_approach} presents a reference of the system model and blueprint architecture of the targeted solution. The architecture and implementation guidelines of the solution are approached in section \ref{sec:planned_architecture_and_implementation}.
+In this chapter we provide an overview of the system model and implemented architecture along with all of its components. It is explained how all component interact with each other and each component purpose and how they work.
 
-After exposing the planned implementation and architecture, section \ref{sec:planned_testbench_environments} explains how and where it is planned to test the system, whereas section \ref{sec:relevant_evaluation_criteria} will complement it with what metrics will be gathered and how they will be compared with each other.
+It is also explained how the different security features are implemented into the system in order to provide a secure overall system and achieve the contributions planned for this thesis.
+
+(...)
+
+In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security related project as it provides a clear overview of what attacks the system is able to protect against, presnts the trustability chain and \gls{TCB} as well as what components and  security properties are out of scoped and not addressed in the project.
+Sections \ref{sec:system_model} and \ref{sec:proposed_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:operations_supported} and \ref{sec:logging_and_auditing} we expose the application specific operations supported and auditing services of the system.
+
+Finally, as always, section \ref{sec:summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation specific details performed to achieve the described system.
 
 \section{Refinement of Objectives and Contributions} % (fold)
 \label{sec:refinement_of_objectives_and_contributions}
 
 The goal of this dissertation as explained on chapter \ref{cha:introduction}, is the design, development and validation with experimental evaluation of a secure in-memory storage (based on a "key-value" model), supported by a hardware-enabled trust computing base.
 
-Regarding the security assumptions, the solution will provide: (i) hardware-isolated in-memory processing engine, designed as a hardware-isolated container (docker) facility, enclaved within the Intel-SGX protection guarantees; (ii) hardware-isolated communication endpoints for client access, providing TLS tunnelling with strong TLS 1.3 endpoint encryption parameterisations and support for mutual client/server authentication, and (iii) privacy-enhanced operations to be directly processed on encrypted data sets in memory. The former facility is particularly interesting to combine the possibility to manage protected memory for small data sets and also searchable encrypted data sets that are far larger than the protected memory limits imposed by the SGX memory mapping facility. Furthermore, the solution will target main data structures commonly use fine-grained data items that can include pointers, complex composite types and keys, which do not match well with the coarse-grained paging of the SGX memory extension technique.
+Regarding the security assumptions, the solution will provide: (i) hardware-isolated in-memory processing engine, designed as a hardware-isolated container facility, enclaved within the Intel-SGX protection guarantees; (ii) hardware-isolated communication endpoints for client access, providing TLS tunnelling with strong TLS 1.3 endpoint encryption parameterisations and support for mutual client/server authentication, and (iii) privacy-enhanced operations to be directly processed on encrypted data sets in memory. The former facility is particularly interesting to combine the possibility to manage protected memory for small data sets and also searchable encrypted data sets that are far larger than the protected memory limits imposed by the SGX memory mapping facility. Furthermore, the solution will target main data structures commonly use fine-grained data items that can include pointers, complex composite types and keys, which do not match well with the coarse-grained paging of the SGX memory extension technique.
 
 In the next subsections we will align the implementation ideas starting by refining the circumvention of limitations in SGX and the threat model assumptions to address our solution.
 
@@ -23,9 +28,22 @@ In the next subsections we will align the implementation ideas starting by refin
 
 Section \ref{ssec:circumvention_of_sgx_limitations} describes in detail the limitations of \gls{SGX}. In our approach we will intend to design a solution that can be leveraged from conventional reference KVS technology, giving the possibility to manage small datasets but also larger datasets (directly mapped in non-protected memory). To circumvent the problem our solution must combine the possibility to use the internal capabilities native to SGX with the possibility of supporting operations managing datasets encrypted in memory, with such operations executed directly over encrypted data. This facility will be provided by the use of partial homomorphic encryption constructions, with data initially encrypted and submitted to the key-value-store solution with cryptographic keys only managed in the client side. Our solution will be designed in order to be possible the support for fine-grained key-value encryption, driven form the application requirements. Our target is the support of a variety of operations provided in a typical KVS API, taking REDIS as the reference solution and in order to support a considerable number of queries currently used by many REDIS-supported applications.
 
-\subsection{Adversary Model}
-\label{ssec:adversary_model}
+\section{Threat Model and Security Properties}
+\label{sec:threat_model_and_security_properties}
 
+The ensure basic security system, we need to work within a few key parameters:
+ 
+\textbf{Data Privacy} - Data must remain private to its owner.
+
+\textbf{Data Integrity} - Data must not be compromised, modified or corrupted.
+
+\textbf{Authenticity} - Data and system interactions should be authentic and not spoofed by unauthorised users.
+
+Subsections \ref{ssec:adversarial_model_definition}, \ref{ssec:other_system_assumptions} and \ref{ssec:contermeaseures_for_privacy_preservation} explain under which conditions and assumptions the system will achieve these three main parameters and implement a secure system.
+
+\subsection{Adversarial Model Definition}
+\label{ssec:adversarial_model_definition}
+	
 As the baseline, our threat model will lie on the protection overview stated in SGX’s paper \cite{sgx:7}: \textit{SGX prevents all other software from accessing the code and data located inside an enclave including system software and access from other enclaves. Attempts to modify an enclave’s contents are detected and either prevented or execution is aborted}, which falls in the following adversary model:
 
 \textbf{Isolation by trusted containerisation from malicious code}: The system performs and protects its data from an attacker capable of compromising the system through another application installed on the same system or malicious code existent or injected in the OS or OS hypervisor layers;
@@ -35,8 +53,8 @@ As the baseline, our threat model will lie on the protection overview stated i
 \textbf{Network Attacks:} All communication to and from the system (supporting client-service operations) should be secure, using proper strong cryptographic parameterisations for TLS 1.3, mutual authenticated handshakes and TLS endpoint executions isolated in SGX-enabled TLS tunnels in communication containers, avoiding attacks against the authentication of the service endpoints, as well as, attacks against the integrity and confidentiality of data flows supporting \gls{REST}/\gls{HTTPS} operations.
 
 \textbf{File system and memory access attacks:} All sensitive data residing outside protected memory should be encrypted and operated in the encrypted form. An attacker can access the physical disks and hardware without the sensitive data being exposed.
-
-\subsection{Other System Assumptions}
+	
+\subsection{System Assumptions}
 \label{ssec:other_system_assumptions}
 
 With the above security baseline considered for the threat model assumptions, the solution must be  resilient to malicious privileged attacks and certain physical attacks. With a controlled and reduced hardware-shielded trust computing base, we want to design a solution that does not rely on the security of operating system managed by cloud providers. Furthermore, our solution must be also resilient to direct conventional physical attacks, such as cold boot attacks, which attempt to retain the DRAM data by freezing the memory chip or even bus probing to sense and to read exposed memory channel between the processor and memory chips. The only weaknesses not covered in our concerns with be the SGX  lack of protection for side-channel attacks.
@@ -49,6 +67,97 @@ The system planned has certain assumptions and aspects that are considered to be
 	\item \textbf{Side Channel Attacks} - It is out of scope any side channel attacks or any related attack not present in \gls{SGX}'s threat model.
 	\item \textbf{Physical and Hardware attacks} exploring the \gls{SGX} processing model and its isolation guarantees are out of scope, namely those presented above initially addressed in chapter \ref{cha:related_work}, section \ref{sec:trusted_computing _environments}.
 \end{itemize}
+
+\subsection{Countermeasures for Privacy-Preservation}
+\label{ssec:contermeaseures_for_privacy_preservation}
+
+ta tudo em containers e em memoria
+(NAO REFERIR TECNOLOGIAS, tipo docker e essas cenas, ainda não)
+
+\section{System Model} % (fold)
+\label{sec:system_model}
+
+overview abstracta (sem indicar aspectos tecnicos da implementacao)
+visão macro do sistema
+	Clientes falam com uma memory KVS que está a correr em cloud, num TEE
+	Passam pelo proxy
+	Proxy, why? - intermediar acesso ao Redis
+Caso seja neutro (nao adicione features)
+ajuda caso haja muitas instancias redis espalhadas, assim serve de single point of access para o cliente
+filtragem (firewall unica)
+overhead extra
+single point of failure
+(pode ser colmatado caso repliquemos o proxy, mas nao entra no escopo da tese)
+Caso seja não neutro (tem features extra)
+      (exemplo authentication)
+redis tem auth
+mas tem que ser configurado individualmente em cada instancia
+caso haja muitas, aumenta complexidade  
+	
+Etc… falar das restantes entidades que vao entrar no sistema
+
+\subsection{General Overview}
+\label{ssec:general_overview}
+
+\subsection{Secure DataStore}
+\label{ssec:secure_datastore}
+
+StandAlone, Master Slave, Cluster
+
+\subsection{Proxy Server}
+\label{ssec:proxy_server}
+
+\subsection{Client/Tester}
+\label{ssec:clienttester}
+
+\subsection{Authentication Server}
+\label{ssec:authentication_server}
+
+\section{Proposed Architecture} % (fold)
+\label{sec:proposed_architecture}
+
+\subsection{SaaS/PaaS Infrastructure}
+\label{ssec:saas_pass_infrastructure}
+
+\subsection{System Architecture}
+\label{ssec:system_architecture}
+
+\subsection{SSL, HTTPS and Certificate Chain}
+\label{ssec:ssl_https_certificate_chain}
+
+\section{Operations Supported} % (fold)
+\label{sec:operations_supported}
+
+\subsection{Role-Based Authorisation}
+\label{ssec:role-based_authorisation}
+
+\subsection{Redis Operations}
+\label{ssec:redis_operations}
+
+1. Set
+2. Get
+3. Set list
+4. Get list
+5. Set members with score
+6. Get members between score
+
+\subsection{Proxy Enabled Operations}
+\label{ssec:proxy_enabled_operations}
+
+1. Sum (TODO)
+2. Subtraction (TODO)
+3. Multiply (TODO)
+
+\subsection{Attestation}
+\label{ssec:proxy_attestation}
+
+\section{Logging and Auditing} % (fold)
+\label{sec:logging_and_auditing}
+
+\section{Summary} % (fold)
+\label{sec:summary}
+
+%% Dissertation Plan Chapters below
 
 \section{System Model Approach} % (fold)
 \label{sec:system_model_approach}
