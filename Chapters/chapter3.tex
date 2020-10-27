@@ -9,10 +9,10 @@ It is also explained how the different security features are implemented into th
 
 (...)
 
-In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security related project as it provides a clear overview of what attacks the system is able to protect against, presnts the trustability chain and \gls{TCB} as well as what components and  security properties are out of scoped and not addressed in the project.
+In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and  security properties are out of scoped and not addressed in the project.
 Sections \ref{sec:system_model} and \ref{sec:proposed_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:operations_supported} and \ref{sec:logging_and_auditing} we expose the application specific operations supported and auditing services of the system.
 
-Finally, as always, section \ref{sec:summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation specific details performed to achieve the described system.
+Finally, as always, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation specific details performed to achieve the described system.
 
 \section{Refinement of Objectives and Contributions} % (fold)
 \label{sec:refinement_of_objectives_and_contributions}
@@ -71,8 +71,17 @@ The system planned has certain assumptions and aspects that are considered to be
 \subsection{Countermeasures for Privacy-Preservation}
 \label{ssec:contermeaseures_for_privacy_preservation}
 
-ta tudo em containers e em memoria
-(NAO REFERIR TECNOLOGIAS, tipo docker e essas cenas, ainda não)
+Under the described threat model and system assumptions, the system has some measures to achieved the desired security and trustability level.
+
+All instances of the datastore are running in a containerised solution which means that each container is not only isolated from the host but they are also isolated from each other. Data is kept in memory at all times unless persistent disk storage is turned on. Data in main memory is secure when running both in protected and unprotected mode. 
+
+Privacy, integrity and authenticity when running in protected mode are always ensured by the \gls{SGX}'s technology under their threat model and assumptions. But when the system is running in unprotected memory, outside the trusted execution environment, the system will always keep data always encrypted with strong and standard state of the art cryptography algorithms, therefor preserving privacy of data. 
+
+For data integrity preservation, all values are appended with standard checksums calculations and integrity check algorithms. Authenticity is preserved by performing strong and standard cryptographic signing algorithms.
+
+As for the application security, the system provides a secured \gls{API} that only allows authenticated requests and it contains a role based segmentation authorisation with secure and strong passwords and cryptographic keys. This system also applies the principle of least privilege \cite{polp:1} to all actions, where users never have more privileges that they require.
+
+Privacy is also preserved on all communications with the use of the strongest transport layer security algorithms currently available, and established trust between all components with a trusted certificate chain.
 
 \section{System Model} % (fold)
 \label{sec:system_model}
@@ -105,7 +114,7 @@ Etc… falar das restantes entidades que vao entrar no sistema
 StandAlone, Master Slave, Cluster
 
 \subsection{Proxy Server}
-\label{ssec:proxy_server}
+\label{ssec:system_model_proxy_server}
 
 \subsection{Client/Tester}
 \label{ssec:clienttester}
@@ -155,7 +164,7 @@ StandAlone, Master Slave, Cluster
 \label{sec:logging_and_auditing}
 
 \section{Summary} % (fold)
-\label{sec:summary}
+\label{sec:chapter3_summary}
 
 %% Dissertation Plan Chapters below
 
@@ -170,7 +179,7 @@ The main goal of this project is modelled in figure \ref{fig:syste_model_detaile
   \label{fig:syste_model_detailed}
 \end{figure}
 
-The system should comply with the adversary and threat model explained in section \ref{ssec:adversary_model}. The user should not be aware of implementation details and should have seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution should expose the same \gls{API} and support an interface as equal as possible to the unprotected version of the Key-Value Store. We must mention that the above system model will address the replication facilities as leveraged from the REDIS solution and trying to offer the same availability conditions as the original REDID cluster service. This availability provided by the replication of REDIS instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byazntine-fault-tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
+The system should comply with the adversary and threat model explained in section \ref{ssec:adversarial_model_definition}. The user should not be aware of implementation details and should have seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution should expose the same \gls{API} and support an interface as equal as possible to the unprotected version of the Key-Value Store. We must mention that the above system model will address the replication facilities as leveraged from the REDIS solution and trying to offer the same availability conditions as the original REDID cluster service. This availability provided by the replication of REDIS instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byazntine-fault-tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
 
 \section{Planned Architecture and Implementation} % (fold)
 \label{sec:planned_architecture_and_implementation}
