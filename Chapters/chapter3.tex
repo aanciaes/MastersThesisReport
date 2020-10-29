@@ -108,7 +108,7 @@ The storage server is a key-value store meant to hold data required by the user.
 
 In this project, there will be two different kinds of storage servers. The \textbf{secured} and \textbf{unsecure} storage server. This nomenclature do not reflect the privacy, integrity and authenticity security problems as they are preserved on both components but it reflects the environment which they will run on.
 
-The \textbf{secure} storage runs on a trusted hardware protected by a secure physical processor present on the host machine. This processor provides the security features that allow for memory to be operated in plain text without breaking privacy or data security.
+The \textbf{secure} storage runs on a trusted execution environment (trusted hardware) protected by a secure physical processor present on the host machine. This processor provides the security features that allow for memory to be operated in plain text without breaking privacy or data security as explained in section \ref{sec:trusted_computing _environments}.
 
 As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and on untrusted hardware. This means that data must be actively secure by encryption, integrity checks and authentication features in order to provide and preserve privacy.
 
