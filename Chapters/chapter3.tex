@@ -10,7 +10,7 @@ It is also explained how the different security features are implemented into th
 (...)
 
 In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and  security properties are out of scoped and not addressed in the project.
-Sections \ref{sec:system_model} and \ref{sec:proposed_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:operations_supported} and \ref{sec:logging_and_auditing} we expose the application specific operations supported and auditing services of the system.
+Sections \ref{sec:system_model} and \ref{sec:proposed_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:supported_operations} and \ref{sec:operation_flow} we expose the application specific operations supported both key value store specific operations and custom operations implemented by the proxy and also an interaction flow to represent a user interaction with the system.
 
 Finally, as always, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation specific details performed to achieve the described system.
 
@@ -125,7 +125,7 @@ With a centralised gateway we have a centralised access management with authenti
 
 The proxy server manages security properties when connecting to instances on a unsecure storage configuration. It is the proxy that handles security features like encryption and decryption, integrity and authentication checks, and provides a completely encrypted and private storage service.
 
-It also exports a REST API which can bu used by multiple clients with different implementations and also offers custom features that the standard data storage system does not. Custom operations will be explained below, on section \ref{sec:operations_supported}.
+It also exports a \gls{REST} \gls{API} which can be used by multiple clients with different implementations and also offers custom features that the standard data storage system does not. Custom operations will be explained below, on section \ref{sec:supported_operations}.
 
 The proxy server serves as a single point of access for the multiple storage instances remote attestation features. It attests every instance and feedback the user on the hardware stack and software state of each instance. Furthermore, the proxy server itself runs on a trusted execution environment leveraging secure trusted hardware and can also be attested by the clients.
 
@@ -136,10 +136,12 @@ An external authentication server is required to centralised user management. It
 
 An external authentication server relieves the proxy of user authentication and management, and outsources it to a standardised open source system that implements security standards of identity and access management. This is also import so that the proxy server can, if needed, be replicated.
 
-\subsection{Client/Tester}
-\label{ssec:clienttester}
+\subsection{Client}
+\label{ssec:client}
 
-Benchmark tester, not final user, but just representative. 
+The client, or user, is the one that will consume the exposed \glspl{API} by the proxy server. In the case of this project, the client will be a representative benchmark tester that will use the exposed endpoints to record benchmark times and various relevant evaluation criteria so all storage configurations and replication mechanism can be compared.
+
+Although just a simulated client/tester, the \glspl{API} are consumed the same way a real user would consumed them, so, benchmarks are a representation of real system usage.
 
 \section{Proposed Architecture} % (fold)
 \label{sec:proposed_architecture}
@@ -153,31 +155,69 @@ Benchmark tester, not final user, but just representative.
 \subsection{SSL, HTTPS and Certificate Chain}
 \label{ssec:ssl_https_certificate_chain}
 
-\section{Operations Supported} % (fold)
-\label{sec:operations_supported}
+\section{Supported Operations} % (fold)
+\label{sec:supported_operations}
+
+The exposed \gls{API} can perform some operations over the storage system. Some operations are out of the box key-value stores operations, and some were implemented in the proxy so to give a customised and more complex operations.
+
+The next subsections will iterate and explain the supported operations, and we need to indicate that all operations listed can work on both main data storage configurations (protected and unprotected), where operations are performed whether data is maintained on clear text, securely inside a trusted execution environment or maintained encrypted in unprotected memory regions.
 
 \subsection{Role-Based Authorisation}
 \label{ssec:role-based_authorisation}
 
-\subsection{Redis Operations}
-\label{ssec:redis_operations}
+The system by default rejects all unauthenticated requests, which means, users do need to be registered and have credentials to access the system.
 
-1. Set
-2. Get
-3. Set list
-4. Get list
-5. Set members with score
-6. Get members between score
+As explained before, user management is performed by the external authentication server, and each user has a role assigned. Different roles can do different actions on the system and role based authorisation can be completely customised.
+
+In this thesis we operate with the principle of least privileges, and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a readonly user), and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role based authorisation that the system performs before accepting a request into the server.
+
+\subsection{Key-Value Storage Operations}
+\label{ssec:key-value_storage_operations}
+
+The system is ready to perform a set of operations from the key value storage of choosing, without modification. However, this is not a full fledge solution, and accommodations had to be made for the tow main configurations of the storage system: protected and unprotected.
+
+The supported operations are as follow:
+
+\begin{itemize}
+  \item \textbf{Set} Stores a value into the database associated with a key.
+  \item \textbf{Get} Retrieves a value associated to the provided key.
+  \item \textbf{Set on List} Creates a list of values associated to a key.
+  \item \textbf{Set on List} Creates a list of values associated to a key.
+  \item \textbf{Get Lists} Retrieves all values associated with the given key.
+  \item \textbf{Set on List with Score} Creates a list of values associated to a key. Each value has associated a score (integer)
+  \item \textbf{Get on List between Score} Retrieves all values associated with the given key with scores between provided scores. 
+\end{itemize}
 
 \subsection{Proxy Enabled Operations}
 \label{ssec:proxy_enabled_operations}
 
-1. Sum 
-2. Subtraction
-3. Multiply
+The proxy server implementation allows for the implementation of another set of operations not supported out of the box from the key value store:
+
+\textbf{Sum}, given a key and a number, the server can fetch the value associated with given key and add it to the number provided.
+
+\textbf{Subtraction}, given a key and a number, the server can fetch the value associated with given key and subtract it to the number provided.
+
+\textbf{Multiplication}, given a key and a number, the server can fetch the value associated with given key and multiply it to the number provided.
+
+\textbf{Search on List}, where the server takes a search term, match it against each value of a provided key of a list and return only the matching values.
 
 \subsection{Attestation}
 \label{ssec:proxy_attestation}
+
+Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client. 
+
+The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether  or not the system is correct and protected and can continue on using it.
+
+\section{Operation Flow}
+\label{sec:operation_flow}
+
+Figure \ref{fig:operation_flow} shows an example of a flow that can occur between all system components.
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{UserFlow}}%
+  \caption{Operation Flow}
+  \label{fig:operation_flow}
+\end{figure}
 
 \section{Logging and Auditing} % (fold)
 \label{sec:logging_and_auditing}
@@ -188,19 +228,6 @@ Maybe move this section to implementation
 \label{sec:chapter3_summary}
 
 %% Dissertation Plan Chapters below
-
-\section{System Model Approach} % (fold)
-\label{sec:system_model_approach}
-
-The main goal of this project is modelled in figure \ref{fig:syste_model_detailed}. As shown, the model can be divided in three main components - the \textbf{client} which was already defined as trustable, the \textbf{communications} and the \textbf{backend service}. 
-
-\begin{figure}[htbp]
-  \centering{\includegraphics[width=0.9\linewidth]{SystemModelDetailed}}%
-  \caption{System Model Details}
-  \label{fig:syste_model_detailed}
-\end{figure}
-
-The system should comply with the adversary and threat model explained in section \ref{ssec:adversarial_model_definition}. The user should not be aware of implementation details and should have seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution should expose the same \gls{API} and support an interface as equal as possible to the unprotected version of the Key-Value Store. We must mention that the above system model will address the replication facilities as leveraged from the REDIS solution and trying to offer the same availability conditions as the original REDID cluster service. This availability provided by the replication of REDIS instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byazntine-fault-tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
 
 \section{Planned Architecture and Implementation} % (fold)
 \label{sec:planned_architecture_and_implementation}
