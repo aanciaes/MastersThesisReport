@@ -86,6 +86,39 @@ Privacy is also preserved on all communications with the use of the strongest tr
 \section{System Model} % (fold)
 \label{sec:system_model}
 
+The main goal of this project is modelled in figure \ref{fig:system_model_overview}. As shown, the model can be divided in four main components - the \textbf{client}, the \textbf{proxy server}, the \textbf{key-value storage server} and the \textbf{authentication server}.
+
+% \subsection{General Overview}
+% \label{ssec:general_overview}
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{FinalSystemModel}}%
+  \caption{System Model Overview}
+  \label{fig:system_model_overview}
+\end{figure}
+
+The system complies with the adversary and threat model explained in section \ref{ssec:adversarial_model_definition}. The user is not aware of any implementation details and has seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution expose the same \gls{API} and support an interface as equal as possible to the unprotected version of the key-value store. 
+
+All of the four main components will be explained in the subsections below.
+
+\subsection{Key-Value Storage Server}
+\label{ssec:key-value_storage_server}
+
+The storage server is a key-value store meant to hold data required by the user. This data is kept in memory so it allows fast read, writes, updates and deletes.
+
+In this project, there will be two different kinds of storage servers. The \textbf{secured} and \textbf{unsecure} storage server. This nomenclature do not reflect the privacy, integrity and authenticity security problems as they are preserved on both components but it reflects the environment which they will run on.
+
+The \textbf{secure} storage runs on a trusted hardware protected by a secure physical processor present on the host machine. This processor provides the security features that allow for memory to be operated in plain text without breaking privacy or data security.
+
+As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and on untrusted hardware. This means that data must be actively secure by encryption, integrity checks and authentication features in order to provide and preserve privacy.
+
+We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byazntine-fault-tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
+
+Every Redis instance running on a secure configuration will also provide an API for remote attestation, so their hardware stack and software can be attested by remote parties, to provide trust to the users.
+
+\subsection{Proxy Server}
+\label{ssec:system_model_proxy_server}
+
 overview abstracta (sem indicar aspectos tecnicos da implementacao)
 visão macro do sistema
 	Clientes falam com uma memory KVS que está a correr em cloud, num TEE
@@ -104,24 +137,6 @@ mas tem que ser configurado individualmente em cada instancia
 caso haja muitas, aumenta complexidade  
 	
 Etc… falar das restantes entidades que vao entrar no sistema
-
-\subsection{General Overview}
-\label{ssec:general_overview}
-
-\begin{figure}[htbp]
-  \centering{\includegraphics[width=1.0\linewidth]{FinalSystemModel}}%
-  \caption{System Model Overview}
-  \label{fig:system_model_overview}
-\end{figure}
-
-
-\subsection{Secure DataStore}
-\label{ssec:secure_datastore}
-
-StandAlone, Master Slave, Cluster
-
-\subsection{Proxy Server}
-\label{ssec:system_model_proxy_server}
 
 \subsection{Client/Tester}
 \label{ssec:clienttester}
@@ -160,15 +175,17 @@ StandAlone, Master Slave, Cluster
 \subsection{Proxy Enabled Operations}
 \label{ssec:proxy_enabled_operations}
 
-1. Sum (TODO)
-2. Subtraction (TODO)
-3. Multiply (TODO)
+1. Sum 
+2. Subtraction
+3. Multiply
 
 \subsection{Attestation}
 \label{ssec:proxy_attestation}
 
 \section{Logging and Auditing} % (fold)
 \label{sec:logging_and_auditing}
+
+Maybe move this section to implementation
 
 \section{Summary} % (fold)
 \label{sec:chapter3_summary}
