@@ -7,10 +7,10 @@ In this chapter we provide an overview of the system model and implemented archi
 
 It is also explained how the different security features are implemented into the system in order to provide a secure overall system and achieve the contributions planned for this thesis.
 
-(...)
+Section \ref{sec:refinement_of_objectives_and_contributions} provides a small recap and refinement of the objectives and contributions of this thesis and the used \gls{TEE} technology.
 
 In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and  security properties are out of scoped and not addressed in the project.
-Sections \ref{sec:system_model} and \ref{sec:proposed_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:supported_operations} and \ref{sec:operation_flow} we expose the application specific operations supported both key value store specific operations and custom operations implemented by the proxy and also an interaction flow to represent a user interaction with the system.
+Sections \ref{sec:system_model} and \ref{sec:system_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:supported_operations} and \ref{sec:operation_flow} we expose the application specific operations supported both key value store specific operations and custom operations implemented by the proxy and also an interaction flow to represent a user interaction with the system.
 
 Finally, as always, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation specific details performed to achieve the described system.
 
@@ -31,7 +31,7 @@ Section \ref{ssec:circumvention_of_sgx_limitations} describes in detail the limi
 \section{Threat Model and Security Properties}
 \label{sec:threat_model_and_security_properties}
 
-The ensure basic security system, we need to work within a few key parameters:
+The threat model and security properties definition describe the conditions of how we define a secure system. However, to ensure a basic secure system, we must achieve a few key goals and objectives:
  
 \textbf{Data Privacy} - Data must remain private to its owner.
 
@@ -143,19 +143,10 @@ The client, or user, is the one that will consume the exposed \glspl{API} by the
 
 Although just a simulated client/tester, the \glspl{API} are consumed the same way a real user would consumed them, so, benchmarks are a representation of real system usage.
 
-\section{Proposed Architecture} % (fold)
-\label{sec:proposed_architecture}
+\section{System Architecture}
+\label{sec:system_architecture}
 
-\subsection{SaaS/PaaS Infrastructure}
-\label{ssec:saas_pass_infrastructure}
-
-\subsection{System Architecture}
-\label{ssec:system_architecture}
-
-\subsection{SSL, HTTPS and Certificate Chain}
-\label{ssec:ssl_https_certificate_chain}
-
-\section{Supported Operations} % (fold)
+\section{Supported Operations}
 \label{sec:supported_operations}
 
 The exposed \gls{API} can perform some operations over the storage system. Some operations are out of the box key-value stores operations, and some were implemented in the proxy so to give a customised and more complex operations.
@@ -219,10 +210,13 @@ Figure \ref{fig:operation_flow} shows an example of a flow that can occur betwee
   \label{fig:operation_flow}
 \end{figure}
 
-\section{Logging and Auditing} % (fold)
-\label{sec:logging_and_auditing}
+Following the flow, we can see that the first interaction is with the external authentication server by providing the user credentials (\textbf{1}) and (if login successful) receiving an access token in return (\textbf{2}). 
 
-Maybe move this section to implementation
+Then, the user uses the access token to attest the system and make sure that hardware and software stacks are working as expected. It requests an attestation to the proxy (\textbf{3}) with the access token retrieved on login. The proxy checks the access token with the authentication server (\textbf{4}) and verifies if it is correct and has the necessary roles to access the attestation endpoint. If the verification fails, a proxy returns an authentication/authorisation fail back to the client (\textbf{5}). 
+
+If it succeeds, the attestation can proceed and the proxy server contact all storage server attestation services and gathers all quotes (\textbf{6}), and while it's doing that, also starts an self attestation process (\textbf{7}) and returns all quotes to the client. 
+
+Now, the client must analise the quotes from the attestation and decide whether or not it trusts the system to continue (\textbf{8}). If it deems the system incorrect, it fails but if the client trusts the system, it can carry on with normal operations to the proxy and to the storage server (\textbf{9}).
 
 \section{Summary} % (fold)
 \label{sec:chapter3_summary}
