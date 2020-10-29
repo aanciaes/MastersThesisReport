@@ -132,27 +132,14 @@ The proxy server serves as a single point of access for the multiple storage ins
 \subsection{Authentication Server}
 \label{ssec:authentication_server}
 
-bla bla bla
-bla bla bla
-bla bla bla
-bla bla bla
-bla bla bla
-bla bla bla
-bla bla bla
+An external authentication server is required to centralised user management. It is responsible for user authentication and verification. A user authenticates against the authentication server receiving an access token, that it provides to the proxy on every request. The proxy can verify the token and check if it is valid and what permissions this user has, and can authorise or reject the access to a particular endpoint or system functionality.
 
-bla bla bla
-
-bla bla bla
-bla bla bla
-bla bla bla
-bla bla bla
-
-bla bla bla
-bla bla bla
+An external authentication server relieves the proxy of user authentication and management, and outsources it to a standardised open source system that implements security standards of identity and access management. This is also import so that the proxy server can, if needed, be replicated.
 
 \subsection{Client/Tester}
 \label{ssec:clienttester}
 
+Benchmark tester, not final user, but just representative. 
 
 \section{Proposed Architecture} % (fold)
 \label{sec:proposed_architecture}
