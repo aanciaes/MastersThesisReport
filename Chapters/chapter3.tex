@@ -112,37 +112,47 @@ The \textbf{secure} storage runs on a trusted execution environment (trusted har
 
 As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and on untrusted hardware. This means that data must be actively secure by encryption, integrity checks and authentication features in order to provide and preserve privacy.
 
-We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byazntine-fault-tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
+We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
 
 Every Redis instance running on a secure configuration will also provide an API for remote attestation, so their hardware stack and software can be attested by remote parties, to provide trust to the users.
 
 \subsection{Proxy Server}
 \label{ssec:system_model_proxy_server}
 
-overview abstracta (sem indicar aspectos tecnicos da implementacao)
-visão macro do sistema
-	Clientes falam com uma memory KVS que está a correr em cloud, num TEE
-	Passam pelo proxy
-	Proxy, why? - intermediar acesso ao Redis
-Caso seja neutro (nao adicione features)
-ajuda caso haja muitas instancias redis espalhadas, assim serve de single point of access para o cliente
-filtragem (firewall unica)
-overhead extra
-single point of failure
-(pode ser colmatado caso repliquemos o proxy, mas nao entra no escopo da tese)
-Caso seja não neutro (tem features extra)
-      (exemplo authentication)
-redis tem auth
-mas tem que ser configurado individualmente em cada instancia
-caso haja muitas, aumenta complexidade  
-	
-Etc… falar das restantes entidades que vao entrar no sistema
+The proxy server serves as a gateway to the storage instances. It is a single point of entry to the system which as some advantages. Not only it provides an abstraction to a backend which can be replicated across multiple instances across multiple geo-locations, it also can add additional features to the system. 
+
+With a centralised gateway we have a centralised access management with authentication and authorisation features. Not only that, but the connection to multiple instances of secure data storages with different authentication mechanisms and secrets can also be centralised in one place, which allows the user to have just a single username/password pair to connect to all the storage instances.
+
+The proxy server manages security properties when connecting to instances on a unsecure storage configuration. It is the proxy that handles security features like encryption and decryption, integrity and authentication checks, and provides a completely encrypted and private storage service.
+
+It also exports a REST API which can bu used by multiple clients with different implementations and also offers custom features that the standard data storage system does not. Custom operations will be explained below, on section \ref{sec:operations_supported}.
+
+The proxy server serves as a single point of access for the multiple storage instances remote attestation features. It attests every instance and feedback the user on the hardware stack and software state of each instance. Furthermore, the proxy server itself runs on a trusted execution environment leveraging secure trusted hardware and can also be attested by the clients.
+
+\subsection{Authentication Server}
+\label{ssec:authentication_server}
+
+bla bla bla
+bla bla bla
+bla bla bla
+bla bla bla
+bla bla bla
+bla bla bla
+bla bla bla
+
+bla bla bla
+
+bla bla bla
+bla bla bla
+bla bla bla
+bla bla bla
+
+bla bla bla
+bla bla bla
 
 \subsection{Client/Tester}
 \label{ssec:clienttester}
 
-\subsection{Authentication Server}
-\label{ssec:authentication_server}
 
 \section{Proposed Architecture} % (fold)
 \label{sec:proposed_architecture}
