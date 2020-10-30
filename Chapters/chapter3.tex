@@ -208,7 +208,7 @@ The proxy server implementation allows for the implementation of another set of 
 \textbf{Search on List}, where the server takes a search term, match it against each value of a provided key of a list and return only the matching values.
 
 \subsection{Attestation}
-\label{ssec:proxy_attestation}
+\label{ssec:attestation}
 
 Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client. 
 
@@ -236,55 +236,10 @@ Now, the client must analise the quotes from the attestation and decide whether 
 \section{Summary} % (fold)
 \label{sec:chapter3_summary}
 
-%% Dissertation Plan Chapters below
+To achieve the objectives and contributions of this thesis, the system should rely on a physical hardware processor that can implement an isolated execution environment, to protect the system against insider threats, operating system and hypervisors vulnerabilities, and several other attacks already explained in the adversary and threat model of this project. That processor, as shown on system architecture section is present in the used machines, and to allow for a light weight, easily portable and deployable system, an TEE virtualisation technology was used in order to a containerised application can take advantage of the physical processor.
 
-\section{Planned Architecture and Implementation} % (fold)
-\label{sec:planned_architecture_and_implementation}
+However this technology still has some limitations, and to address a memory limitations, the system also allows for a storage system to be placed in unprotected memory and still maintain security, privacy and integrity properties.
 
-Cloud providers offer their services and applications in different stacks and computing infrastructures. They can be categorised in two main and most common: \gls{IaaS} (Infrastructure as a Service), and \gls{SaaS} (Software as a Service). These are terms to represent how much of the stack is available for user customisation and how much is managed by the provider. Figure \ref{fig:computing_stacks} shows the two stacks that where the shaded components represent the ones managed by the provider.
+This way, we can maintain a system, running an unmodified key value storage application and deploy it safely on the cloud, or any other machine provider and be sure that data is as protected as it can be.
 
-\begin{figure}[htbp]
-  \centering
-  \subcaptionbox{IaaS Stack\label{fig:iaas_stack}}%
-    {\includegraphics[width=0.2\linewidth]{IaaS_stack}}%
-    \hspace{5em}
-  \subcaptionbox{PaaS Stack\label{fig:saas_stack}}%
-    {\includegraphics[width=0.2\linewidth]{SaaS_stack}}%
-  \caption{Computing Stacks}
-  \label{fig:computing_stacks}
-\end{figure}
-
-We will start development with a stack like figure \ref{fig:iaas_stack} as it is the simpler to customise and change to our needs especially for development. Everything besides the physical hardware can be customisable and it is managed by the user. In the end, we would like to expose the solution as a \gls{SaaS}, like figure \ref{fig:saas_stack} where it provides to the user a more abstracted environment, requiring less knowledge of computing bases and setups \cite{computing_stacks:1}.
-
-As shown on figure \ref{fig:computing_stacks} and to achieve the objectives and goals of the project (\ref{sec:objectives_and_planned_contributions}), the hardware chosen was Intel's \gls{SGX} secure module. As explained in section \ref{ssec:intel_sgx}, this technology has the means and the ability to provide a truly isolated environment has required in this dissertation. The stack will be running a Linux Ubuntu Server \cite{ubuntu_server:1} operating system as the Host \gls{OS}, version 18.04 LTS. This version has compatibility with Intel's \gls{SGX} hardware, with the help of its \gls{SDK} and drivers \cite{sgx_sdk:1, sgx_drivers:1} and with some software needed in another layer of the stack.
-
-Redis (v5.0.7 \cite{redis:1}) will be the key-value store application that will be worked on. This is the most used and most known \gls{KVS} technology, written in C language and will be deployed on the application component of the stack. To support large datasets, given \gls{SGX} limitations explained in section \ref{ssec:circumvention_of_sgx_limitations}, all data will be kept outside the enclave and will always be encrypted. The client can then decide to perform queries in encrypted form directly over the encrypted memory, sparing encryption and decryption cycles on the server. This will speed up the performance and will keep encryption keys away from the server in the cloud. Keys would be managed by the client which is considered trustable by the scope of this dissertation. Although this technique should help performance, it also means that system can lose some abilities and a set of operations. Fully homomorphic encryption is not feasible yet, so this solution will not be a full fledged solution. To this end, the solution will use the HomoLib, which is a JAVA Partial Homomorphic Cryptographic Library developed be the NOVA LINCS Research Center \cite{homolib:1}.
-
-To help with \gls{SGX} integration a middleware software called Graphene \cite{graphene:1, graphene:2} will be used. This technology is a library \gls{OS} that \textit{"with \gls{SGX} support (...) can secure a critical application in a hardware-encrypted memory region. Graphene can protect applications from a malicious system stack with minimal porting effort"}. This library has already been tested with Linux Ubuntu Server 18.04 running as the \gls{OS}. 
-
-Communications will be secure with the help of SGXStunnel \cite{sgxstunnel:1}, a prototype proxy to support TLS tunnelling with endpoints executed in a trusted execution environment provided by Intel SGX. \gls{SGX} termination means that at no time the data exchanged between the client and the server is exposed in clear text to any outsider because the packets are decrypted inside the secure module, which allows the network drivers, modules and physical cards to be removed from the \gls{TCB}.
-
-Services and runtime environments will be coded using Java (Java SE 11 (LTS)) and the deployment of all softwares and services will be done with containers using docker technology \cite{docker:1}. Graphene already supplies integration with docker \cite{graphene_container:1}.
-
-\section{Planned Testbench Environments} % (fold)
-\label{sec:planned_testbench_environments}
-
-The services will be deployed and tested in two different environments. The \textbf{development environment} translates to a local virtual machine that aims to simulate and be as close as possible to the production environment, but providing ease of development and rapid deployments. The \textbf{production environment} corresponds to a cloud provider that offers \gls{SGX} dedicated hardware, like OVHcloud \cite{ovhcloud:1}. The machines used should have the following specs:
-
-\lstset{numbers=none, caption=Machine Specifications, label=lst:machine_specs}
-\begin{lstlisting}
-Dedicated Server Node
-Processor: Intel 2x Xeon Silver 4214 - 24c/48t - 22.GHZ/3.2Ghz
-Memory: 192 GB
-Hard Drive: NVMe, SATA available
-Public Network: Beginning at 1 Gbps
-Private Network: Beginning at 2 Gbps
-CloudLinux (Ubuntu 18.4 LTS Server 64 bits)
-\end{lstlisting}
-
-The tests will pe performed by a combination of the built-in Redis-Client benchmark tests \cite{redis_benchmark_cli:1} and to eliminate any bias claims, an external tester like the Yahoo! Cloud Serving Benchmark \cite{yahoo_benchmark:1}.
-
-\section{Relevant Evaluation Criteria} % (fold)
-\label{sec:relevant_evaluation_criteria}
-
-The testers and benchmark clients will evaluate metrics that can be compared with a non secure solution. On the network layer, latency and throughput (as operations per seconds (ops/s)) and on the server side we will monitor the resources of the machines, like memory consumption, CPU load and also power consumption during the performance tests. Resource monitoring metrics should be gathered by the built in Linux tools like \textit{htop}, \textit{lsof} or \textit{vmstat}, and/or docker built-in tools like \textit{docker stats}.
+Not only that, but all the hardware stack and software can be attested so that, on a unlikely event of attack, data corruption or leaked vulnerability occurs, the user can always, to a high percentage of trust, define weather or not the underlying system is correct and can be trusted.
