@@ -146,6 +146,21 @@ Although just a simulated client/tester, the \glspl{API} are consumed the same w
 \section{System Architecture}
 \label{sec:system_architecture}
 
+Figure \ref{fig:system_architecture_stack} describes the hardware and software representative stack of the infrastructure \footnote{The described stack is a representative stack of the machine layers and it does not represent a true overhead ladder}. Figure \ref{fig:storage_stack} shows how the storage service are deployed onto the cloud provider's machines. The machines hardware provide a very specific and physical processor that implements a trusted execution environment. Running on the operating system, a containerisation solution runs the \gls{TEE} virtualisation framework in order for the container running both the key value stores and the attestation services being able to access the \gls{TEE}. On the right hand side of this figure, we can see a storage service that runs with no \gls{TEE} virtualisation system, and that is the deployment of an unprotected key value store configuration.
+
+On figure \ref{fig:proxt_stack} the stack provided describes a system also running in the confinements of a trusted execution environment and therefor, also providing an attestation service.
+
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{Storage Stack\label{fig:storage_stack}}%
+    {\includegraphics[width=0.35\linewidth]{storage_architecture}}%
+    \hspace{5em}
+  \subcaptionbox{Proxy Stack\label{fig:proxt_stack}}%
+    {\includegraphics[width=0.35\linewidth]{proxy_architecture}}%
+  \caption{System Architecture Stack}
+  \label{fig:system_architecture_stack}
+\end{figure}
+
 \section{Supported Operations}
 \label{sec:supported_operations}
 
