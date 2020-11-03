@@ -3,17 +3,44 @@
 \chapter{Prototype Implementation}
 \label{cha:elaboration_plan}
 
-\section{Architecture and Implemented Components}
-\label{sec:architecture_implementation_components}
+This chapter presents a detailed explanation of the implementation of the prototype - A Trusted and Privacy-Enhanced In-Memory Data Store, and all the implementation details that helped the system to achieve a secure state according to the adversary model.
 
-Rebobinar o boneco da arquitetura
-	Dizer que tecnologias são responsaveis por o que. ex: redis 6.0.2 é a KVS, Cloud OVH, o Intel Modelo X é o processador, oferece X Mbs de page cache, tem esta RAM, etc etc...
+Section \ref{sec:architecture_implementation_options} explains the system model presented on figure \ref{fig:system_model_overview} from a developer view, and presents all used technologies, programming languages and implementation details used to achieve the desired system.
 
-\section{Implementation Options}
-\label{sec:implementation_options}
+Section \ref{sec:additional_security_features} presents some general additional security and implementation features also worth mentioning and in section \ref{sec:tradeoffs_implementation_options} it is explained some tradeoffs decided in the implementation of the prototype, and why where they made. 
+
+To finalise, there is a general summary if the chapter in section \ref{sec:chapter4_summary} that gathers all important implementation features from all components.
+
+The implemented prototype source code is available publicly on GitHub, secure datastore, \cite{thesis-repository:container}, the proxy \cite{thesis-repository:proxy} and the client/tester \cite{thesis-repository:client}.
+
+\section{Architecture and Implementation Options}
+\label{sec:architecture_implementation_options}
+
+To achieve the goal of deploying the system in a cloud, we had to find a provider that has and provides host machines with the pretended \gls{TEE} technology - Intel's Software Guard Extensions (\gls{SGX}). Although not globally available, some cloud providers are starting to make them available and for this thesis, the cloud provider used is OVH Cloud \cite{ovhcloud:1}. 
+
+For this thesis, OVH provided an IaaS stack machine running Ubuntu Server, which means that we have control over all host's stack but the hardware, from the operating system, networks, runtime and applications. The used machine specific configurations are listed on listing \ref{lst:ovh_machine_specs}.
+
+\lstset{numbers=none, caption=Machine Specifications, label=lst:machine_specs}
+\label{lst:ovh_machine_specs}
+\begin{lstlisting}
+Dedicated Server Node
+Processor: Intel 2x Xeon Silver 4214 - 24c/48t - 2.2GHz/3.2Ghz
+Memory: 192 GB
+Hard Drive: NVMe, SATA available
+Public Network: Beginning at 1 Gbps
+Private Network: Beginning at 2 Gbps
+CloudLinux (Ubuntu 18.4 LTS Server 64 bits)
+\end{lstlisting}
+
+This particular Intel processor offers \gls{SGX} with an 128\gls{MB} of enclave page cache (\gls{EPC}) with about 94\gls{MB} being available for application use like explained in section \ref{ssec:circumvention_of_sgx_limitations} and all \gls{SGX} linux drivers and \glspl{SDK} were installed \cite{sgx_drivers:1, sgx_sdk:1}.
+
+All components of the application will be deployed using Docker \cite{docker:1} and the Docker Compose tool \cite{docker-compose:1}. To integrate and run unmodified applications with \gls{SGX}, the SCONE \cite{scone:1} technology was used, and will wrap all components that need to run within a secure and isolated environment.
 
 \subsection{Secure Redis}
 \label{ssec:secure_redis}
+
+Rebobinar o boneco da arquitetura
+Dizer que tecnologias são responsaveis por o que. ex: redis 6.0.2 é a KVS, Cloud OVH, o Intel Modelo X é o processador, oferece X Mbs de page cache, tem esta RAM, etc etc...
 
 \subsection{Proxy Server}
 \label{ssec:proxy_server}
@@ -21,11 +48,17 @@ Rebobinar o boneco da arquitetura
 \subsection{Client-based Benchmarks}
 \label{ssec:client_based_benchmarks}
 
-\subsection{SSL, HTTPS and Certificate Chain}
-\label{ssec:ssl_https_certificate_chain}
+\subsection{Authentication Server}
+\label{ssec:implementation_authentication_server}
 
 \subsection{Attestation Service}
 \label{ssec:attestation_service}
+
+\section{Additional Security Features}
+\label{sec:additional_security_features}
+
+\subsection{SSL, HTTPS and Certificate Chain}
+\label{ssec:ssl_https_certificate_chain}
 
 \subsection{Logging and Auditing} 
 \label{sec:logging_and_auditing}
@@ -36,4 +69,4 @@ Rebobinar o boneco da arquitetura
 Discutir overheads daquilo que usámos (openSSL issue, redis monolitico ou não, etc)
 
 \section{Summary}
-\label{sec:summary}
+\label{sec:chapter4_summary}
