@@ -16,9 +16,9 @@ The implemented prototype source code is available publicly on GitHub, secure da
 \section{Architecture and Implementation Options}
 \label{sec:architecture_implementation_options}
 
-To achieve the goal of deploying the system in a cloud, we had to find a provider that has and provides host machines with the pretended \gls{TEE} technology - Intel's Software Guard Extensions (\gls{SGX}). Although not globally available, some cloud providers are starting to make them available and for this thesis, the cloud provider used is OVH Cloud \cite{ovhcloud:1}. 
+To achieve the goal of deploying the system in a cloud, we had to find a provider that has and provides host machines with the pretended \gls{TEE} technology - Intel's Software Guard Extensions (\gls{SGX}) v2.11. Although not globally available, some cloud providers are starting to make them available and for this thesis, the cloud provider used is OVH Cloud \cite{ovhcloud:1}. 
 
-For this thesis, OVH provided an IaaS stack machine running Ubuntu Server, which means that we have control over all host's stack but the hardware, from the operating system, networks, runtime and applications. The used machine specific configurations are listed on listing \ref{lst:ovh_machine_specs}.
+For this thesis, OVH provided an IaaS stack machine running Ubuntu Server version 18.04 with kernel 4.15.0-101-generic, which means that we have control over all host's stack but the hardware, from the operating system, networks, runtime and applications. The used machine specific configurations are listed on listing \ref{lst:ovh_machine_specs}.
 
 \lstset{numbers=none, caption=Machine Specifications, label=lst:machine_specs}
 \label{lst:ovh_machine_specs}
@@ -29,30 +29,28 @@ Memory: 192 GB
 Hard Drive: NVMe, SATA available
 Public Network: Beginning at 1 Gbps
 Private Network: Beginning at 2 Gbps
-CloudLinux (Ubuntu 18.4 LTS Server 64 bits)
+CloudLinux (Ubuntu 18.04 LTS Server 64 bits)
 \end{lstlisting}
 
 This particular Intel processor offers \gls{SGX} with an 128\gls{MB} of enclave page cache (\gls{EPC}) with about 94\gls{MB} being available for application use like explained in section \ref{ssec:circumvention_of_sgx_limitations} and all \gls{SGX} linux drivers and \glspl{SDK} were installed \cite{sgx_drivers:1, sgx_sdk:1}.
 
-All components of the application will be deployed using Docker \cite{docker:1} and the Docker Compose tool \cite{docker-compose:1}. To integrate and run unmodified applications with \gls{SGX}, the SCONE \cite{scone:1} technology was used, and will wrap all components that need to run within a secure and isolated environment.
+All components of the application will be deployed using Docker v19.03.6 \cite{docker:1} and the Docker Compose tool v1.17.1 \cite{docker-compose:1}. To integrate and run unmodified applications with \gls{SGX}, the SCONE v4.2.1 \cite{scone:1} technology was used, and will wrap all components that need to run within a secure and isolated environment.
 
 \subsection{Secure Redis}
 \label{ssec:secure_redis}
 
-Redis \cite{redis:1} is the key-value storage server used by this thesis. SCONE framework already provides a curated image from their repository which contains a Redis server version 6.0-rc1 ready to run on an isolated environment, in this case Intel's SGX. The SCONE version used is the SCONE 4.2.1 to match across all the SCONE components.
+Redis \cite{redis:1} is the key-value storage server used by this thesis. Redis instances will run in two different modes, as explained in section \ref{ssec:key-value_storage_server}. Unsecure Redis configuration will run on unprotected memory on a docker image based on the official Redis Docker repository \cite{redis:6}. For the secure configuration, SCONE framework already provides a curated image from their repository which contains a Redis server version 6.0-rc1 ready to run on an isolated environment, in this case Intel's SGX. The SCONE version used is the SCONE 4.2.1 to match across all the SCONE components.
 
 Although all redis servers run behind a proxy all the necessary security features provided natively by the server are used. Only communications incoming from the proxy server are allowed and all are encrypted with strong \gls{TLS} 1.3 \footnote{TLS is a new feature released in Redis v6.0} protocols with enclave termination. The non encrypted communication port is disabled, and mutual \gls{TLS} authentication is turned on, which means that all clients are required to provide a certificate signed by the thesis CA in order to establish a connection.
 
 Access Control is also enabled through an explicit \gls{ACL} \footnote{Redis ACL is a new feature released in Redis v6.0}. Following the principle of least privilege, users are defined via an username and a strong password and have permissions to access only the operations that they require to function.
 
-When running in a replicated environment, master-slave or cluster, the same principles apply. Communication between replicas is also always through mutual \gls{TLS} authentication, even in cluster mode where an event bus is necessary for replica synchronisation. 
-
-Replicas are read-only and since they can connect to the master instance, they use a specific user with permissions to perform just the operations that the replica needs to synchronise, and cannot alter the state of the master instance.
+When running in a replicated environment, master-slave or cluster, the same principles apply. Communication between replicas is also always through mutual \gls{TLS} authentication, even in cluster mode where an event bus is necessary for replica synchronisation. Replicas are read-only and since they can connect to the master instance, they use a specific user with permissions to perform just the operations that the replica needs to synchronise, and cannot alter the state of the master instance.
 
 \subsection{Proxy Server}
 \label{ssec:proxy_server}
 
-bla bla bla
+The proxy server is component that abstracts the Redis configurations in the backend. Proxy is a spring boot starter, version 2.3.0.RELEASE, web server application written in Kotlin v1.4.10, a language that runs on the \gls{JVM} with Java OpenJDK version 11.0.9.
 
 \subsection{Client-based Benchmarks}
 \label{ssec:client_based_benchmarks}
