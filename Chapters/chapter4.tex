@@ -52,6 +52,14 @@ When running in a replicated environment, master-slave or cluster, the same prin
 
 The proxy server is component that abstracts the Redis configurations in the backend. Proxy is a spring boot starter, version 2.3.0.RELEASE, web server application written in Kotlin v1.4.10, a language that runs on the \gls{JVM} with Java OpenJDK version 11.0.9.
 
+\begin{eqnarray}
+EncryptedValue \  = \  [\: value \: ] \: \textsubscript{Ks} \label{eq:redis_value_encrypted} \\
+CompositeValue \  = \  [\: value \: ] \: \textsubscript{Ks} \quad | \quad [\: EncryptedValue \: ] \: \textsubscript{Ksignature} \label{eq:redis_value_signature} \\
+\![\: value \: ] \: \textsubscript{Ks} \quad | \quad [\: EncryptedValue \: ] \: \textsubscript{Ksignature} \quad | \quad [ \: CompositeValue \: ] \: \textsubscript{KHmac} \label{eq:final_redis_value}
+\end{eqnarray}
+
+where KS in \ref{eq:redis_value_encrypted} is an AES cipher or an HomoAdd Paillier Key
+
 % TODO: Configurations files, TLS, jwt authentication, Jedis, encryption/integrity/authenticity algorithms, homomorphic encryption hlib library, redis encrypted line as equation.
 
 \subsection{Client-based Benchmarks}
