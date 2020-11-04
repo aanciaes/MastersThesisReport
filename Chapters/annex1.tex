@@ -5,13 +5,40 @@
 %%
 %% Chapter with example of appendix with a short dummy text
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Work Plan Gantt}
-\label{ann:work_plan_gantt}
+\chapter{Technology Versions}
+\label{ann:technology_versions}
 
-Figure \ref{fig:work_plan} presents the tasks explained in section \ref{sec:workplan} destributed along time in a Gantt chart.
+Table \ref{tab:versions_of_used_technologies} lists and summarises the version of all technologies used in this thesis.
 
-\begin{figure}[htbp]
-	\centerline{\includegraphics[angle=90, width=1.2\linewidth]{workplan}}%
-	\caption{Work Plan}
-	\label{fig:work_plan}
-\end{figure}
+\begin{table}[ht]
+	\caption{Versions of Used Technologies}
+	\label{tab:versions_of_used_technologies}
+\centering
+\begin{tabular}{lccccc}
+	\toprule
+	\multicolumn{1}{c}{\textbf{Technology}} 	& \multicolumn{1}{c}{\textbf{Version}} \\
+	\midrule
+		CloudLinux (OVH Cloud OS) 			& 		Ubuntu 18.4 LTS Server 64 bits 	\\
+		Docker								& 		0	 							\\
+		Docker Compose						& 		0	 							\\
+		Redis								& 		6.0rc-1 							\\
+		SCONE 								& 		4.2.1 							\\
+		Java 								& 		1								\\
+		Kotlin 								& 		1								\\
+		C++									& 		1								\\
+		g++									& 		1								\\
+		Gradle								&		1								\\
+		Spring Boot Starter					& 		1								\\
+		Keycloak							& 		0								\\
+		Scala								& 		1								\\
+		Gatling								& 		1								\\
+		Jmeter								&		1								\\
+	\midrule
+	\textbf{Secure-Redis-Container (this)}	&		\textbf{1}						\\
+	\textbf{Secure-Redis-Proxy (this)}		&		\textbf{1}						\\
+	\textbf{Secure-Redis-Client	(this)}		&		\textbf{1}						\\
+	\bottomrule
+\end{tabular}
+\end{table}
+
+% Maybe Intel processor, SGX, SGX driver and SGX SDK

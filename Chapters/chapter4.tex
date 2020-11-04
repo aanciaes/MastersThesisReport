@@ -39,11 +39,20 @@ All components of the application will be deployed using Docker \cite{docker:1} 
 \subsection{Secure Redis}
 \label{ssec:secure_redis}
 
-Rebobinar o boneco da arquitetura
-Dizer que tecnologias são responsaveis por o que. ex: redis 6.0.2 é a KVS, Cloud OVH, o Intel Modelo X é o processador, oferece X Mbs de page cache, tem esta RAM, etc etc...
+Redis \cite{redis:1} is the key-value storage server used by this thesis. SCONE framework already provides a curated image from their repository which contains a Redis server version 6.0-rc1 ready to run on an isolated environment, in this case Intel's SGX. The SCONE version used is the SCONE 4.2.1 to match across all the SCONE components.
+
+Although all redis servers run behind a proxy all the necessary security features provided natively by the server are used. Only communications incoming from the proxy server are allowed and all are encrypted with strong \gls{TLS} 1.3 \footnote{TLS is a new feature released in Redis v6.0} protocols with enclave termination. The non encrypted communication port is disabled, and mutual \gls{TLS} authentication is turned on, which means that all clients are required to provide a certificate signed by the thesis CA in order to establish a connection.
+
+Access Control is also enabled through an explicit \gls{ACL} \footnote{Redis ACL is a new feature released in Redis v6.0}. Following the principle of least privilege, users are defined via an username and a strong password and have permissions to access only the operations that they require to function.
+
+When running in a replicated environment, master-slave or cluster, the same principles apply. Communication between replicas is also always through mutual \gls{TLS} authentication, even in cluster mode where an event bus is necessary for replica synchronisation. 
+
+Replicas are read-only and since they can connect to the master instance, they use a specific user with permissions to perform just the operations that the replica needs to synchronise, and cannot alter the state of the master instance.
 
 \subsection{Proxy Server}
 \label{ssec:proxy_server}
+
+bla bla bla
 
 \subsection{Client-based Benchmarks}
 \label{ssec:client_based_benchmarks}
