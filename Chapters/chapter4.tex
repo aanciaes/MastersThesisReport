@@ -50,7 +50,15 @@ When running in a replicated environment, master-slave or cluster, the same prin
 \subsection{Proxy Server}
 \label{ssec:proxy_server}
 
-The proxy server is component that abstracts the Redis configurations in the backend. Proxy is a spring boot starter, version 2.3.0.RELEASE, web server application written in Kotlin v1.4.10, a language that runs on the \gls{JVM} with Java OpenJDK version 11.0.9.
+The proxy server is the component that abstracts the Redis configurations in the backend. Proxy is a spring boot starter, version 2.3.0.RELEASE, web server application written in Kotlin v1.4.10, a language that runs on the \gls{JVM} with Java OpenJDK version 11.0.9.
+
+This component serves as a single point of entry to the system, and clients connect to it via an exposed \gls{HTTP} \gls{API} via a \gls{SSL}/\gls{TLS} encrypted channel (\gls{HTTPS}). This connection only authenticates the server, but users need to provide an authorisation header to access the server. The bearer token, on the format of a \gls{JWT} (Json Web Token) must be provided by the external authentication server as the proxy will check with it to validate the request. Not all users can access all endpoints, and the proxy decides the access control based on the role presented in the token.
+
+Using an external configuration file, the proxy is able to communicate with multiple configurations of Redis instances. Communication with the instance is performed via Jedis v3.3.0 \cite{jedis:1}, a simple and lightweight java Redis client. When connecting to a protected Redis instance, an instance secured by \gls{SGX} processor and running inside an enclave, the proxy passes through the keys and values to the instance without any modification, meaning that values are secured inside the enclave even though they are handled in plaintext. However, all data residing on unprotected memory should be encrypted and by enabling a flag in the configuration file, the proxy will encrypt, sign and perform integrity checks on all keys and values. The homomorphic encryption is performed with the help of the Hlib v1.2r2 \cite{homolib:1}, an homomorphic encryption library implemented by the NOVA LINCS developers.
+
+Keys for all value formats (simple, lists, etc..) are always encrypted with the Homomorphic Deterministic (HomoDet) cipher, that guarantees the same encrypted string for the same clear text value. This allows for Redis to match a given key with one present in the storage without revealing the actual value of the key.
+
+The value from the key-value pair is encrypted in a more complex way than the keys, and their format is detailed in \ref{eq:redis_value_encrypted}, \ref{eq:redis_value_signature} and \ref{eq:final_redis_value}.
 
 \begin{eqnarray}
 EncryptedValue \  = \  [\: value \: ] \: \textsubscript{Ks} \label{eq:redis_value_encrypted} \\
@@ -58,9 +66,22 @@ CompositeValue \  = \  [\: value \: ] \: \textsubscript{Ks} \quad | \quad [\: En
 \![\: value \: ] \: \textsubscript{Ks} \quad | \quad [\: EncryptedValue \: ] \: \textsubscript{Ksignature} \quad | \quad [ \: CompositeValue \: ] \: \textsubscript{KHmac} \label{eq:final_redis_value}
 \end{eqnarray}
 
-where KS in \ref{eq:redis_value_encrypted} is an AES cipher or an HomoAdd Paillier Key
+The value is encrypted in one of two ways - refering to \ref{eq:redis_value_encrypted}:
 
-% TODO: Configurations files, TLS, jwt authentication, Jedis, encryption/integrity/authenticity algorithms, homomorphic encryption hlib library, redis encrypted line as equation.
+\begin{itemize}
+  \item \textbf{If the value is a string}, it is encrypted with a strong \gls{AES} cipher working on a \gls{ECB} (Electronic Code Book) mode with a \textit{PKCS5} Padding (\textit{AES/ECB/PKCS5Padding}) from SunJCE provider, with a 256 bit key.
+  \item \textbf{If the value is an integer/long/double}, the value is encrypted with the Homomorphic Addition (HomoAdd) cipher from the Hlib library with a Paillier Key.
+\end{itemize}
+
+Strings are encrypted with the strongest cipher because no operation will be performed over the encrypted value, but for arithmetic values, the HomoAdd cipher is used, to allow for addition, subtraction and multiplication operations over the encrypted value.
+
+Regardless of the encryption cipher, the encrypted value is signed with a standard SHA512 with \gls{RSA} signature algorithm from the \textit{SunRsaSign} provider - \ref{eq:redis_value_signature}. The signature is performed over the encrypted value to allow the homomorphic operations results being sign without having to decrypt the value. The signature is then appended to the encrypted value and the result is  hashed with a HMacSHA256 algorithm to provide a rapid integrity check. The result of all security operations, encryption, signature and hashing is appended into one string and set into the Redis database as a single value.
+
+When setting a value in a list with a score, the keys and values are secured like explained above, but the scores can also pretend to sensitive data and are also encrypted. However, to provide the capabilities of fetching values between scores, a score is encrypted with the HomoOpeInt cipher from Hlib, an order preserving cipher. This cipher kepts the scores confidential but still preserves order and can be searchable on an inequality operation, for example $ x < score < y $, that fetches all values with scores between an \textit{x} and a \textit{y} number.
+
+For demonstration purposes, when adding a value to a set, on the respective endpoint, the value is encrypted with the HomoSearch cipher from Hlib. This cipher allows searching an encrypted value for a specific substring provided by the client.
+
+The \gls{API}, endpoints and parameters, are completely documented and available on an OpenAPI v3.0.0 \textit{yml} format.
 
 \subsection{Client-based Benchmarks}
 \label{ssec:client_based_benchmarks}
@@ -73,6 +94,9 @@ where KS in \ref{eq:redis_value_encrypted} is an AES cipher or an HomoAdd Pailli
 
 \section{Additional Security Features}
 \label{sec:additional_security_features}
+
+\subsection{SCONE debug}
+\label{ssec:scone_debug}
 
 \subsection{SSL, HTTPS and Certificate Chain}
 \label{ssec:ssl_https_certificate_chain}
