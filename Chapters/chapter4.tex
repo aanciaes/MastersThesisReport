@@ -86,8 +86,24 @@ The \gls{API}, endpoints and parameters, are completely documented and available
 \subsection{Client-based Benchmarks}
 \label{ssec:client_based_benchmarks}
 
+As explained before, the client is going to be emulated by a tester. Benchmarks were performed in two different ways: directly against the Redis instances, using the \textbf{redis-benchmark} \cite{redis_benchmark_cli:1} tool, and through the proxy \gls{API}.
+
+This proxy \gls{API} tester is implemented using the Gatling v3.2.1 \cite{gatling:1} framework. Gatling is a load and performance testing tool that is configured as code. The configuration of the tool is written in Scala v2.12.3 and provides a very configurable \gls{API}. It has the ability to generate fields, that will be used to populate the database, and perform as much requests as needed or perform request during  a certain amount of time. This framework also allows to perform the necessary login request to the external authentication server in order to provided the access token to the proxy API.
+
+For performance and load testing we can also make various simultaneous users perform actions at the same time and set up ramp up periods of higher load.
+
+The benchmarks are doing requests to every endpoint available, and will compared against other proxy and database configurations and Gatling provides a detailed report for each one, exposing different metrics that will be presented further down this document in chapter \ref{cha:validation_experimental_Evaluation}.
+
+Also, the same tests were configured on the Apache Jmeter v5.3\cite{jmeter:1} load testing platform to corroborate some results.
+
 \subsection{Authentication Server}
 \label{ssec:implementation_authentication_server}
+
+The external authentication server is Keycloak v10.0.2 \cite{keycloak:1}, open source identity and access management from Red Hat. This service implements the current standards for single sing-on, authentication and authorisation security.
+
+Communication is performed over encrypted \gls{HTTPS} channels, and the client logins directly against this server to obtain the access token necessary to access the proxy.
+
+User and roles management is done via the Keycloak user console and the platform allows for the configuration of different access token signing keys, their expiration date and supports token revocation and key rotation.
 
 \subsection{Attestation Service}
 \label{ssec:attestation_service}
