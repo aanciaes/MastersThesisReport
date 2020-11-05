@@ -105,8 +105,18 @@ Communication is performed over encrypted \gls{HTTPS} channels, and the client l
 
 User and roles management is done via the Keycloak user console and the platform allows for the configuration of different access token signing keys, their expiration date and supports token revocation and key rotation.
 
-\subsection{Attestation Service}
-\label{ssec:attestation_service}
+\subsection{Attestation}
+\label{ssec:implementation_of_attestation}
+
+Attestation is performed with two different methods in two different scenarios. The \gls{SGX} attestation and the application software and stack attestation.
+
+\textbf{\gls{SGX} attestation} is performed at startup and its transparent and automatic using physical \gls{SGX} \gls{EPID}-based attestation between the locally deployed attestation service, the SCONE \gls{LAS} and the remote SCONE \gls{CAS}. 
+
+The Configuration and Attestation Service \gls{CAS} will hold some application secret, in case of the Redis instance, the \gls{TLS} private and public keys, in case of the attestation server running alongside Redis, the software stack attestation quote signing keys, and assign access control policies to the secrets where only an attested enclave with a know and configured enclave hash can access. So, at start up, both containers will try and fetch these secrets from the \gls{CAS}. To do so, enclaves must prove that they meet the access control policies set by \gls{CAS} to access the secrets, and the \gls{SGX} attestation between both enclaves starts. When the attestation succeeds, the requested secrets are stored inside the requesting enclave and nowhere else, meaning that no human or process, regardless of their roles in the system will be able to access the secrets. In case of Redis, if it is able to provide the right certificates on a \gls{HTTPS} connection, that means that the enclave was attested and its correct. The same goes for the application and software stack attestation and its signing keys.
+
+\textbf{The application software and stack attestation} relies on the first type attestation in order to access the keys necessary to operate, and it is performed at user request. This attestation is meant to attest binaries, config files, hardware and \gls{OS} information to the client by providing signed hashes of those resources. The client then decides if they match and pass the expected integrity checks, and if sign with a key provided by the \gls{CAS}.
+
+This attestation service was implemented in C++14 for the Redis instances, compiled using \textit{Linux Musl g++} GNU Compiler Collection (GCC) version 10.2.0 using the Linux Chilkat C/C++ Library v9.5.0.84 statically linked to the code in order to run totally inside the enclave, and Koltin for the proxy server.
 
 \section{Additional Security Features}
 \label{sec:additional_security_features}
