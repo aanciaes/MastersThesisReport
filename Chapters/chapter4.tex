@@ -7,7 +7,7 @@ This chapter presents a detailed explanation of the implementation of the protot
 
 Section \ref{sec:architecture_implementation_options} explains the system model presented on figure \ref{fig:system_model_overview} from a developer view, and presents all used technologies, programming languages and implementation details used to achieve the desired system.
 
-Section \ref{sec:additional_features} presents some general additional security and implementation features also worth mentioning and in section \ref{sec:tradeoffs_implementation_options} it is explained some tradeoffs decided in the implementation of the prototype, and why where they made. 
+Section \ref{sec:additional_details} presents some general additional security and implementation features also worth mentioning and in section \ref{sec:tradeoffs_implementation_options} it is explained some tradeoffs decided in the implementation of the prototype, and why where they made. 
 
 To finalise, there is a general summary if the chapter in section \ref{sec:chapter4_summary} that gathers all important implementation features from all components.
 
@@ -118,15 +118,15 @@ The Configuration and Attestation Service \gls{CAS} will hold some application s
 
 This attestation service was implemented in C++14 for the Redis instances, compiled using \textit{Linux Musl g++} GNU Compiler Collection (GCC) version 10.2.0 using the Linux Chilkat C/C++ Library v9.5.0.84 statically linked to the code in order to run totally inside the enclave, and Koltin for the proxy server.
 
-\section{Additional Features}
-\label{sec:additional_features}
+\section{Additional Details}
+\label{sec:additional_details}
 
 \subsection{Protected Memory Check}
 \label{ssec:protected_memory_check}
 
 SCONE framework says that it is running the applications inside secure enclaves and application memory is protected and there are two ways to verify it. By running an application with secrets in the SCONE configuration and attestation server (\gls{CAS}), we can be sure that the program is running inside an enclave since CAS requires a specific \gls{SGX} attestation mechanism. 
 
-On a lower architecture level we can actually inspect the memory being used by the application. To test this, we can write a simple C program that holds a secret on an array in memory. By dumping the memory of the process via the \textit{/proc} filesystem. The \textit{/proc/pid/map} shows the different memory regions of the process and \textit{/proc/pid/mem} holds the memory. By analysing this path, we can check that the secret is \textbf{not} present, as opposed to the same program running outside protected memory \cite{scone:debug}.
+On a lower architecture level we can actually inspect the memory being used by the application. To test this, we can write a simple C program that holds a secret on an array in memory. By dumping the memory of the process via the \textit{/proc} filesystem. The \textit{/proc/<pid>/map} shows the different memory regions of the process and \textit{/proc/<pid>/mem} holds the memory. By analysing this path, we can check that the secret is \textbf{not} present, as opposed to the same program running outside protected memory \cite{scone:debug}.
 
 \subsection{SSL, HTTPS and Certificate Chain}
 \label{ssec:ssl_https_certificate_chain}

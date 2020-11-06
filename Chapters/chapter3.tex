@@ -209,11 +209,22 @@ The proxy server implementation allows for the implementation of another set of 
 \subsection{Attestation}
 \label{ssec:attestation}
 
-Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client. 
-
-The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether  or not the system is correct and protected and can continue on using it.
+Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
 
 % TODO: Write about CAS and LAS. Write about Redis TLS attestation and AIK attestation service attestation
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{AttestationModelv3}}%
+  \caption{Attestation Model}
+  \label{fig:attestation_model}
+\end{figure}
+
+The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether  or not the system is correct and protected and can continue normal use.
+
+Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
+
+The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether  or not the system is correct and protected and can continue normal use.
+
 
 \section{Operation Flow}
 \label{sec:operation_flow}
@@ -243,4 +254,4 @@ However this technology still has some limitations, and to address a memory limi
 
 This way, we can maintain a system, running an unmodified key value storage application and deploy it safely on the cloud, or any other machine provider and be sure that data is as protected as it can be.
 
-Not only that, but all the hardware stack and software can be attested so that, on a unlikely event of attack, data corruption or leaked vulnerability occurs, the user can always, to a high percentage of trust, define weather or not the underlying system is correct and can be trusted.
+Not only that, but all the hardware stack and software can be attested so that, on a unlikely event of attack, data corruption or leaked vulnerability occurs, the user can always, to a high percentage of trust, define whether or not the underlying system is correct and can be trusted.
