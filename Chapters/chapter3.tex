@@ -207,11 +207,9 @@ The proxy server implementation allows for the implementation of another set of 
 \textbf{Search on List}, where the server takes a search term, match it against each value of a provided key of a list and return only the matching values.
 
 \subsection{Attestation}
-\label{ssec:attestation}
+\label{ssec:attestation_system_model}
 
-Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
-
-% TODO: Write about CAS and LAS. Write about Redis TLS attestation and AIK attestation service attestation
+Attestation is the method provided by the processor implementing a trusted execution environment to establish trustability assumptions to a remote challenge. It proves to a third party that the system is running the correct application with the correct system configurations and physical hardware. This thesis implements two different kinds of attestation: An hardware and \gls{TEE} attestation and an on demand software and system stack attestation.
 
 \begin{figure}[htbp]
   \centering{\includegraphics[width=1.0\linewidth]{AttestationModelv3}}%
@@ -219,12 +217,11 @@ Users can also request the remote attestation of the complete system. The proxy 
   \label{fig:attestation_model}
 \end{figure}
 
-The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether  or not the system is correct and protected and can continue normal use.
+Figure \ref{fig:attestation_model} describes the hardware attestation. It happens at application start up, and is the attestation that relies on the secure processor and it requires an external Configuration and Attestation Server (\gls{CAS}) that holds some kind of secret necessary for the application startup. However, the \gls{CAS} will only allow and provide the secret if the application enclave can prove itself to be correct, i.e, is running the correct source code in the correct system. Application contact a Local Attestation Server (\gls{LAS}) to obtain a proof of their correctnessnes and try to fetch their secrets in the configuration server. If the application is deemed correct, it can access those secrets and can start.
 
-Users can also request the remote attestation of the complete system. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
+Users can also request the remote attestation of the complete system software stack and hardware information. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
 
-The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether  or not the system is correct and protected and can continue normal use.
-
+The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether or not the system is correct and protected and can continue normal use.
 
 \section{Operation Flow}
 \label{sec:operation_flow}

@@ -11,7 +11,7 @@ Section \ref{sec:additional_details} presents some general additional security a
 
 To finalise, there is a general summary if the chapter in section \ref{sec:chapter4_summary} that gathers all important implementation features from all components.
 
-The implemented prototype source code is available publicly on GitHub, secure datastore, \cite{thesis-repository:container}, the proxy \cite{thesis-repository:proxy} and the client/tester \cite{thesis-repository:client}.
+The implemented prototype source code is available publicly on GitHub, secure datastore \cite{thesis-repository:container}, the proxy \cite{thesis-repository:proxy} and the client/tester \cite{thesis-repository:client}.
 
 \section{Architecture and Implementation Options}
 \label{sec:architecture_implementation_options}
@@ -132,6 +132,8 @@ On a lower architecture level we can actually inspect the memory being used by t
 \label{ssec:ssl_https_certificate_chain}
 
 All communications in the system, both from outside or inside the system are performed over \gls{HTTPS} with custom and different certificates for each component. However, we can establish a chain of trust by signing all all certificates with a root custom certificate authority (\gls{CA}). A custom \gls{CA} was created, and signed all certificates and keys and marked as a trusted certificate authority for the entire system.
+
+% TODO: Talk about ciphers...
 
 \subsection{Logging and Auditing} 
 \label{sec:logging_and_auditing}
