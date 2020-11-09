@@ -114,7 +114,7 @@ As for the \textbf{unsecure} storage, it describes a storage service that runs o
 
 We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
 
-Every Redis instance running on a secure configuration will also provide an API for remote attestation, so their hardware stack and software can be attested by remote parties, to provide trust to the users.
+Every Redis instance running on a secure configuration will also provide an API for remote attestation, going forward known as the attestation service, so their hardware stack and software can be attested by remote parties, to provide trust to the users.
 
 \subsection{Proxy Server}
 \label{ssec:system_model_proxy_server}
@@ -209,7 +209,7 @@ The proxy server implementation allows for the implementation of another set of 
 \subsection{Attestation}
 \label{ssec:attestation_system_model}
 
-Attestation is the method provided by the processor implementing a trusted execution environment to establish trustability assumptions to a remote challenge. It proves to a third party that the system is running the correct application with the correct system configurations and physical hardware. This thesis implements two different kinds of attestation: An hardware and \gls{TEE} attestation and an on demand software and system stack attestation.
+Attestation is the method provided by the processor implementing a trusted execution environment to establish trustability assumptions to a remote challenger. It proves to a third party that the system is running the correct application with the correct system configurations in the expected physical hardware. This thesis implements two different kinds of attestation: An hardware and \gls{TEE} attestation and an on-demand software and system stack attestation.
 
 \begin{figure}[htbp]
   \centering{\includegraphics[width=1.0\linewidth]{AttestationModelv3}}%
@@ -217,9 +217,9 @@ Attestation is the method provided by the processor implementing a trusted execu
   \label{fig:attestation_model}
 \end{figure}
 
-Figure \ref{fig:attestation_model} describes the hardware attestation. It happens at application start up, and is the attestation that relies on the secure processor and it requires an external Configuration and Attestation Server (\gls{CAS}) that holds some kind of secret necessary for the application startup. However, the \gls{CAS} will only allow and provide the secret if the application enclave can prove itself to be correct, i.e, is running the correct source code in the correct system. Application contact a Local Attestation Server (\gls{LAS}) to obtain a proof of their correctnessnes and try to fetch their secrets in the configuration server. If the application is deemed correct, it can access those secrets and can start.
+Figure \ref{fig:attestation_model} describes the \gls{TEE} hardware attestation infrastructure. It happens at application start up, and is the attestation that relies on the secure processor and it requires an external Configuration and Attestation Server (\gls{CAS}) that holds some kind of secret necessary for the application startup. However, the \gls{CAS} will only allow and provide the secret if the application enclave can prove itself to be correct, i.e, is running the correct source code in the correct system. The application contacts a Local Attestation Server (\gls{LAS}) to obtain a proof of their correctness and then try to fetch their secrets in the configuration server. If the application is deemed correct, it can access those secrets and can start.
 
-Users can also request the remote attestation of the complete system software stack and hardware information. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
+On the other hand, users can also request the remote attestation of the complete system software stack and hardware information at any point on the user's lifecycle. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
 
 The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether or not the system is correct and protected and can continue normal use.
 
