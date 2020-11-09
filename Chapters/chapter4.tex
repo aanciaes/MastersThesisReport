@@ -138,12 +138,10 @@ SCONE framework says that it is running the applications inside secure enclaves 
 
 On a lower architecture level we can actually inspect the memory being used by the application. To test this, we can write a simple C program that holds a secret on an array in memory and dumping the memory of the process via the \textit{/proc} filesystem. The \textit{/proc/<pid>/map} shows the different memory regions of the process and \textit{/proc/<pid>/mem} holds the memory. By analysing this path, we can check that the secret is \textbf{not} present, as opposed to the same program running outside protected memory \cite{scone:debug}.
 
-\subsection{SSL, HTTPS and Certificate Chain}
-\label{ssec:ssl_https_certificate_chain}
+\subsection{TLS, HTTPS and Certificate Chain}
+\label{ssec:tls_https_certificate_chain}
 
-All communications in the system, both from outside or inside the system are performed over \gls{HTTPS} with custom and different certificates for each component. However, we can establish a chain of trust by signing all all certificates with a root custom certificate authority (\gls{CA}). A custom \gls{CA} was created, and signed all certificates and keys and marked as a trusted certificate authority for the entire system.
-
-% TODO: Server preferred ciphers Talk about ciphers...
+All communications in the system, both from outside or inside the system are performed over \gls{HTTPS}, \gls{TLS} v1.2 or v1.3, with custom and different certificates for each component. However, we can establish a chain of trust by signing all all certificates with a root custom certificate authority (\gls{CA}). A custom \gls{CA} was created, and signed all certificates and keys and marked as a trusted certificate authority for the entire system.
 
 \subsection{Logging and Auditing} 
 \label{sec:logging_and_auditing}
@@ -155,10 +153,20 @@ All operations in the system, being logins, proxy standard operations or even at
 
 Discutir overheads daquilo que usámos (openSSL issue, redis monolitico ou não, etc)
 
+Introduce the line between tradeoffs. Security and Performance. IT WILL HAPPEN, BUT IS IT BEARABLE?
+
+Replication, performance vs consistency - eventual consistency
+
+Memory size, security and performance. example openssl library statically linked
+
+SGX Attestation vs on-demand software custom attestation service
+
+Homomorphic encryption trade-off - sums, subtractions and multiplication
+
 \section{Summary}
 \label{sec:chapter4_summary}
 
-To recap, Redis will server as a storage server and runs on an isolated environment using Intel's \gls{SGX} secure processor and also runs on normal unprotected memory. However, both solutions preserve privacy and integrity, either by \gls{SGX}'s guarantees or by proxy enabled encryption and security properties. The proxy enabled some Redis out-of-the-box operations, but also some additional operations. When Redis is running in unprotected mode, the proxy enables the performance of operations over encrypted memory, sparing encryption and decryption cycles.
+To recap, Redis will server as a storage server and runs on an isolated environment using Intel's \gls{SGX} secure processor and also runs on normal unprotected memory. However, both solutions preserve privacy and integrity, either by \gls{SGX}'s guarantees or by proxy enabled encryption and security properties. The proxy enables some Redis out-of-the-box operations, but also some additional operations. When Redis is running in unprotected mode, the proxy enables the performance of operations over encrypted memory, sparing encryption and decryption cycles.
 
 Both Redis and the Proxy Server are attested at start-up, by requesting application secrets hold by a third party server that implements strong access policies to make sure each secret is injected to the correct enclave. 
 
@@ -166,4 +174,4 @@ Users can also request attestation of the system on-demand, by requesting it to 
 
 In regards to communication, all channels between all components are secure with the standard string TLS encryption with a system wide CA signature.
 
-These security properties come with some tradeoffs but all address a necessary privacy property, and the next chapter will evaluate them and determine if there is a bearable overhead in order to implement a secure and correct system.
+These security properties come with some tradeoffs but they all address a necessary privacy property, and the next chapter will evaluate them and determine if there is a bearable overhead in order to implement a secure correct and trustable system.
