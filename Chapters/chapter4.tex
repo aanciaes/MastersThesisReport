@@ -157,3 +157,13 @@ Discutir overheads daquilo que usámos (openSSL issue, redis monolitico ou não,
 
 \section{Summary}
 \label{sec:chapter4_summary}
+
+To recap, Redis will server as a storage server and runs on an isolated environment using Intel's \gls{SGX} secure processor and also runs on normal unprotected memory. However, both solutions preserve privacy and integrity, either by \gls{SGX}'s guarantees or by proxy enabled encryption and security properties. The proxy enabled some Redis out-of-the-box operations, but also some additional operations. When Redis is running in unprotected mode, the proxy enables the performance of operations over encrypted memory, sparing encryption and decryption cycles.
+
+Both Redis and the Proxy Server are attested at start-up, by requesting application secrets hold by a third party server that implements strong access policies to make sure each secret is injected to the correct enclave. 
+
+Users can also request attestation of the system on-demand, by requesting it to the Proxy server. The Proxy contacts all redis instance's attestation services, which are deployed alongside Redis, and returns binary, config files and system information that the user can analyse and have the guarantee that it is communicating with a correct system.
+
+In regards to communication, all channels between all components are secure with the standard string TLS encryption with a system wide CA signature.
+
+These security properties come with some tradeoffs but all address a necessary privacy property, and the next chapter will evaluate them and determine if there is a bearable overhead in order to implement a secure and correct system.
