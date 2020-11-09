@@ -146,22 +146,24 @@ All communications in the system, both from outside or inside the system are per
 \subsection{Logging and Auditing} 
 \label{sec:logging_and_auditing}
 
-All operations in the system, being logins, proxy standard operations or even attestation requests are logged. A log line contains a timestamp, remote \gls{IP}v4 address, request information such as path, method, and response status, and the request owner, the user. However, to protect preserve privacy, username is hashed. A system administrator can access the logs in order to audit the system. 
+All operations in the system, being logins, proxy standard operations or even attestation requests are logged. A log line contains a timestamp, remote \gls{IP}v4 address, request information such as path, method, and response status, and the request owner, the user. However, to protect preserve privacy, username is hashed. A system administrator can access the logs in order to audit the system.
 
 \section{Tradeoffs on the Implementation Options}
 \label{sec:tradeoffs_implementation_options}
 
-Discutir overheads daquilo que usámos (openSSL issue, redis monolitico ou não, etc)
+Tradeoff is the loss a system property is exchange of another. When implementing additional security properties in a system, there will always be a performance impact. It is then up to testing and use case evaluation to decide whether or not the security increase compensates the performance decrease.
 
-Introduce the line between tradeoffs. Security and Performance. IT WILL HAPPEN, BUT IS IT BEARABLE?
+When it comes to replication, there is also a decision to make referring to a consistency-performance tradeoff. Being a key-value store, Redis is always focused on performance and that is why, it follows an eventual consistency model on replication, meaning that a Redis master node will propagate changes to their slave nodes but will not wait for slave acknowledge to respond to the client.
 
-Replication, performance vs consistency - eventual consistency
+\gls{SGX} technology also makes several tradeoff between performance and security, although it default to the latter. Protected memory size is a big issue to an \gls{SGX} enabled application, because, as explained in section \ref{ssec:circumvention_of_sgx_limitations}, the protected memory is limited, and when it is exceeded, protected memory is swapped to main memory. With additional encryption and decryption cycles as well as integrity checks, that as a penalty performance that can reach over 2000x. 
 
-Memory size, security and performance. example openssl library statically linked
+To explain this problem, we can use the OpenSSL library as an example: Dynamically linking a library to an enclave will incur a security level penalty because, not only the library cannot be trusted as it is part of the operating system and can be compromised, but also \gls{TLS} termination and decryption would be performed, outside the enclave. On the other hand, statically linking the OpenSSL libraries (option taken on this project) means that the enclave has the necessary libraries to perform \gls{TLS} termination inside the enclave. However, it will increase the size of the application, reducing the amount of memory that can be present inside the enclave and having to be being swapped into main memory.
 
-SGX Attestation vs on-demand software custom attestation service
+Another implementation detail on the performance-security tradeoff topic are the homomorphic ciphers that the proxy implements on an unprotected Redis instance. Homomorphic encrypted values do leak some minor information to an attacker, although it is a good trade-off between security and performance. For example, order preserving ciphers although they do not leak specific values, they do leak the decrypted value order.
 
-Homomorphic encryption trade-off - sums, subtractions and multiplication
+The security-performance tradeoff is not a static line, and it moves depending on the use case. For some applications, data must be extremely secure and performance can take a hit to maintain a strong privacy preserving system. This thesis implemented various security properties and all are evaluated in chapter \ref{cha:validation_experimental_Evaluation} to provide enough information for a user to decide whether or not it is a right solution to its own use case.
+
+% TODO: Should we write about SGX Attestation vs on-demand software custom attestation service
 
 \section{Summary}
 \label{sec:chapter4_summary}
