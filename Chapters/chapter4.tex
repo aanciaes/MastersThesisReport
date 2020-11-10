@@ -96,6 +96,8 @@ The benchmarks are doing requests to every endpoint available, and will compared
 
 Also, the same tests were configured on the Apache Jmeter v5.3\cite{jmeter:1} load testing platform to corroborate some results.
 
+To record memory and \gls{CPU} statistics, a script written in bash was implemented that makes use of the Docker command \textit{docker-stats} to record the statistics in real time and write it to disk in a \gls{CSV} format.
+
 \subsection{Authentication Server}
 \label{ssec:implementation_authentication_server}
 
