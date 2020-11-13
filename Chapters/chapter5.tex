@@ -3,35 +3,29 @@
 \chapter{Validation and Experimental Evaluation}
 \label{cha:validation_experimental_Evaluation}
 
-\section{Testbench Environment}
+\section{Testbench Environments}
 \label{sec:testbench_environment}
 
-\subsection{Cloud-Based SGX-enabled REDIS Single Instance}
-\label{ssec:cloud-based_sgx_enabled_redis_single_instance}
+There are multiple testbenchs, redis-benchmark for standalone instance, proxy with standalone instance for both secure and unsecure redis configurations, proxy with cluster for both secure and unsecure redis configurations, homomorphic operations for standalone instance, attestation operations, both sgx attestation at startup and software attestation on demand.
 
-\subsection{Cloud-Based SGX-Enabled REDIS Cluster}
-\label{ssec:cloud-based_sgx_enabled_redis_cluster}
+Talk about how the systems are deployed on the multiple testbenchs.
 
-\section{Benchmarks}
+\section{Benchmarks and Relevant Evaluation Criteria}
 \label{sec:benchmarks}
 
-\section{Performance evaluation for Testbench 1}
-\label{sec:performance_evaluation_testbench_1}
+Latency, throughputs, startup times, memory and cpu consumptions.
 
-\subsection{Latency}
-\label{ssec:testbench_1_latency}
+\section{Performance evaluation for Redis-Benchmark tool}
+\label{sec:performance_evaluation_redisbenchmark_tool}
 
-\subsection{Throughput}
-\label{ssec:testbench_1_throughput}
+\section{Performance evaluation for Standalone Redis}
+\label{sec:performance_evaluation_standalone_redis}
 
-\section{Performance evaluation for Testbench 2}
-\label{sec:performance_evaluation_testbench_2}
+\section{Performance evaluation for Cluster Redis}
+\label{sec:performance_evaluation_cluster_redis}
 
-\subsection{Latency}
-\label{ssec:testbench_2_latency}
-
-\subsection{Throughput}
-\label{ssec:testbench_2_throughput}
+\section{Performance evaluation for Homomorphic Operations}
+\label{sec:performance_evaluation_homomorphic_operations}
 
 \section{Evaluation of the Attestation Protocol}
 \label{sec:evaluation_attestation_protocol}
@@ -45,3 +39,34 @@ Memory, CPU, etc instrumentation, workload
 
 \section{ Summary and Findings}
 \label{sec:summary_and_findings}
+
+% \section{Performance evaluation for Testbench 1}
+% \label{sec:performance_evaluation_testbench_1}
+
+% \subsection{Latency}
+% \label{ssec:testbench_1_latency}
+
+% \subsection{Throughput}
+% \label{ssec:testbench_1_throughput}
+
+% \section{Performance evaluation for Testbench 2}
+% \label{sec:performance_evaluation_testbench_2}
+
+% \subsection{Latency}
+% \label{ssec:testbench_2_latency}
+
+% \subsection{Throughput}
+% \label{ssec:testbench_2_throughput}
+
+% \section{Evaluation of the Attestation Protocol}
+% \label{sec:evaluation_attestation_protocol}
+
+% Get startup times with and without CAS, get stack attestation times...
+
+% \section{Complementary Measurements}
+% \label{sec:complementary_measurements}
+
+% Memory, CPU, etc instrumentation, workload
+
+% \section{ Summary and Findings}
+% \label{sec:summary_and_findings}
