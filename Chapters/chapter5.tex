@@ -3,6 +3,14 @@
 \chapter{Validation and Experimental Evaluation}
 \label{cha:validation_experimental_Evaluation}
 
+This chapter presents, analyses and discusses the work performed to obtain relevant evaluation criteria measured from the complete system deployed on a cloud environment in order to validate the implemented prototype.
+
+Section \ref{sec:testbench_environment} details how the system is deployed, explains the different configurations that that system adopts in order to present relevant data to compare.
+
+In section \ref{sec:benchmarks_and_revelant_evaluation_criteria} explains which metrics will be evaluated for each different testbench scenario. Sections \ref{sec:performance_evaluation_redis_benchmark_tool} through \ref{sec:complementary_measurements} presents the actual metrics taken from the performance and load testing tools and compares the different system configurations with secure and vulnerable storage instances.
+
+The last section, section \ref{sec:summary_and_findings} contains a summary of all the finding and some considerations that can be taken from the presented metrics.
+
 \section{Testbench Environments}
 \label{sec:testbench_environment}
 
@@ -11,12 +19,35 @@ There are multiple testbenchs, redis-benchmark for standalone instance, proxy wi
 Talk about how the systems are deployed on the multiple testbenchs.
 
 \section{Benchmarks and Relevant Evaluation Criteria}
-\label{sec:benchmarks}
+\label{sec:benchmarks_and_revelant_evaluation_criteria}
 
 Latency, throughputs, startup times, memory and cpu consumptions.
 
 \section{Performance evaluation for Redis-Benchmark tool}
-\label{sec:performance_evaluation_redisbenchmark_tool}
+\label{sec:performance_evaluation_redis_benchmark_tool}
+
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{Redis Latency External\label{fig:redis_latency_external_2}}%
+    {\includegraphics[width=0.5\linewidth]{redis_latency_external_2}}%
+    %\hspace{1em}
+  \subcaptionbox{Redis Throughput External\label{fig:redis_throughput_external_2}}%
+    {\includegraphics[width=0.5\linewidth]{redis_throughput_external_2}}%
+  \caption{Redis Benchmark External Client Metrics}
+  \label{fig:redis_benchmark_external_metrics}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{Redis Latency Internal\label{fig:redis_latency_internal}}%
+    {\includegraphics[width=0.5\linewidth]{redis_latency_internal}}%
+    %\hspace{1em}
+  \subcaptionbox{Redis Throughput Internal\label{fig:redis_throughput_internal}}%
+    {\includegraphics[width=0.5\linewidth]{redis_throughput_internal}}%
+  \caption{Redis Benchmark Internal Client Metrics}
+  \label{fig:redis_benchmark_internal_metrics}
+\end{figure}
+
 
 \section{Performance evaluation for Standalone Redis}
 \label{sec:performance_evaluation_standalone_redis}
