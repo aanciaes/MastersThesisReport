@@ -36,9 +36,9 @@ The tests measure several different relevant metrics that can be compared with e
 \section{Performance evaluation for Redis-Benchmark tool}
 \label{sec:performance_evaluation_redis_benchmark_tool}
 
-The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official redis-benchmark realest does not support TLS test. The redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses it appears to be a final version of the tool. All benchmarks tests used the same version} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set} and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
+The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official redis-benchmark realest does not support TLS test. The redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses it appears to be a final version of the tool. All benchmarks tests used the same version} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set}, and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
 
-Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results when running the benchmark tool on a Macbook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s.
+Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3 byte payload when running the benchmark tool on a Macbook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload.
 
 \begin{figure}[htbp]
   \centering
@@ -51,7 +51,7 @@ Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throu
   \label{fig:redis_benchmark_external_metrics}
 \end{figure}
 
-The results show a performance drop when adding security layers on the deployment. The \gls{SGX} deployed instance showed the biggest overhead on performance, around x\%, both latency and throughput, however, due to the added security, this is an expected result.
+The results show a performance drop for each additional security layers added to the instance deployment. The \gls{SGX} deployed instance showed the biggest overhead on performance, around x\%, both latency and throughput, however, due to the added security, this is an expected result.
 
 Figure \ref{fig:redis_benchmark_internal_metrics} shows the results of the same tests but instead of running the benchmark tool on a separate machine, it runs it on the same host where the server is deployed, therefore eliminating the network overhead.
 
