@@ -71,6 +71,21 @@ The results corroborate the initial tests but the differences between security l
 \section{Performance evaluation for Standalone Redis}
 \label{sec:performance_evaluation_standalone_redis}
 
+\begin{table}[ht]
+	\caption{Proxy Redis Standalone Results}
+	\label{tab:proxy_redis_standalone_latency_results}
+\centering
+\begin{tabular}{lccccc}
+	\toprule
+	\multicolumn{1}{c}{\textbf{Test}} & \pmb{\#}\textbf{Request} & \textbf{Final Payload Size} & \textbf{Mean Latency} & \pmb{\ensuremath{\sigma}} & \textbf{99}\pmb{\%} \\
+	\midrule
+		1. Get & 100000 & 10000b & 120ms & 11ms & 110ms 	\\
+	\midrule
+	\textbf{Secure}	&		\textbf{1}							\\
+	\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Performance evaluation for Cluster Redis}
 \label{sec:performance_evaluation_cluster_redis}
 
