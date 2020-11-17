@@ -33,7 +33,7 @@ The tests measure several different relevant metrics that can be compared with e
   \item \textbf{\gls{CPU} Consumption} - Extracted in megabytes in a percentage, and also measured alongside the tests.
 \end{itemize}
 
-\section{Performance evaluation for Redis-Benchmark tool}
+\section{Performance Evaluation for Redis-Benchmark tool}
 \label{sec:performance_evaluation_redis_benchmark_tool}
 
 The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official redis-benchmark realest does not support TLS test. The redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses it appears to be a final version of the tool. All benchmarks tests used the same version} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set}, and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
@@ -51,7 +51,7 @@ Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throu
   \label{fig:redis_benchmark_external_metrics}
 \end{figure}
 
-The results show a performance drop for each additional security layers added to the instance deployment. The \gls{SGX} deployed instance showed the biggest overhead on performance, around x\%, both latency and throughput, however, due to the added security, this is an expected result.
+The results show a performance drop for each additional security layers added to the instance deployment. The \gls{SGX} deployed instance showed the biggest overhead on performance, around 8\%-10\%, both latency and throughput, however, due to the added security, this is an expected result.
 
 Figure \ref{fig:redis_benchmark_internal_metrics} shows the results of the same tests but instead of running the benchmark tool on a separate machine, it runs it on the same host where the server is deployed, therefore eliminating the network overhead.
 
@@ -68,8 +68,26 @@ Figure \ref{fig:redis_benchmark_internal_metrics} shows the results of the same 
 
 The results corroborate the initial tests but the differences between security levels are much more visible. The main objective of this comparison is to point out that the network jitter and latency overhead will affect the performance results going forward to the next tests.
 
-\section{Performance evaluation for Standalone Redis}
+\section{Performance Evaluation for Standalone Redis}
 \label{sec:performance_evaluation_standalone_redis}
+
+This testbench configuration tests a standalone architecture with a single proxy instance and a single Redis instance. Both the proxy and the Redis components will be tested in different deployment configurations, running inside and outside \gls{SGX} enclaves. When Redis is running outside the isolated environment, it will run both in a vulnerable configuration, without any security properties and in its encrypted format, where the proxy server enabled encrypted values.
+
+The tests will run one single thread, making as many \textit{gets} and \textit{sets} requests as possible during 10 minutes with a 20 byte key and a 100 byte value. Figure \ref{fig:standalone_throughput_results} presents the throughput obtained from the tests for the different configurations.
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{Get throughput\label{fig:standalone_get_throughput}}%
+    {\includegraphics[width=0.5\linewidth]{standalone_get_throughput}}%
+    %\hspace{1em}
+  \subcaptionbox{Set throughput\label{fig:standalone_set_throughput}}%
+    {\includegraphics[width=0.5\linewidth]{standalone_set_throughput}}%
+  \caption{Standalone Throughput Results}
+  \label{fig:standalone_throughput_results}
+\end{figure}
+
+The throughputs measured from the different system configurations show a higher count of operations per second on the normal and vulnerable Proxy \& Redis configuration. When running the components on an \gls{SGX} enclave, performance takes a 20\%-25\% hit. Keeping the proxy running inside enclaves, but extracting the Redis to unprotected memory sees 18\%-22\% loss in performance. Even though the storage service is running faster outside enclaves, the proxy needs to perform extra work in order to maintain data privacy and integrity.
+ 
+The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_results} support the throughput measurements.
 
 \begin{table}[ht]
 	\caption{Proxy Redis Standalone Results}
@@ -77,30 +95,65 @@ The results corroborate the initial tests but the differences between security l
 \centering
 \begin{tabular}{lccccc}
 	\toprule
-	\multicolumn{1}{c}{\textbf{Test}} & \pmb{\#}\textbf{Request} & \textbf{Final Payload Size} & \textbf{Mean Latency} & \pmb{\ensuremath{\sigma}} & \textbf{99}\pmb{\%} \\
+	\multicolumn{1}{c}{\textbf{Test}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{99}\pmb{\%} & \textbf{DB Size} \\
 	\midrule
-		1. Get & 100000 & 10000b & 120ms & 11ms & 110ms 	\\
-	\midrule
-	\textbf{Secure}	&		\textbf{1}							\\
+		Proxy \& Redis & 14038 & 42ms & 15ms & 42ms & 2,03MB 	\\
+		Proxy SGX \& Redis SGX & 12013 & 49,67ms & 19,66ms & 58ms & 2,00MB \\
+		Proxy SGX \& Redis Encrypted & 12773 & 48,67ms & 20,12ms & 55ms & 6,49MB \\
 	\bottomrule
 \end{tabular}
 \end{table}
 
-\section{Performance evaluation for Cluster Redis}
+\section{Performance Evaluation for Cluster Redis}
 \label{sec:performance_evaluation_cluster_redis}
 
-\section{Performance evaluation for Homomorphic Operations}
+\section{Performance Evaluation for Homomorphic Operations}
 \label{sec:performance_evaluation_homomorphic_operations}
 
 \section{Evaluation of the Attestation Protocol}
 \label{sec:evaluation_attestation_protocol}
 
-Get startup times with and without CAS, get stack attestation times...
+The two different attestation types are evaluated in two different ways. Since hardware \gls{SGX} attestation is performed at container startup, it is evaluated by measuring the component deployment time and comparing it to a non-attested container.
+
+Table \ref{tab:sgx_attestation_results} shows the comparison between startup times of the Redis instance and Proxy instance, both using, and not using \gls{SGX} hardware attestation.
+
+\begin{table}[ht]
+	\caption{SGX Hardware Attestation Results}
+	\label{tab:sgx_attestation_results}
+\centering
+\begin{tabular}{lccccc}
+	\toprule
+	\multicolumn{1}{c}{\textbf{Component}} & \textbf{No Attestation} & \textbf{SGX Attestation} & \textbf{Time Loss} \\
+	\midrule
+		Redis Instance & 0,009s & 1,604s & 1,594s 	\\
+		Proxy Instance & 3,108s & 69,146s & 66,038s 	\\
+	\bottomrule
+\end{tabular}
+\end{table}
+
+On the other attestation type, the proxy will contact the redis instance and get a signed quote of important aspects of the system such as the binary and configuration file, \gls{OS} kernel information and \gls{CPU} core count and processor type. It also attests itself and returns the quotes to the client. This processes was also measured by requesting as much attestation quotes in 10 minutes and collected throughputs and latency values described on table \ref{tab:custom_attestation_results}.
+
+\begin{table}[ht]
+	\caption{Custom Attestation Results}
+	\label{tab:custom_attestation_results}
+\centering
+\begin{tabular}{lccccc}
+	\toprule
+	\multicolumn{1}{c}{\textbf{Run Number}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{Req/s} \\
+	\midrule
+		1st Run & 1491 & 402 & 188	 & 549 & 2,481 \\
+		2nd Run & 1494 & 401 & 179	 & 550 & 2,483 \\
+		3rd Run & 1494 & 401 & 164 & 546 & 2,486 \\
+	\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Complementary Measurements}
 \label{sec:complementary_measurements}
 
 Memory, CPU, etc instrumentation, workload
+
+Exhausting SGX memory
 
 \section{ Summary and Findings}
 \label{sec:summary_and_findings}
