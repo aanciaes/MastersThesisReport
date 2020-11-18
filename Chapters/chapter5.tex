@@ -169,7 +169,7 @@ Table \ref{tab:sgx_attestation_results} shows the comparison between startup tim
 \end{tabular}
 \end{table}
 
-On the other attestation type, the proxy will contact the redis instance and get a signed quote of important aspects of the system such as the binary and configuration file, \gls{OS} kernel information and \gls{CPU} core count and processor type. It also attests itself and returns the quotes to the client. This processes was also measured by requesting as much attestation quotes in 10 minutes and collected throughputs and latency values described on table \ref{tab:custom_attestation_results}.
+On the other attestation type, the proxy will contact the Redis instance and get a signed quote of important aspects of the system such as the binary and configuration file, \gls{OS} kernel information and \gls{CPU} core count and processor type. It also attests itself and returns the quotes to the client. This processes was also measured by requesting as much attestation quotes in 10 minutes and collected throughputs and latency values described on table \ref{tab:custom_attestation_results}.
 
 \begin{table}[ht]
 	\caption{Custom Attestation Results}
@@ -177,11 +177,11 @@ On the other attestation type, the proxy will contact the redis instance and get
 \centering
 \begin{tabular}{lccccc}
 	\toprule
-	\multicolumn{1}{c}{\textbf{Run Number}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{Req/s} \\
+	\multicolumn{1}{c}{\textbf{Run Number}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{99}\pmb{\%} & \textbf{Req/s} \\
 	\midrule
-		1st Run & 1491 & 402 & 188	 & 549 & 2,481 \\
-		2nd Run & 1494 & 401 & 179	 & 550 & 2,483 \\
-		3rd Run & 1494 & 401 & 164 & 546 & 2,486 \\
+		1st Run & 1491 & 402ms & 188	ms & 549ms & 2,481 ops/s \\
+		2nd Run & 1494 & 401ms & 179	ms & 550ms & 2,483 ops/s \\
+		3rd Run & 1494 & 401ms & 164ms & 546ms & 2,486 ops/s \\
 	\bottomrule
 \end{tabular}
 \end{table}
