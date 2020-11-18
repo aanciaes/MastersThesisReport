@@ -1,0 +1,82 @@
+%!TEX root = ../template.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% annex3.tex
+%% NOVA thesis document file
+%%
+%% Chapter with example of appendix with a short dummy text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Software Stack Attestation}
+\label{ann:software_stack_attestation_response_example}
+
+Listing \ref{lst:software_stack_attestation_response_example} presents an eaxmple of an software and stack attestation response where various measurements about binaries, configuration files and hardware information are provided along side a signature that can be verified for each component instance.
+
+\lstset{
+	caption=Software Attestation Response Example,
+	label=lst:software_stack_attestation_response_example,
+	string=[s]{"}{"},
+	stringstyle=\color{blue},
+	comment=[l]{:},
+	commentstyle=\color{black},
+}
+\begin{lstlisting}
+{
+ "redis": [
+  {
+   "node": "ns31249243.ip-51-210-0.eu:8541",
+   "quote": {
+    "challenges": [
+     {
+      "filename": "/usr/local/bin/redis-server",
+      "hash": "b6a07d069d17a2ab5b36869271e266e9ee94823908c9cd9747c33b293207196a"
+     },
+     {
+      "filename": "/usr/local/etc/redis/redis.conf",
+      "hash": "65bf49826aca20825206aa3679201eb08516604977efce699d42fca2c8712a03"
+     },
+     {
+      "filename": "/home/redis/mrenclave",
+      "hash": "792233b7ef44a0e7a985f561f596a1ce449bf9150e4863e2cc29dc0653829450"
+     },
+     {
+      "filename": "/home/attestation_server/attestation-server",
+      "hash": "caab16d965d8c4924a7d8a59558e5d761c8986901a3762cde93ea30c9b30701a"
+     },
+     {
+      "filename": "/home/attestation_server/mrenclave",
+      "hash": "b75392ab9d7dad6f42dbd0be0d0584951e8c95dad6ae9af60ef4ae921c712c23"
+     }
+    ],
+    "nonce": 2,
+    "system": {
+     "processorCount": 16,
+     "processorModel": "Intel(R) Xeon(R) E-2288G CPU @ 3.70GHz",
+     "operaringSystem": "Alpine Linux v3.8"
+    },
+    "quoteSignature": "Dr5afOli3vCI/vvtU5aEol2VdjVc4wW(...)"
+   }
+  }
+ ],
+    
+  "proxy": {
+   "quote": {
+    "challenges": [
+     {
+      "filename": "/home/secure-proxy-redis/secure-redis-proxy-1.3.0.jar",
+      "hash": "6f9731f7bc6a325caa314c724d4d9beea8621dac139c7ecc7deae1ce5368b65f"
+     },
+     {
+      "filename": "/home/secure-proxy-redis/mrenclave",
+      "hash": "ed5ae8a95e54392ff9e28f20bb7539c639b1a800fe6d75443330a33abc893896"
+     }
+    ],
+    "nonce": 2,
+    "system": {
+     "processorCount": 4,
+     "processorModel": "Intel(R) Xeon(R) E-2288G CPU @ 3.70GHz",
+     "operaringSystem": "Alpine Linux v3.7"
+    },
+    "quoteSignature": "lz9bRJ75WT70Wabek02YWwummvqhE+8cD32AuhDxg4KP5u(...)"
+   }
+  }
+}
+\end{lstlisting}

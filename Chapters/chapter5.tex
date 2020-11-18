@@ -113,7 +113,7 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 
 The implementation of homomorphic encryption is a way to speed up performance by performing arithmetic operations over encrypted data. This test runs a proxy server inside an \gls{SGX} enclave and a single Redis instance running on unprotected memory. To maintain data privacy and integrity on an unprotected Redis instance, the proxy enables encryption and only stores encrypted data on Redis. This test compares latency and throughputs of the \textit{Sum} and \textit{Search} operations of the system. There are three configurations to test, one where the proxy does not encrypted data (the plain Redis), a second where the proxy enables encryption with homomorphic ciphers, and the last one, where proxy encrypts data with standard \textit{AES} encryption. With homomorphic encryption, the operations are performed over the encrypted value, meaning that, unlike standard encryption, it does not need to decrypt the current value for the \textit{SUM} operation to succeed.
 
-The tests were run over a dataset of 5000 key-pairs and over 5 minutes making as many \textit{Sum} and \textit{Searches} requests as possible. The tests were run multiple times with multiple payload sizes and the average throughputs and latencies are presented in figure \ref{fig:sum_throughput_results} and table \ref{tab:sum_latency_results}.
+The \textit{Sum} tests were run over a dataset of 5000 key-pairs and over 5 minutes making as many requests as possible and the \textit{Search} test run over a dataset with 1 list with 1000 values with about 140 bytes per line. The tests were run multiple times with multiple payload sizes and the average throughputs and latencies are presented in figure \ref{fig:homomorphic_encryption_throughput_results} and table \ref{tab:sum_latency_results}.
 
 \begin{figure}[htbp]
   \centering
@@ -137,16 +137,16 @@ The tests were run over a dataset of 5000 key-pairs and over 5 minutes making as
 		Sum - Plain Redis & 6512 & 46ms & 17ms & 48ms & 1.13MB  					\\
 		Sum - Homo Encrypted Redis & 4853 & 62ms & 23ms & 69ms & 10.578MB  		\\
 		Sum - Standard Encrypted Redis & 6001 & 52ms & 19ms & 54ms & 3.85MB  	\\
-		Search - Plain Redis & 4484 & 67ms & 24ms & 81ms & -						\\
-		Search - Homo Encrypted Redis & 3571	 & 84ms & 27ms & 130ms & -			\\
-		Search - Standard Encrypted Redis & 2655	ms & 113ms & 33ms & 163ms & -	\\
+		Search - Plain Redis & 5718 & 52ms & 20ms & 68ms & 0.21MB				\\
+		Search - Homo Encrypted Redis & 4238	 & 70ms & 25ms & 117ms & 0.49MB		\\
+		Search - Standard Encrypted Redis & 3016	 & 99ms & 30ms & 150ms & 0.27MB	\\
 	\bottomrule
 \end{tabular}
 \end{table}
 
-As expected, a non encrypted Redis is the fastest configuration, however, the results on the encrypted configurations of the \textit{Sum} operation were not as anticipated. We were not able to achieve better performance by performing \textit{Sum} operations over encrypted data. This result maybe due to the size of the \textit{Sum} operation values, since we are working within the range of integers, standard \gls{AES} encryption is very fast. As we can see on the \textit{Search} operations, since values are strings, they are very big and the encryption and decryption cycles are more costly.
+As expected, a non encrypted Redis is the fastest configuration, however, the results on the encrypted configurations of the \textit{Sum} operation were not as anticipated. We were not able to achieve better performance by performing \textit{Sum} operations over encrypted data. This result maybe due to the size of the \textit{Sum} operation values, since we are working within the range of integers, standard \gls{AES} encryption is very fast. As we can see on the \textit{Search} operations, since values are strings, they are much bigger than a single integer and the encryption and decryption cycles are much more costly.
 
-On the other hand, homomorphic encryption can enable operations that are not possible with the standard encryption like maintaining encrypted data in order and searching through finding values between certain boundaries. Other very important feature that is enabled by homomorphic encryption is that the plain text value is never present in memory, since the operations do not need to decrypt.
+On the other hand, homomorphic encryption can enable operations that are not possible with the standard encryption like maintaining encrypted data in order and searching through finding values between certain boundaries. Other very important feature that is enabled by homomorphic encryption is that the plain text value is never present in memory, since the operations do not need to decrypt the value in order to proceeded.
 
 \section{Evaluation of the Attestation Protocol}
 \label{sec:evaluation_attestation_protocol}

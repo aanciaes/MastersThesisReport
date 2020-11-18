@@ -11,7 +11,7 @@ Section \ref{sec:additional_details} presents some general additional security a
 
 To finalise, there is a general summary if the chapter in section \ref{sec:chapter4_summary} that gathers all important implementation features from all components.
 
-The implemented prototype source code is available publicly on GitHub, secure datastore \cite{thesis-repository:container}, the proxy \cite{thesis-repository:proxy} and the client/tester \cite{thesis-repository:client}.
+The implemented prototype source code is available publicly on GitHub, secure datastore \cite{thesis-repository:container}, the proxy \cite{thesis-repository:proxy} and the client/tester \cite{thesis-repository:client} and a list of all technologies and corresponding versions are present in annex \ref{ann:technologies_and_versions}.
 
 \section{Architecture and Implementation Options}
 \label{sec:architecture_implementation_options}
@@ -50,7 +50,7 @@ When running in a replicated environment, master-slave or cluster, the same prin
 \subsection{Proxy Server}
 \label{ssec:proxy_server}
 
-The proxy server is the component that abstracts the Redis configurations in the backend. Proxy is a spring boot starter, version 2.3.0.RELEASE, web server application written in Kotlin v1.4.10, a language that runs on the \gls{JVM} with Java OpenJDK version 11.0.9.
+The proxy server is the component that abstracts the Redis configurations in the backend. Proxy is a spring boot starter, version 2.3.0.RELEASE, web server application written in Kotlin v1.4.10, a language that runs on the \gls{JVM} with Java OpenJDK version 1.8.0\_222.
 
 This component serves as a single point of entry to the system, and clients connect to it via an exposed \gls{HTTP} \gls{API} via a \gls{SSL}/\gls{TLS} encrypted channel (\gls{HTTPS}). This connection only authenticates the server, but users need to provide an authorisation header to access the server. The bearer token, on the format of a \gls{JWT} (Json Web Token) must be provided by the external authentication server as the proxy will check with it to validate the request. Not all users can access all endpoints, and the proxy decides the access control based on the role presented in the token.
 
@@ -128,7 +128,7 @@ In case of the Redis storage server, the \gls{TLS} private keys and certificates
 
 \textbf{The application software and stack attestation} relies on the first type attestation in order to access the keys necessary to operate, and it is performed at user request. This attestation is meant to attest binaries, config files, hardware and \gls{OS} information to the client by providing signed hashes of those resources. The client then decides if they match and pass the expected integrity checks, and if sign with a key provided by the \gls{CAS}.
 
-This attestation service was implemented in C++14 for the Redis instances, compiled using \textit{Linux Musl g++} GNU Compiler Collection (GCC) version 10.2.0 using the Linux Chilkat C/C++ Library v9.5.0.84 statically linked to the code in order to run totally inside the enclave, and Kotlin for the proxy server.
+This attestation service was implemented in C++14 for the Redis instances, compiled using \textit{Linux Musl g++} GNU Compiler Collection (GCC) version 10.2.0 using the Linux Chilkat C/C++ Library v9.5.0.84 statically linked to the code in order to run totally inside the enclave, and Kotlin for the proxy server. An example of the attestation response is presented in annex \ref{ann:software_stack_attestation_response_example}.
 
 \section{Additional Details}
 \label{sec:additional_details}
