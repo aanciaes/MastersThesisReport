@@ -96,7 +96,7 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 \centering
 \begin{tabular}{lccccc}
 	\toprule
-	\multicolumn{1}{c}{\textbf{Test}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{99}\pmb{\%} & \textbf{DB Size} \\
+	\multicolumn{1}{c}{\textbf{Test}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{95}\pmb{\%} & \textbf{DB Size} \\
 	\midrule
 		Proxy \& Redis & 14038 & 42ms & 15ms & 42ms & 2,03MB 	\\
 		Proxy SGX \& Redis SGX & 12013 & 49,67ms & 19,66ms & 58ms & 2,00MB \\
@@ -107,6 +107,32 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 
 \section{Performance Evaluation for Cluster Redis}
 \label{sec:performance_evaluation_cluster_redis}
+
+\begin{figure}[htbp]
+  \centering
+  \subcaptionbox{Get throughput\label{fig:cluster_get_throughput}}%
+    {\includegraphics[width=0.5\linewidth]{cluster_get_throughput}}%
+    %\hspace{1em}
+  \subcaptionbox{Set throughput\label{fig:cluster_set_throughput}}%
+    {\includegraphics[width=0.5\linewidth]{cluster_set_throughput}}%
+  \caption{Cluster Throughput Results}
+  \label{fig:cluster_throughput_results}
+\end{figure}
+
+\begin{table}[ht]
+	\caption{Proxy Redis Cluster Results}
+	\label{tab:proxy_redis_cluster_latency_results}
+\centering
+\begin{tabular}{lccccc}
+	\toprule
+	\multicolumn{1}{c}{\textbf{Test}} & \pmb{\#}\textbf{Request} & \textbf{Avg Latency} & \pmb{\ensuremath{\sigma}} & \textbf{95}\pmb{\%} \\
+	\midrule
+		Proxy \& Redis & 14219 & 41ms & 13ms & 41ms  				\\
+		Proxy SGX \& Redis SGX & 12229 & 49ms & 21ms & 53ms  		\\
+		Proxy SGX \& Redis Encrypted & 13131 & 46ms & 16ms & 46ms 	\\
+	\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Performance Evaluation for Homomorphic Operations}
 \label{sec:performance_evaluation_homomorphic_operations}
