@@ -140,6 +140,11 @@ SCONE framework says that it is running the applications inside secure enclaves 
 
 On a lower architecture level we can actually inspect the memory being used by the application. To test this, we can write a simple C program that holds a secret on an array in memory and dumping the memory of the process via the \textit{/proc} filesystem. The \textit{/proc/<pid>/map} shows the different memory regions of the process and \textit{/proc/<pid>/mem} holds the memory. By analysing this path, we can check that the secret is \textbf{not} present, as opposed to the same program running outside protected memory \cite{scone:debug}.
 
+\subsection{Protected Heap and Stack Memory}
+\label{ssec:protected_heap_and_stack_memory}
+
+%TODO: Write
+
 \subsection{TLS, HTTPS and Certificate Chain}
 \label{ssec:tls_https_certificate_chain}
 
@@ -164,8 +169,6 @@ To explain this problem, we can use the OpenSSL library as an example: Dynamical
 Another implementation detail on the performance-security tradeoff topic are the homomorphic ciphers that the proxy implements on an unprotected Redis instance. Homomorphic encrypted values do leak some minor information to an attacker, although it is a good trade-off between security and performance. For example, order preserving ciphers although they do not leak specific values, they do leak the decrypted value order.
 
 The security-performance tradeoff is not a static line, and it moves depending on the use case. For some applications, data must be extremely secure and performance can take a hit to maintain a strong privacy preserving system. This thesis implemented various security properties and all are evaluated in chapter \ref{cha:validation_experimental_Evaluation} to provide enough information for a user to decide whether or not it is a right solution to its own use case.
-
-% TODO: Should we write about SGX Attestation vs on-demand software custom attestation service
 
 \section{Summary}
 \label{sec:chapter4_summary}

@@ -108,6 +108,10 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 \section{Performance Evaluation for Cluster Redis}
 \label{sec:performance_evaluation_cluster_redis}
 
+%TODO: Write
+
+Clustering on Redis is distributed out of the box on the latest Redis versions. It combines the Master-Slave model and an event bus to provide replication and sharding and coordination between the nodes. This test uses a configuration with one proxy server, and six Redis nodes, with three masters and three slaves. The tests run were the same of the standalone system configuration presented on section \ref{sec:performance_evaluation_standalone_redis} to maintain consistency between tests, and it runs a single thread, making as many requests as possible during 10 minutes, using random 20 byte keys with a 100 byte random value. Figure \ref{fig:cluster_throughput_results} shows the throughput results on the sets and get operations.
+
 \begin{figure}[htbp]
   \centering
   \subcaptionbox{Get throughput\label{fig:cluster_get_throughput}}%
@@ -118,6 +122,8 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
   \caption{Cluster Throughput Results}
   \label{fig:cluster_throughput_results}
 \end{figure}
+
+Again, as expected, the vulnerable Redis configuration is the fastest since it doesn't need to maintain any security or privacy properties. Running the Proxy and Redis server on an isolated environment incurs in a performance penalty. However, running the Redis in unprotected memory but on an encrypted format seems to have a bit of an edge in performance over the \gls{SGX} isolated server.
 
 \begin{table}[ht]
 	\caption{Proxy Redis Cluster Results}
@@ -133,6 +139,10 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 	\bottomrule
 \end{tabular}
 \end{table}
+
+Table \ref{tab:proxy_redis_cluster_latency_results} shows the latency results of the same tests, and it shows a correlation with the tests and the evaluation made above.
+
+By observing both throughputs and latencies of the standalone and the cluster configurations we can compared them and observe similarities. Both tests seem to have a similar result on all system configurations and that might be due to the consistency guarantee of the cluster. Although a Redis cluster does provide replication, automatically split data among multiple nodes and some availability during network partitions, it is not able to guarantee \textbf{strong consistency}. This means that under some specific conditions the Redis cluster can lose writes that were acknowledged to the user by the system. This happens because Redis uses asynchronous replication, where it responds to the client before replicating the results to the replica instances. This configuration explains the similarity in performance since the proxy will only communicate with one instance at a time and that instance will respond before replicate the given command, just like a standalone node.
 
 \section{Performance Evaluation for Homomorphic Operations}
 \label{sec:performance_evaluation_homomorphic_operations}
@@ -180,6 +190,8 @@ On the other hand, homomorphic encryption can enable operations that are not pos
 The two different attestation types are evaluated in two different ways. Since hardware \gls{SGX} attestation is performed at container startup, it is evaluated by measuring the component deployment time and comparing it to a non-attested container.
 
 Table \ref{tab:sgx_attestation_results} shows the comparison between startup times of the Redis instance and Proxy instance, both using, and not using \gls{SGX} hardware attestation.
+
+%TODO: Add non enclave startup, enclave but no attestation, enclave and attestation and extrapolate attestation times
 
 \begin{table}[ht]
 	\caption{SGX Hardware Attestation Results}
