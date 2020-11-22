@@ -185,11 +185,9 @@ On the other hand, homomorphic encryption can enable operations that are not pos
 \section{Evaluation of the Attestation Protocol}
 \label{sec:evaluation_attestation_protocol}
 
-The two different attestation types are evaluated in two different ways. Since hardware \gls{SGX} attestation is performed at container startup, it is evaluated by measuring the component deployment time and comparing it to a non-attested container.
+The two different attestation types are evaluated in two different ways. Since \gls{SGX} hardware attestation is a SCONE feature and it happens automatically on startup, there is not an accurate way to measure the attestation time, so it is extrapolated from the startup times of different components configurations.
 
-Table \ref{tab:sgx_attestation_results} shows the comparison between startup times of the Redis instance and Proxy instance, both using, and not using \gls{SGX} hardware attestation.
-
-%TODO: Add non enclave startup, enclave but no attestation, enclave and attestation and extrapolate attestation times
+Table \ref{tab:sgx_attestation_results} shows the comparison between startup times of the Redis instance and Proxy instance, using a component that does not run on an enclave, the component running on enclave but not performing attestation, and one running within enclaves with startup \gls{SGX} hardware attestation.
 
 \begin{table}[ht]
 	\caption{SGX Hardware Attestation Results}
@@ -197,10 +195,10 @@ Table \ref{tab:sgx_attestation_results} shows the comparison between startup tim
 \centering
 \begin{tabular}{lccccc}
 	\toprule
-	\multicolumn{1}{c}{\textbf{Component}} & \textbf{No Attestation} & \textbf{SGX Attestation} & \textbf{Time Loss} \\
+	\multicolumn{1}{c}{\textbf{Component}} & \textbf{No SGX} & \textbf{SGX w/o Attestation} & \textbf{SGX w/ Attestation} &\pmb{\ensuremath{\approx}} \textbf{Attestation Time} \\
 	\midrule
-		Redis Instance & 0,009s & 1,604s & 1,594s 	\\
-		Proxy Instance & 3,108s & 69,146s & 66,038s 	\\
+		Redis Instance & 0,009s & 0,2854s & 1,604s & 1,2916s 	\\
+		Proxy Instance & 3,108s & 66,1174s & 69,146s & 3,0294s 	\\
 	\bottomrule
 \end{tabular}
 \end{table}
