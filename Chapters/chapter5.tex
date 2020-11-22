@@ -108,8 +108,6 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 \section{Performance Evaluation for Cluster Redis}
 \label{sec:performance_evaluation_cluster_redis}
 
-%TODO: Write
-
 Clustering on Redis is distributed out of the box on the latest Redis versions. It combines the Master-Slave model and an event bus to provide replication and sharding and coordination between the nodes. This test uses a configuration with one proxy server, and six Redis nodes, with three masters and three slaves. The tests run were the same of the standalone system configuration presented on section \ref{sec:performance_evaluation_standalone_redis} to maintain consistency between tests, and it runs a single thread, making as many requests as possible during 10 minutes, using random 20 byte keys with a 100 byte random value. Figure \ref{fig:cluster_throughput_results} shows the throughput results on the sets and get operations.
 
 \begin{figure}[htbp]

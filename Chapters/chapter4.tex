@@ -16,7 +16,7 @@ The implemented prototype source code is available publicly on GitHub, secure da
 \section{Architecture and Implementation Options}
 \label{sec:architecture_implementation_options}
 
-To achieve the goal of deploying the system in a cloud, we had to find a provider that has and provides host machines with the pretended \gls{TEE} technology - Intel's Software Guard Extensions (\gls{SGX}) v2.11. Although not globally available, some cloud providers are starting to make them available and for this thesis, the cloud provider used is OVH Cloud \cite{ovhcloud:1}. 
+To achieve the goal of deploying the system in a cloud, we had to find a provider that has and provides host machines with the pretended \gls{TEE} technology - Intel's Software Guard Extensions (\gls{SGX}v1) version 2.5.0. Although not globally available, some cloud providers are starting to make them available and for this thesis, the cloud provider used is OVH Cloud \cite{ovhcloud:1}. 
 
 For this thesis, OVH provided an IaaS stack machine running Ubuntu Server version 18.04 with kernel 4.15.0-101-generic, which means that we have control over all host's stack but the hardware, from the operating system, networks, runtime and applications. The used machine specific configurations are listed on listing \ref{lst:ovh_machine_specs}.
 
@@ -143,7 +143,11 @@ On a lower architecture level we can actually inspect the memory being used by t
 \subsection{Protected Heap and Stack Memory}
 \label{ssec:protected_heap_and_stack_memory}
 
-%TODO: Write
+The application stack and heap memories are a core feature of any program. Stack is a memory region that stores temporary variables and data for a single computing task or function. In this memory space, variables are declared stored and initialised during runtime and are automatically erased after the code block is complete. The heap on the other hand, is a bigger region of memory, mostly allocated at startup and it stores long lived global variables, class references and other data necessary for the complete lifecycle of the program.
+
+Running on an enclave, all of this memory must be protected and isolated from the all the other system software, hardware and even users with privileged accounts by running being placed inside the \gls{EPC}. Since we are running Intel's \gls{SGX} version 1 processors, all protected memory must be allocated at enclave startup. SCONE provides environment variables that can be set when running an application to adjust the size of the heap and stack memory regions, the SCONE\_HEAP and SCONE\_STACK variables.
+
+Version 1 of \gls{SGX} technology means that no on-demand dynamic scaling or paging is available on the enclave allocated memory (which will be fixed by \gls{SGX}v2) and that SCONE cannot estimate how much memory the application will need. However, swapping enclave pages to main unprotected memory is still available, meaning that we can allocate more memory than the psychical \gls{EPC} limit of 128\gls{MB}, but also means that all memory must be allocated at enclave startup which can generate a higher startup time, and some \gls{OOM} (Out Of Memory) errors if the application reaches Stack or Heap allocated memory limits.
 
 \subsection{TLS, HTTPS and Certificate Chain}
 \label{ssec:tls_https_certificate_chain}
