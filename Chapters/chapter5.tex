@@ -223,40 +223,49 @@ On the other attestation type, the proxy will contact the Redis instance and get
 \section{Complementary Measurements}
 \label{sec:complementary_measurements}
 
+\subsection{Memory and CPU Measurements}
+\label{ssec:memory_and_cpu_measurements}
+
 Memory, CPU, etc instrumentation, workload
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{system_cpu_load}}%
+  \caption{Average CPU Load}
+  \label{fig:average_cpu_load}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{redis_plain_memory}}%
+  \caption{Redis Plain Memory}
+  \label{fig:redis_plain_memory}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{redis_sgx_memory}}%41
+  \caption{Redis SGX Memory}
+  \label{fig:redis_sgx_memory}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{redis_enc_memory}}%
+  \caption{Encrypted Redis Memory}
+  \label{fig:encrypted_redis_memory}
+\end{figure}
+
+\subsection{Exhausting Protected Memory}
+\label{ssec:exhausting_protected_memory}
 
 Exhausting SGX memory
 
+\subsection{Performance and Payload Size}
+\label{ssec:performance_and_payload_size}
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{latency_per_data_size}}%
+  \caption{Latency per Data Size}
+  \label{fig:latency_per_data_size}
+\end{figure}
+
+
 \section{ Summary and Findings}
 \label{sec:summary_and_findings}
-
-% \section{Performance evaluation for Testbench 1}
-% \label{sec:performance_evaluation_testbench_1}
-
-% \subsection{Latency}
-% \label{ssec:testbench_1_latency}
-
-% \subsection{Throughput}
-% \label{ssec:testbench_1_throughput}
-
-% \section{Performance evaluation for Testbench 2}
-% \label{sec:performance_evaluation_testbench_2}
-
-% \subsection{Latency}
-% \label{ssec:testbench_2_latency}
-
-% \subsection{Throughput}
-% \label{ssec:testbench_2_throughput}
-
-% \section{Evaluation of the Attestation Protocol}
-% \label{sec:evaluation_attestation_protocol}
-
-% Get startup times with and without CAS, get stack attestation times...
-
-% \section{Complementary Measurements}
-% \label{sec:complementary_measurements}
-
-% Memory, CPU, etc instrumentation, workload
-
-% \section{ Summary and Findings}
-% \label{sec:summary_and_findings}
