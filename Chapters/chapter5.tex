@@ -226,46 +226,66 @@ On the other attestation type, the proxy will contact the Redis instance and get
 \subsection{Memory and CPU Measurements}
 \label{ssec:memory_and_cpu_measurements}
 
-Memory, CPU, etc instrumentation, workload
+During the standalone tests, \gls{CPU} and memory values of the containers and processes were measured and recorder for further evaluation. Figure \ref{fig:average_cpu_load} shows the average \gls{CPU} loads of each system configuration during the 10 minute test performance test detailed in section \ref{sec:performance_evaluation_standalone_redis} of the standalone test.
 
 \begin{figure}[htbp]
-  \centering{\includegraphics[width=1.0\linewidth]{system_cpu_load}}%
+  \centering{\includegraphics[width=0.7\linewidth]{system_cpu_load}}%
   \caption{Average CPU Load}
   \label{fig:average_cpu_load}
 \end{figure}
 
-\begin{figure}[htbp]
-  \centering{\includegraphics[width=1.0\linewidth]{redis_plain_memory}}%
-  \caption{Redis Plain Memory}
-  \label{fig:redis_plain_memory}
-\end{figure}
+By cross referencing the tests made directly into Redis with the help of the Redis-Benchmark tool and the ones performed through the proxy that regardless of the configuration, the network and the proxy impose a significant overhead that allows the Redis server to never really reaching a problematic \gls{CPU} load. However, running the proxy inside a secure enclave also incurs a increase of \gls{CPU} load during testing. Also, running alongside the protected redis is a small attestation service that measures at about 2\%-2.5\% of the measured 8\%. When it comes to the Proxy server, the same conclusions were reached, where a service running protected by a secure enclave seams to run a higher \gls{CPU} load during performance testing.
+
+Higher \gls{CPU} loads can be explained with encryption and decryption of data in order to maintain it secure, as well as stronger access control checks, and protected memory page swapping that requires more encryption, decryption and integrity checks and system calls that slow down the system and required exiting and entering the enclaves.
+
+Graphs \ref{fig:redis_plain_memory}, \ref{fig:encrypted_redis_memory} and \ref{fig:redis_sgx_memory} show the memory evolution during the same tests. The metrics recorded were the Redis total memory usage, the Redis dataset memory size and the \gls{RSS} (Resident Set Size) memory of the Redis process. Figure \ref {fig:redis_plain_enc_memory_results} shows the memory from both Redis configurations that do not run on a secure enclave, where figure \ref{fig:encrypted_redis_memory} corresponds to an homomorphic encrypted Redis configuration.
 
 \begin{figure}[htbp]
-  \centering{\includegraphics[width=1.0\linewidth]{redis_sgx_memory}}%41
-  \caption{Redis SGX Memory}
+\hspace*{-8mm}
+  \centering
+  \subcaptionbox{Redis Plain Memory\label{fig:redis_plain_memory}}%
+    {\includegraphics[width=0.55\linewidth]{redis_plain_memory}}%
+    %\hspace{1em}
+  \subcaptionbox{Encrypted Redis Memory\label{fig:encrypted_redis_memory}}%
+    {\includegraphics[width=0.55\linewidth]{redis_enc_memory}}%
+  \caption{Redis Plain Memory Usage}
+  \label{fig:redis_plain_enc_memory_results}
+\end{figure}
+
+The graphs show a normal progression, with a clear distinction between the \textit{sets} and \textit{gets} operations on the test. All metrics climb steadily while data is being inserted into Redis, and maintain a their value when the test changes to the \textit{get} operation portion of the test. With the additional information that is stored with the value on an encrypted configuration, such as digital signatures and integrity check hashes, the memory used was expected to be higher, and the tests confirmed that expectation.
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=0.6\linewidth]{redis_sgx_memory}}%
+  \caption{Redis SGX Memory Usage}
   \label{fig:redis_sgx_memory}
 \end{figure}
 
-\begin{figure}[htbp]
-  \centering{\includegraphics[width=1.0\linewidth]{redis_enc_memory}}%
-  \caption{Encrypted Redis Memory}
-  \label{fig:encrypted_redis_memory}
-\end{figure}
+Graph \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instance running on an Intel's secure enclave, and although the total Redis memory and dataset size follow the same lines as the previous configurations, the \gls{RSS} memory starts very high, and maintains that value all throughout the test. This can be explain by the lack of ability that an application running inside of Intel's \gls{SGX}v1 secure enclave to dynamically resize allocated memory. Nevertheless, used memory and dataset memory of the Redis seams to be about the same of an unprotected Redis running on standard \gls{RAM}.
 
 \subsection{Exhausting Protected Memory}
 \label{ssec:exhausting_protected_memory}
 
-Exhausting SGX memory
+As previously mentioned on section \ref{ssec:protected_heap_and_stack_memory}, the lack of ability of dynamically resizing and allocating memory when running on a secure enclave is an \gls{SGX}1 problem, but, a second generation of the processor, the \gls{SGX}2, with the objective to overcome this problem, is already a work-in-progress \cite{Xing2016}.
+
+This means that application \textit{heap} and \textit{stack} memory parameters should be tuned at enclave startup and are fixed and not resizable at runtime. When running any datastore application, this parameters are very important because, depending on the use case, the size which the database size will rise are not very predictable and reaching the \textit{heap} or \textit{stack} limits will kill the process with a \gls{OOM} (Out of Memory) error.
+
+Through testing we were able to confirm this limitation, by inserting data continuously until reaching the default \textit{SCONE Heap} limit of 64\gls{MB}, the container where Redis was running gets killed by a \gls{OOM} error. By tuning the \textit{SCONE Heap} parameter through the provided environment variable, Redis was able to surpass the 64\gls{MB} limit and also the 128\gls{MB} physical limit of the \gls{EPC}.
 
 \subsection{Performance and Payload Size}
 \label{ssec:performance_and_payload_size}
 
+All tests were made with a small key-value pair with about 20 bytes for the key and 100 bytes for the value. However, it is important to know how the system would handle requests with the different payload sizes, and a standalone system running the three systems configurations tested in this chapter were tested with payloads of 100 bytes, 1KB, 100KB, 500KB and 1MB and the results are presented in graph \ref{fig:latency_per_data_size}.
+
 \begin{figure}[htbp]
-  \centering{\includegraphics[width=1.0\linewidth]{latency_per_data_size}}%
+  \centering{\includegraphics[width=0.6\linewidth]{latency_per_data_size}}%
   \caption{Latency per Data Size}
   \label{fig:latency_per_data_size}
 \end{figure}
 
+The graph shows the average response times in running the different configurations with the variable payload size over a 5000 request test bench. As expected, a plain redis running on unprotected memory scaled the best, followed by the enclave and encrypted configurations that run closely throughout the tests.
+
 
 \section{ Summary and Findings}
 \label{sec:summary_and_findings}
+
+Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World
