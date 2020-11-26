@@ -284,8 +284,20 @@ All tests were made with a small key-value pair with about 20 bytes for the key 
 
 The graph shows the average response times in running the different configurations with the variable payload size over a 5000 request test bench. As expected, a plain redis running on unprotected memory scaled the best, followed by the enclave and encrypted configurations that run closely throughout the tests.
 
-
 \section{ Summary and Findings}
 \label{sec:summary_and_findings}
 
-Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World
+A plain and normal configuration, an \gls{SGX} enabled architecture and an hybrid system are he three most prominent configurations available and all were tested on the same test benches and on the same conditions to provide a clear conclusion of the work performed in order to achieve and reach the expected goals and contributions of this thesis, but also for those who are able to choose a system architecture based on security, can make an informed decision and tailored to their use case.
+
+The test revealed that, as expected, additional security measures incur on a performance overhead to the system but risk managing is an important part of any project planing and the performance drawback can be worth it for some use cases.
+
+Referencing the \gls{SGX} secure enclaves, we saw a performance drop of about 15\% to approximately 25\%, and the performance of an application running on an enclave depends on these three main points:
+
+\textbf{Memory Access Local}: If the application exceeds the \gls{EPC} size limit, memory is swapped to main memory and that requires additional encryption and decryption cycles.
+
+\textbf{System Calls}: System calls require enclave exiting and entering which is a slow process. However, SCONE uses an asynchronous system call interface that ensures that threads do not need to exit the enclave to perform a system call.
+
+\textbf{Threading}: SCONE uses asynchronous application threading in order to allow switching to another application thread if another one is waiting for some system event, without exiting the enclave, which can speed up the performance.
+
+We also found out that the bigger the application enclave is, the more page swapping it has to perform and also, with \gls{SGX}1, the lack of dynamically resizing enclaves makes a great case for an hybrid approach, where the storage server lives on unprotected memory but is secured by encryption mechanism enabled by the proxy, which can itself run inside an enclave, making sure that the encryption and decryption cycles are hardware protected.
+
