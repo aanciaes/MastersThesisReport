@@ -3,13 +3,23 @@
 \chapter{Conclusions}
 \label{cha:conclusions}
 
-\section{Main conclusions}
+\section{Main Conclusions}
 \label{sec:main_conclusion}
 
 Match contributions with results
 
 \section{Open Remarks}
 \label{sec:open_remarks}
+
+performance, memory sgx limitations.
+
+Limited to the given set of operations. Due to the homomorphic encryption schema, this is not a full fledge solution and may not support all redis operations.
+
+only works on intel sgx supported machines
+
+Built in backups on redis sgx are backing up a plain text file with data.
+
+500 errors on big payload sets corresponding with redis background saving processes.
 
 \section{Future Work Directions}
 \label{sec:future_work_directions}
