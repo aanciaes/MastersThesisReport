@@ -1,5 +1,7 @@
 # NOVAthesis LaTeX template
 
+![Master Thesis](https://img.shields.io/badge/MasterThesis-Delivered-brightgreen)
+
 --------
 
 *If you are here looking for the (deprecated) Word templates (not maintained anymore), please go to [this other repository](https://github.com/joaomlourenco/novathesis_word).*
