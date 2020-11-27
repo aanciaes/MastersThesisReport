@@ -1,6 +1,8 @@
 # NOVAthesis LaTeX template
 
 ![Master Thesis](https://img.shields.io/badge/MasterThesis-Delivered-brightgreen)
+[![GitHub release](https://img.shields.io/github/release/aanciaes/MastersThesisReport.svg)](https://github.com/aanciaes/MastersThesisReport/releases/)
+[![GitHub issues](https://img.shields.io/github/issues/aanciaes/MastersThesisReport.svg)](https://github.com/aanciaes/MastersThesisReport/issues/)
 
 --------
 
