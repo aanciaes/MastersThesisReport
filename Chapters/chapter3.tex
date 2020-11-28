@@ -110,7 +110,7 @@ To circumvent the \gls{SGX} memory limitation, the dataset will be split into tw
 
 The \textbf{secure} storage runs on a trusted execution environment (trusted hardware) protected by a secure physical processor present on the host machine. This processor provides the security features that allow for memory to be operated in plain text without breaking privacy or data security as explained in section \ref{sec:trusted_computing _environments}.
 
-As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and on untrusted hardware. This means that data must be actively secure by encryption, integrity checks and authentication features in order to provide and preserve privacy.
+As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and on untrusted hardware. This means that data must be actively secured by encryption, integrity checks and authentication features in order to provide and preserve privacy.
 
 We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
 
@@ -132,9 +132,9 @@ The proxy server serves as a single point of access for the multiple storage ins
 \subsection{Authentication Server}
 \label{ssec:authentication_server}
 
-An external authentication server is required to centralised user management. It is responsible for user authentication and verification. A user authenticates against the authentication server receiving an access token, that it provides to the proxy on every request. The proxy can verify the token and check if it is valid and what permissions this user has, and can authorise or reject the access to a particular endpoint or system functionality.
+An external authentication server is required to centralised user management. It is responsible for user authentication and verification. An user authenticates against the authentication server receiving an access token, that it provides to the proxy on every request. The proxy can verify the token and check if it is valid and what permissions this user has, and can authorise or reject the access to a particular endpoint or system functionality.
 
-An external authentication server relieves the proxy of user authentication and management, and outsources it to a standardised open source system that implements security standards of identity and access management. This is also import so that the proxy server can, if needed, be replicated.
+An external authentication server relieves the proxy of user authentication and management, and outsources it to a standardised open source system that implements security standards of identity and access management. This is also important so that the proxy server can, if needed, be replicated.
 
 \subsection{Client}
 \label{ssec:client}
@@ -148,7 +148,7 @@ Although just a simulated client/tester, the \glspl{API} are consumed the same w
 
 Figure \ref{fig:system_architecture_stack} describes the hardware and software representative stack of the infrastructure \footnote{The described stack is a representative stack of the machine layers and it does not represent a true overhead ladder}. Figure \ref{fig:storage_stack} shows how the storage service are deployed onto the cloud provider's machines. The machines hardware provide a very specific and physical processor that implements a trusted execution environment. Running on the operating system, a containerisation solution runs the \gls{TEE} virtualisation framework in order for the container running both the key value stores and the attestation services being able to access the \gls{TEE}. On the right hand side of this figure, we can see a storage service that runs with no \gls{TEE} virtualisation system, and that is the deployment of an unprotected key value store configuration.
 
-On figure \ref{fig:proxt_stack} the stack provided describes a system also running in the confinements of a trusted execution environment and therefor, also providing an attestation service.
+On figure \ref{fig:proxt_stack} the stack provided describes a system also running in the confinements of a trusted execution environment and therefore, also providing an attestation service.
 
 \begin{figure}[htbp]
   \centering
@@ -175,7 +175,7 @@ The system by default rejects all unauthenticated requests, which means, users d
 
 As explained before, user management is performed by the external authentication server, and each user has a role assigned. Different roles can do different actions on the system and role based authorisation can be completely customised.
 
-In this thesis we operate with the principle of least privileges, and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a readonly user), and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role based authorisation that the system performs before accepting a request into the server.
+In this thesis we operate with the principle of least privileges, and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a readonly user), and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role based authorisation that the system performs before accepting a request into the server and can be further configured (or new roles added) for a finer grained authorisation mechanism.
 
 \subsection{Key-Value Storage Operations}
 \label{ssec:key-value_storage_operations}
@@ -219,7 +219,7 @@ Attestation is the method provided by the processor implementing a trusted execu
 
 Figure \ref{fig:attestation_model} describes the \gls{TEE} hardware attestation infrastructure. It happens at application start up, and is the attestation that relies on the secure processor and it requires an external Configuration and Attestation Server (\gls{CAS}) that holds some kind of secret necessary for the application startup. However, the \gls{CAS} will only allow and provide the secret if the application enclave can prove itself to be correct, i.e, is running the correct source code in the correct system. The application contacts a Local Attestation Server (\gls{LAS}) to obtain a proof of their correctness and then try to fetch their secrets in the configuration server. If the application is deemed correct, it can access those secrets and can start.
 
-On the other hand, users can also request the remote attestation of the complete system software stack and hardware information at any point on the user's lifecycle. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is them gathered in the proxy, which attests it self and returned to the client.
+On the other hand, users can also request the remote attestation of the complete system software stack and hardware information at any point on the user's lifecycle. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is then gathered in the proxy, which attests it self and returned to the client.
 
 The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether or not the system is correct and protected and can continue normal use.
 
