@@ -268,7 +268,9 @@ Graph \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instan
 \subsection{Exhausting Protected Memory}
 \label{ssec:exhausting_protected_memory}
 
-As previously mentioned on section \ref{ssec:protected_heap_and_stack_memory}, the lack of ability of dynamically resizing and allocating memory when running on a secure enclave is an \gls{SGX}1 problem, but, a second generation of the processor, the \gls{SGX}2, with the objective to overcome this problem, is already a work-in-progress \cite{Xing2016}.
+The performance of a process that runs inside an isolated enclave is directly dependent of the locality of memory access. When the process necessary memory does not fit in the \gls{EPC}, the process will suffer page faults. When a page fault occurs, the \gls{SGX} driver selects a page from the \gls{EPC}, re-encrypts it for freshness and stores it in main unprotected memory. The page swap process takes some time, and the overhead of the application grows with the page fault rate. With the increase size of an application, the page fault rate also increases, and the performance overhead will also increase correspondingly.  
+
+Also, as previously mentioned on section \ref{ssec:protected_heap_and_stack_memory}, the lack of ability of dynamically resizing and allocating memory when running on a secure enclave is an \gls{SGX}1 problem, but, a second generation of the processor, the \gls{SGX}2, with the objective to overcome this problem, is already a work-in-progress \cite{Xing2016}.
 
 This means that application \textit{heap} and \textit{stack} memory parameters should be tuned at enclave startup and are fixed and not resizable at runtime. When running any datastore application, this parameters are very important because, depending on the use case, the size which the database size will rise are not very predictable and reaching the \textit{heap} or \textit{stack} limits will kill the process with a \gls{OOM} (Out of Memory) error.
 
