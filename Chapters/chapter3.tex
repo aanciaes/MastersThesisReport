@@ -3,30 +3,30 @@
 \chapter{System Model and Design Options}
 \label{cha:system_model_and_design_options}
 
-In this chapter we provide an overview of the system model and implemented architecture along with all of its components. It is explained how all component interact with each other and each component purpose and how they work.
+In this chapter, we provide an overview of the system model and implemented architecture along with all of its components. It is explained how all components interact with each other and each component purpose and how they work.
 
 It is also explained how the different security features are implemented into the system in order to provide a secure overall system and achieve the contributions planned for this thesis.
 
 Section \ref{sec:refinement_of_objectives_and_contributions} provides a small recap and refinement of the objectives and contributions of this thesis and the used \gls{TEE} technology.
 
-In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and  security properties are out of scoped and not addressed in the project.
-Sections \ref{sec:system_model} and \ref{sec:system_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:supported_operations} and \ref{sec:operation_flow} we expose the application specific operations supported both key value store specific operations and custom operations implemented by the proxy and also an interaction flow to represent a user interaction with the system.
+In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security-related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and security properties are out of scoped and not addressed in the project.
+Sections \ref{sec:system_model} and \ref{sec:system_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:supported_operations} and \ref{sec:operation_flow} we expose the application-specific operations supported both key-value store specific operations and custom operations implemented by the proxy and also an interaction flow that represents a user interaction with the system.
 
-Finally, as always, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation specific details performed to achieve the described system.
+Finally, as always, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:elaboration_plan}, which will present all implementation-specific details performed to achieve the described system.
 
 \section{Refinement of Objectives and Contributions} % (fold)
 \label{sec:refinement_of_objectives_and_contributions}
 
 The goal of this dissertation as explained on chapter \ref{cha:introduction}, is the design, development and validation with experimental evaluation of a secure in-memory storage (based on a "key-value" model), supported by a hardware-enabled trust computing base.
 
-Regarding the security assumptions, the solution will provide: (i) hardware-isolated in-memory processing engine, designed as a hardware-isolated container facility, enclaved within the Intel-SGX protection guarantees; (ii) hardware-isolated communication endpoints for client access, providing TLS tunnelling with strong TLS 1.3 endpoint encryption parameterisations and support for mutual client/server authentication, and (iii) privacy-enhanced operations to be directly processed on encrypted data sets in memory. The former facility is particularly interesting to combine the possibility to manage protected memory for small data sets and also searchable encrypted data sets that are far larger than the protected memory limits imposed by the SGX memory mapping facility. Furthermore, the solution will target main data structures commonly use fine-grained data items that can include pointers, complex composite types and keys, which do not match well with the coarse-grained paging of the SGX memory extension technique.
+Regarding the security assumptions, the solution will provide: (i) hardware-isolated in-memory processing engine, designed as a hardware-isolated container facility, enclaved within the Intel-SGX protection guarantees; (ii) hardware-isolated communication endpoints for client access, providing TLS tunnelling with strong TLS 1.3 endpoint encryption parameterisations and support for mutual client/server authentication, and (iii) privacy-enhanced operations to be directly processed on encrypted data sets in memory. The former facility is particularly interesting to combine the possibility to manage protected memory for small data sets and also searchable encrypted data sets that are far larger than the protected memory limits imposed by the SGX memory mapping facility. Furthermore, the solution will target main data structures commonly use fine-grained data items that can include pointers, complex composite types and keys, which do not match well with the coarse-grained paging of the SGX memory extension technique.
 
-In the next subsections we will align the implementation ideas starting by refining the circumvention of limitations in SGX and the threat model assumptions to address our solution.
+In the next subsections, we will align the implementation ideas starting by refining the circumvention of limitations in SGX and the threat model assumptions to address our solution.
 
 \subsection{\gls{SGX} Limitations Refinement}
 \label{ssec:sgx_limitations_refinement}
 
-Section \ref{ssec:circumvention_of_sgx_limitations} describes in detail the limitations of \gls{SGX}. In our approach we will intend to design a solution that can be leveraged from conventional reference KVS technology, giving the possibility to manage small datasets but also larger datasets (directly mapped in non-protected memory). To circumvent the problem our solution must combine the possibility to use the internal capabilities native to SGX with the possibility of supporting operations managing datasets encrypted in memory, with such operations executed directly over encrypted data. This facility will be provided by the use of partial homomorphic encryption constructions, with data initially encrypted and submitted to the key-value-store solution with cryptographic keys only managed in the client side. Our solution will be designed in order to be possible the support for fine-grained key-value encryption, driven form the application requirements. Our target is the support of a variety of operations provided in a typical KVS API, taking REDIS as the reference solution and in order to support a considerable number of queries currently used by many REDIS-supported applications.
+Section \ref{ssec:circumvention_of_sgx_limitations} describes in detail the limitations of \gls{SGX}. In our approach we will intend to design a solution that can be leveraged from conventional reference KVS technology, giving the possibility to manage small datasets but also larger datasets (directly mapped in non-protected memory). To circumvent the problem our solution must combine the possibility to use the internal capabilities native to SGX with the possibility of supporting operations managing datasets encrypted in memory, with such operations executed directly over encrypted data. This facility will be provided by the use of partial homomorphic encryption constructions, with data initially encrypted and submitted to the key-value-store solution with cryptographic keys only managed in the client-side. Our solution will be designed in order to be possible the support for fine-grained key-value encryption, driven form the application requirements. Our target is the support of a variety of operations provided in a typical KVS API, taking REDIS as the reference solution and to support a considerable number of queries currently used by many REDIS-supported applications.
 
 \section{Threat Model and Security Properties}
 \label{sec:threat_model_and_security_properties}
@@ -44,20 +44,20 @@ Subsections \ref{ssec:adversarial_model_definition}, \ref{ssec:other_system_assu
 \subsection{Adversarial Model Definition}
 \label{ssec:adversarial_model_definition}
 	
-As the baseline, our threat model will lie on the protection overview stated in SGX’s paper \cite{sgx:7}: \textit{SGX prevents all other software from accessing the code and data located inside an enclave including system software and access from other enclaves. Attempts to modify an enclave’s contents are detected and either prevented or execution is aborted}, which falls in the following adversary model:
+As the baseline, our threat model will lie on the protection overview stated in SGX’s paper \cite{sgx:7}: \textit{SGX prevents all other software from accessing the code and data located inside an enclave including system software and access from other enclaves. Attempts to modify an enclave’s contents are detected and either prevented or execution is aborted}, which falls in the following adversary model:
 
-\textbf{Isolation by trusted containerisation from malicious code}: The system performs and protects its data from an attacker capable of compromising the system through another application installed on the same system or malicious code existent or injected in the OS or OS hypervisor layers;
+\textbf{Isolation by trusted containerisation from malicious code}: The system performs and protects its data from an attacker capable of compromising the system through another application installed on the same system or malicious code existent or injected in the OS or OS hypervisor layers;
 
-\textbf{Privacy protection against insider "Honest but Curious" System Administrators}: The system must be able to protect from an attacker with root access to the machine, with permissions to access and monitor memory-mapped data. This is relevant because we will target our solution as a candidate solution to protect data privacy in a cloud-based key value store solution as a service, preventing data-leakage vulnerabilities exploitable by insider incorrect users or system-administrators.
+\textbf{Privacy protection against insider "Honest but Curious" System Administrators}: The system must be able to protect from an attacker with root access to the machine, with permissions to access and monitor memory-mapped data. This is relevant because we will target our solution as a candidate solution to protect data privacy in a cloud-based key-value store solution as a service, preventing data-leakage vulnerabilities exploitable by insider incorrect users or system-administrators.
 
-\textbf{Network Attacks:} All communication to and from the system (supporting client-service operations) should be secure, using proper strong cryptographic parameterisations for \gls{TLS} 1.3, mutual authenticated handshakes and TLS endpoint executions isolated in SGX-enabled \gls{TLS} tunnels in communication containers, avoiding attacks against the authentication of the service endpoints, as well as, attacks against the integrity and confidentiality of data flows supporting \gls{REST}/\gls{HTTPS} operations.
+\textbf{Network Attacks:} All communication to and from the system (supporting client-service operations) should be secure, using proper strong cryptographic parameterisations for \gls{TLS} 1.3, mutually authenticated handshakes and TLS endpoint executions isolated in SGX-enabled \gls{TLS} tunnels in communication containers, avoiding attacks against the authentication of the service endpoints, as well as, attacks against the integrity and confidentiality of data flows supporting \gls{REST}/\gls{HTTPS} operations.
 
-\textbf{File system and memory access attacks:} All sensitive data residing outside protected memory should be encrypted and operated in the encrypted form. An attacker can access the physical disks and hardware without the sensitive data being exposed.
+\textbf{File system and memory access attacks:} All sensitive data residing outside protected memory should be encrypted and operated in the encrypted form. An attacker can access the physical disks and hardware without the sensitive data being exposed.
 	
 \subsection{System Assumptions}
 \label{ssec:other_system_assumptions}
 
-With the above security baseline considered for the threat model assumptions, the solution must be  resilient to malicious privileged attacks and certain physical attacks. With a controlled and reduced hardware-shielded trust computing base, we want to design a solution that does not rely on the security of operating system managed by cloud providers. Furthermore, our solution must be also resilient to direct conventional physical attacks, such as cold boot attacks, which attempt to retain the DRAM data by freezing the memory chip or even bus probing to sense and to read exposed memory channel between the processor and memory chips. The only weaknesses not covered in our concerns with be the SGX  lack of protection for side-channel attacks.
+With the above security baseline considered for the threat model assumptions, the solution must be resilient to malicious privileged attacks and certain physical attacks. With a controlled and reduced hardware-shielded trust computing base, we want to design a solution that does not rely on the security of the operating system managed by cloud providers. Furthermore, our solution must be also resilient to direct conventional physical attacks, such as cold boot attacks, which attempt to retain the DRAM data by freezing the memory chip or even bus probing to sense and to read exposed memory channel between the processor and memory chips. The only weaknesses not covered in our concerns with the SGX platform is the lack of protection for side-channel attacks.
 
 The system planned has certain assumptions and aspects that are considered to be out of scope for this dissertation:
 
@@ -65,32 +65,32 @@ The system planned has certain assumptions and aspects that are considered to be
 	\item \textbf{Trusted Client} - The client side is assumed to be completely trusted and correct.
 	\item \textbf{\gls{DoS} and \gls{DDoS}} attacks are out of scope.
 	\item \textbf{Side Channel Attacks} - It is out of scope any side channel attacks or any related attack not present in \gls{SGX}'s threat model.
-	\item \textbf{Physical and Hardware attacks} exploring the \gls{SGX} processing model and its isolation guarantees are out of scope, namely those presented above initially addressed in chapter \ref{cha:related_work}, section \ref{sec:trusted_computing _environments}.
+	\item \textbf{Physical and Hardware attacks} exploring the \gls{SGX} processing model and its isolation guarantees are out of scope, namely those presented above initially addressed in chapter \ref{cha:related_work}, section \ref{sec:trusted_computing _environments}.
 \end{itemize}
 
 \subsection{Countermeasures for Privacy-Preservation}
 \label{ssec:contermeaseures_for_privacy_preservation}
 
-Under the described threat model and system assumptions, the system has implemented and deployed several measures to achieved the desired security and trustability level.
+Under the described threat model and system assumptions, the system has implemented and deployed several measures to achieve the desired security and trustability level.
 
 All instances of the datastore are running in a containerised solution which means that each container is not only isolated from the host but they are also isolated from each other. Data is kept in memory at all times unless persistent disk storage is turned on. Data in main memory is secure when running both in protected and unprotected mode. 
 
-Privacy, integrity and authenticity when running in protected mode are always ensured by the \gls{SGX}'s technology under their threat model and assumptions, but when the storage server is running in unprotected memory, outside the trusted execution environment, the system will always keep data encrypted with strong and standard state of the art cryptography algorithms, therefore preserving privacy of data. 
+Privacy, integrity and authenticity when running in protected mode are always ensured by the \gls{SGX}'s technology under their threat model and assumptions, but when the storage server is running in unprotected memory, outside the trusted execution environment, the system will always keep data encrypted with strong and standard state of the art cryptography algorithms, therefore preserving the privacy of data. 
 
-Although data might be private, the preservation of integrity of that data is also very important and to assure data integrity, all values are appended with standard checksums calculations and integrity check algorithms. Authenticity is preserved by performing strong and standard cryptographic digital signature algorithms.
+Although data might be private, the preservation of the integrity of that data is also very important and to assure data integrity, all values are appended with standard checksums calculations and integrity check algorithms. Authenticity is preserved by performing strong and standard cryptographic digital signature algorithms.
 
-When it comes to the overall security of the exposed application, the system provides an \gls{API} that only allows authenticated requests and it contains a role based segmentation authorisation with secure and strong passwords and cryptographic keys. This system also applies the principle of least privilege \cite{polp:1} to all actions, where users never have more privileges that they require.
+When it comes to the overall security of the exposed application, the system provides an \gls{API} that only allows authenticated requests and it contains a role-based segmentation authorisation with secure and strong passwords and cryptographic keys. This system also applies the principle of least privilege \cite{polp:1} to all actions, where users never have more privileges than they require.
 
-The same security principals must also be guaranteed on an in-transit level and so, all communications are secured with the use of the strongest transport layer security algorithms currently available, and established trust between all components with a trusted certificate chain.
+The same security principals must also be guaranteed on an in-transit level and so, all communications are secured with the use of the strongest transport layer security algorithms currently available and established trust between all components with a trusted certificate chain.
 
-\textbf{Security by Design} means that security is the the foundation of a project, and its tactics and patterns should be used as guideline principles for developers, baked into the project initial state, and enforced by the architecture design.
+\textbf{Security by Design} means that security is the foundation of a project, and its tactics and patterns should be used as guideline principles for developers, baked into the project initial state, and enforced by the architecture design.
 
-The measures adopted to achieve data privacy, integrity and authenticity are a standard that the whole project followed since the beginning of the implementation, meaning that the security by design principle was adopted, and the whole architecture was shaped around security in order to achieve the a secure and correct system. 
+The measures adopted to achieve data privacy, integrity and authenticity are a standard that the whole project followed since the beginning of the implementation, meaning that the security by design principle was adopted, and the whole architecture was shaped around security in order to achieve a secure and correct system. 
 
 \section{System Model} % (fold)
 \label{sec:system_model}
 
-The main goal of this project was to implemented the system that follows the model presented in figure\ref{fig:system_model_overview}. As shown, the it can be divided in four main components - the \textbf{client}, the \textbf{proxy server}, the \textbf{key-value storage server} and the \textbf{authentication server}.
+The main goal of this project was to implement a system that follows the model presented in figure\ref{fig:system_model_overview}. As shown, the system can be divided in four main components - the \textbf{client}, the \textbf{proxy server}, the \textbf{key-value storage server} and the \textbf{authentication server}.
 
 \begin{figure}[htbp]
   \centering{\includegraphics[width=1.0\linewidth]{FinalSystemModel}}%
@@ -98,7 +98,7 @@ The main goal of this project was to implemented the system that follows the mod
   \label{fig:system_model_overview}
 \end{figure}
 
-The system complies with the adversary and threat model explained in section \ref{ssec:adversarial_model_definition}. The user is not aware of any implementation details and has seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution expose the same \gls{API} and support an interface as equal as possible to the unprotected version of the key-value store. 
+The system complies with the adversary and threat model explained in section \ref{ssec:adversarial_model_definition}. The user is not aware of any implementation details and has seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution exposes the same \gls{API} and support an interface as equal as possible to the unprotected version of the key-value store. 
 
 All of the four main components will be explained in the subsections that follow.
 
@@ -117,43 +117,43 @@ To circumvent the \gls{SGX} memory limitation, the dataset will be split into tw
 
 The \textbf{secure} storage runs on a trusted execution environment (trusted hardware) protected by a secure physical processor present on the host machine. This processor provides the security features that allow for memory to be operated in plain text without breaking privacy or data security as explained in section \ref{sec:trusted_computing _environments}.
 
-As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and on untrusted hardware. This means that data must be actively secured by encryption, integrity checks and authentication features in order to provide and preserve privacy.
+As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and untrusted hardware. This means that data must be actively secured by encryption, integrity checks and authentication features in order to provide and preserve privacy.
 
-We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of scope of our planned dissertation).
+We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of the scope of our planned dissertation).
 
 Every Redis instance running on a secure configuration will also provide an API for remote attestation, going forward known as the attestation service, so their hardware stack and software can be attested by remote parties, to provide trust to the users.
 
 \subsection{Proxy Server}
 \label{ssec:system_model_proxy_server}
 
-The proxy server serves as a gateway to the storage instances. It is a single point of entry to the system which as some advantages. Not only it provides an abstraction to a backend which can be replicated across multiple instances across multiple geo-locations, it also can add additional features to the system. 
+The proxy server serves as a gateway to the storage instances. It is a single point of entry to the system which as some advantages. Not only it provides an abstraction to a backend which can be replicated across multiple instances across multiple geo-locations, but it also can add additional features to the system. 
 
-With a centralised gateway we have a centralised access management with authentication and authorisation features. Not only that, but the connection to multiple instances of secure data storages with different authentication mechanisms and secrets can also be centralised in one place, which allows the user to have just a single username/password pair to connect to all the storage instances.
+With a centralised gateway, we have centralised access management with authentication and authorisation features. Not only that, but the connection to multiple instances of secure data storages with different authentication mechanisms and secrets can also be centralised in one place, which allows the user to have just a single username/password pair to connect to all the storage instances.
 
-The proxy server manages security properties when connecting to instances on a unsecure storage configuration. It is the proxy that handles security features like encryption and decryption, integrity and authentication checks, and provides a completely encrypted and private storage service. Trying to soften the performance overhead of encryption and decryption, the proxy enables operations directly into encrypted data, using homomorphic ciphers. 
+The proxy server manages security properties when connecting to instances on an unsecured storage configuration. It is the proxy that handles security features like encryption and decryption, integrity and authentication checks, and provides a completely encrypted and private storage service. Trying to soften the performance overhead of encryption and decryption, the proxy enables operations directly into encrypted data, using homomorphic ciphers. 
 
 It also exports a \gls{REST} \gls{API} which can be used by multiple clients with different implementations and also offers custom features that the standard data storage system does not. Custom operations will be explained below, on section \ref{sec:supported_operations}.
 
-The proxy server serves as a single point of access for the multiple storage instances remote attestation features. It attests every instance and feedback the user on the hardware stack and software state of each instance. Furthermore, the proxy server itself runs on a trusted execution environment leveraging secure trusted hardware and can also be attested by the clients.
+The proxy server serves as a single point of access for the multiple storage instances remote attestation features. It attests every instance and feedbacks the user on the hardware stack and software state of each instance. Furthermore, the proxy server itself runs on a trusted execution environment leveraging secure trusted hardware and can also be attested by the clients.
 
 \subsection{Authentication Server}
 \label{ssec:authentication_server}
 
-An external authentication server is required to centralised user management. It is responsible for user authentication and verification. An user authenticates against the authentication server receiving an access token, that it provides to the proxy on every request. The proxy can verify the token and check if it is valid and what permissions this user has, and can authorise or reject the access to a particular endpoint or system functionality.
+An external authentication server is required to centralised user management. It is responsible for user authentication and verification. A user authenticates against the authentication server receiving an access token, that it provides to the proxy on every request. The proxy can verify the token and check if it is valid and what permissions this user has, and can authorise or reject the access to a particular endpoint or system functionality.
 
-An external authentication server relieves the proxy of user authentication and management, and outsources it to a standardised open source system that implements security standards of identity and access management. This is also important so that the proxy server can, if needed, be replicated.
+An external authentication server relieves the proxy of user authentication and user management and outsources it to a standardised open-source system that implements security standards of identity and access management. This is also important so that the proxy server can, if needed, be replicated.
 
 \subsection{Client}
 \label{ssec:client}
 
 The client, or user, is the one that will consume the exposed \glspl{API} by the proxy server. In the case of this project, the client will be a representative benchmark tester that will use the exposed endpoints to record benchmark times and various relevant evaluation criteria so all storage configurations and replication mechanism can be compared.
 
-Although just a simulated client/tester, the \glspl{API} are consumed the same way a real user would consumed them, so, benchmarks are a representation of real system usage.
+Although just a simulated client/tester, the \glspl{API} are consumed the same way a real user would consume them, so, benchmarks are a representation of real system usage.
 
 \section{System Architecture}
 \label{sec:system_architecture}
 
-Figure \ref{fig:system_architecture_stack} describes the hardware and software representative stack of the infrastructure \footnote{The described stack is a representative stack of the machine layers and it does not represent a true overhead ladder}. Figure \ref{fig:storage_stack} shows how the storage service are deployed onto the cloud provider's machines. The machines hardware provide a very specific and physical processor that implements a trusted execution environment. Running on the operating system, a containerisation solution runs the \gls{TEE} virtualisation framework in order for the container running both the key value stores and the attestation services being able to access the \gls{TEE}. On the right hand side of this figure, we can see a storage service that runs with no \gls{TEE} virtualisation system, and that is the deployment of an unprotected key value store configuration.
+Figure \ref{fig:system_architecture_stack} describes the hardware and software representative stack of the infrastructure \footnote{The described stack is a representative stack of the machine layers and it does not represent a true overhead ladder}. Figure \ref{fig:storage_stack} shows how the storage service is deployed onto the cloud provider's machines. On the machine’s hardware, it is provided a very specific and physical processor that implements a trusted execution environment. Running on the operating system, a containerisation solution runs the \gls{TEE} virtualisation framework in order for the container running both the key-value stores and the attestation services being able to access the \gls{TEE}. On the right-hand side of this figure, we can see a storage service that runs with no \gls{TEE} virtualisation system, and that is the deployment of an unprotected key-value store configuration.
 
 On figure \ref{fig:proxt_stack} the stack provided describes a system also running in the confinements of a trusted execution environment and therefore, also providing an attestation service.
 
@@ -178,34 +178,34 @@ The next subsections will iterate and explain the supported operations, and we n
 \subsection{Role-Based Authorisation}
 \label{ssec:role-based_authorisation}
 
-The system by default rejects all unauthenticated requests, which means, users do need to be registered and have credentials to access the system.
+The system by default rejects all unauthenticated requests, which means, users need to be registered and have credentials to access the system.
 
-As explained before, user management is performed by the external authentication server, and each user has a role assigned. Different roles can do different actions on the system and role based authorisation can be completely customised.
+As explained before, user management is performed by the external authentication server, and each user has a role assigned. Different roles can do different actions on the system and role-based authorisation can be completely customised.
 
-In this thesis we operate with the principle of least privileges, and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a readonly user), and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role based authorisation that the system performs before accepting a request into the server and can be further configured (or new roles added) for a finer grained authorisation mechanism.
+In this thesis, we operate with the principle of least privileges and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a read-only user) and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role-basedauthorisation that the system performs before accepting a request into the server and can be further configured (or new roles added) for a finer-grained authorisation mechanism.
 
 \subsection{Key-Value Storage Operations}
 \label{ssec:key-value_storage_operations}
 
-The system is ready to perform a set of operations from the key value storage of choosing, without modification. However, this is not a full fledge solution, and accommodations had to be made for the tow main configurations of the storage system: protected and unprotected.
+The system is ready to perform a set of operations from the key-value storage of choosing, without modification. However, this is not a full-fledge solution, and accommodations had to be made for the two main configurations of the storage system: protected and unprotected.
 
 The supported operations are as follow:
 
 \begin{itemize}
   \item \textbf{Set} - Stores a value into the database associated with a key.
-  \item \textbf{Get} - Retrieves a value associated to the provided key.
-  \item \textbf{Set on List} - Creates a list of values associated to a key.
+  \item \textbf{Get} - Retrieves a value associated with the provided key.
+  \item \textbf{Set on List} - Creates a list of values associated with a key.
   \item \textbf{Get List} - Retrieves all values associated with the given key.
-  \item \textbf{Set on List with Score} - Creates a list of values associated to a key. Each value has associated a score (integer)
+  \item \textbf{Set on List with Score} - Creates a list of values associated with a key. Each value has associated a score (integer)
   \item \textbf{Get on List between Score} - Retrieves all values associated with the given key with scores between provided scores. 
 \end{itemize}
 
 \subsection{Proxy Enabled Operations}
 \label{ssec:proxy_enabled_operations}
 
-The proxy server implementation allows for the implementation of another set of operations not supported out of the box from the key value store:
+The proxy server implementation allows for the implementation of another set of operations not supported out of the box from the key-value store:
 
-\textbf{Sum}, given a key and a number, the server can fetch the value associated with given key and add it to the number provided.
+\textbf{Sum}, given a key and a number, the server can fetch the value associated with a given key and add it to the number provided.
 
 \textbf{Subtraction}, given a key and a number, the server can fetch the value associated with given key and subtract it to the number provided.
 
@@ -224,11 +224,11 @@ Attestation is the method provided by the processor implementing a trusted execu
   \label{fig:attestation_model}
 \end{figure}
 
-Figure \ref{fig:attestation_model} describes the \gls{TEE} hardware attestation infrastructure. It happens at application start up, and is the attestation that relies on the secure processor and it requires an external Configuration and Attestation Server (\gls{CAS}) that holds some kind of secret necessary for the application startup. However, the \gls{CAS} will only allow and provide the secret if the application enclave can prove itself to be correct, i.e, is running the correct source code in the correct system. The application contacts a Local Attestation Server (\gls{LAS}) to obtain a proof of their correctness and then try to fetch their secrets in the configuration server. If the application is deemed correct, it can access those secrets and can start.
+Figure \ref{fig:attestation_model} describes the \gls{TEE} hardware attestation infrastructure. It happens at application startup and is the attestation that relies on the secure processor and it requires an external Configuration and Attestation Server (\gls{CAS}) that holds some kind of secret necessary for the application startup. However, the \gls{CAS} will only allow and provide the secret if the application enclave can prove itself to be correct, i.e is running the correct source code in the correct system. The application contacts a Local Attestation Server (\gls{LAS}) to obtain a proof of their correctness and then try to fetch their secrets in the configuration server. If the application is deemed correct, it can access those secrets and can start.
 
-On the other hand, users can also request the remote attestation of the complete system software stack and hardware information at any point on the user's lifecycle. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is then gathered in the proxy, which attests it self and returned to the client.
+On the other hand, users can also request the remote attestation of the complete system software stack and hardware information at any point on the user's lifecycle. The proxy server is responsible to contact each storage server's attestation service and request attestation quotes. Each quote is then gathered in the proxy, which attests itself and returned to the client.
 
-The correctness of the system is then determined by the client which analises the quotes provided by each system, and decides whether or not the system is correct and protected and can continue normal use.
+The correctness of the system is then determined by the client which analyses the quotes provided by each system and decides whether or not the system is correct and protected and can continue normal use.
 
 \section{Operation Flow}
 \label{sec:operation_flow}
@@ -241,21 +241,21 @@ Figure \ref{fig:operation_flow} shows an example of a flow that can occur betwee
   \label{fig:operation_flow}
 \end{figure}
 
-Following the flow, we can see that the first interaction is with the external authentication server by providing the user credentials (\textbf{1}) and (if login successful) receiving an access token in return (\textbf{2}). 
+Following the flow, we can see that the first interaction is with the external authentication server by providing the user credentials (\textbf{1}) and (if login is successful) receiving an access token in return (\textbf{2}). 
 
-Then, the user uses the access token to attest the system and make sure that hardware and software stacks are working as expected. It requests an attestation to the proxy (\textbf{3}) with the access token retrieved on login. The proxy checks the access token with the authentication server (\textbf{4}) and verifies if it is correct and has the necessary roles to access the attestation endpoint. If the verification fails, a proxy returns an authentication/authorisation fail back to the client (\textbf{5}). 
+Then, the user uses the access token to attest the system and make sure that hardware and software stacks are working as expected. It requests an attestation to the proxy (\textbf{3}) with the access token retrieved on login. The proxy checks the access token with the authentication server (\textbf{4}) and verifies if it is correct and has the necessary roles to access the attestation endpoint. If the verification fails, a proxy returns an authentication/authorisation failback to the client (\textbf{5}). 
 
-If it succeeds, the attestation can proceed and the proxy server contact all storage server attestation services and gathers all quotes (\textbf{6}), and while it's doing that, also starts an self attestation process (\textbf{7}) and returns all quotes to the client. 
+If it succeeds, the attestation can proceed and the proxy server contacts all storage server attestation services and gathers all quotes (\textbf{6}), and while it's doing that, also starts a self-attestation process (\textbf{7}) and returns all quotes to the client. 
 
-Now, the client must analise the quotes from the attestation and decide whether or not it trusts the system to continue (\textbf{8}). If it deems the system incorrect, it fails but if the client trusts the system, it can carry on with normal operations to the proxy and to the storage server (\textbf{9}).
+Now, the client must analyse the quotes from the attestation and decide whether or not it trusts the system to continue (\textbf{8}). If it deems the system incorrect, it fails but if the client trusts the system, it can carry on with normal operations to the proxy and to the storage server (\textbf{9}).
 
 \section{Summary} % (fold)
 \label{sec:chapter3_summary}
 
-To achieve the objectives and contributions of this thesis, the system should rely on a physical hardware processor that can implement an isolated execution environment, to protect the system against insider threats, operating system and hypervisors vulnerabilities, and several other attacks already explained in the adversary and threat model of this project. That processor, as shown on system architecture section is present in the used machines, and to allow for a light weight, easily portable and deployable system, an TEE virtualisation technology was used in order to a containerised application can take advantage of the physical processor.
+To achieve the objectives and contributions of this thesis, the system should rely on a physical hardware processor that can implement an isolated execution environment, to protect the system against insider threats, operating system and hypervisors vulnerabilities, and several other attacks already explained in the adversary and threat model of this project. That processor, as shown on system architecture section is present in the used machines, and to allow for a lightweight, easily portable and deployable system, a TEE virtualisation technology was used alongside a containerised application that can take advantage of the physical processor.
 
-However this technology still has some limitations, and to address a memory limitations, the system also allows for a storage system to be placed in unprotected memory and still maintain security, privacy and integrity properties.
+However this technology still has some limitations, and to address the memory limitations, the system also allows for a storage system to be placed in unprotected memory and still maintain security, privacy and integrity properties.
 
-This way, we can maintain a system, running an unmodified key value storage application and deploy it safely on the cloud, or any other machine provider and be sure that data is as protected as it can be.
+This way, we can maintain a system, running an unmodified key-value storage application and deploy it safely on the cloud, or any other machine provider and be sure that data is as protected as it can be.
 
-Not only that, but all the hardware stack and software can be attested so that, on a unlikely event of attack, data corruption or leaked vulnerability occurs, the user can always, to a high percentage of trust, define whether or not the underlying system is correct and can be trusted.
+Not only that, but all the hardware stack and software can be attested so that, on an unlikely event of an attack, data corruption or leaked vulnerability occurs, the user can always, to a high percentage of trust, define whether or not the underlying system is correct and can be trusted.

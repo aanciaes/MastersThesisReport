@@ -11,17 +11,17 @@
 This chapter presents and briefly discusses the related work and the study performed beforehand in order to guide and give some context to the reader. It will present work that was used as the basis of this thesis, existent technologies and their relation with this project, and some comparisons between those existing technologies, the problem addressed in this thesis and the solutions proposed to solve, or better address, those very same problems.
 
 First, in section \ref{sec:key-value_stores} we explain and discuss for the first time the definition of a Key-Value Store. We present some use cases, current technology available, their differences and most importantly their security models and concerns.
-Having discussed the software, section \ref{sec:trusted_computing _environments} will then address the environment on where that software will run - hardware. It explains and present the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
+Having discussed the software, section \ref{sec:trusted_computing _environments} will then address the environment on where that software will run - hardware. It explains and presents the different ways to secure and authenticate the hardware, prevent hardware-based attacks and discuss some of the current products available and how they will be used across this thesis.
 Section \ref{sec:sgx_enabled_key_value_stores} will then make the bridge between software and hardware. It explains how Key-Value stores are currently being run on secure environments. It discusses how software and hardware work together to achieve a secure environment for an application to run. Section \ref{sec:sgx_virtualisation_frameworks} will discuss how virtualisation can allow for faster deployments and easier implementation of secure code for the complicated frameworks of secure hardware such as Intel's SGX processors. To conclude the chapter, section \ref{sec:related_work_balance_and_critical_analysis} will combine the information of every sub-chapter and analyse it with a bigger perspective and better knowledge of the theme.
 
-Section \ref{sec:sgx_enabled_key_value_stores} is considered to be the \textbf{main core} investigation and directly related to the work planned for this thesis. As for the other sections, they provide a background knowledge necessary for understanding of the core of this dissertation.
+Section \ref{sec:sgx_enabled_key_value_stores} is considered to be the \textbf{main core} investigation and directly related to the work planned for this thesis. As for the other sections, they provide a piece of background knowledge necessary for the understanding of the core of this dissertation.
 
-Along the next chapter we summarise the main relevant ideas that can be retained from each section for our objectives and expected goals.
+Along through the next chapter, we summarise the main relevant ideas that can be retained from each section for our objectives and expected goals.
 
 \section{Key-Value Stores} % (fold)
 \label{sec:key-value_stores}
 
-Key value stores are the simplest form of what computer scientists call a database. The simplicity lies on associating a value to a certain key and storing that pair, as well as retrieving the values of known keys. \cite{db-engine:1}
+Key-value stores are the simplest form of what computer scientists call a database. The simplicity lies on associating a value to a certain key and storing that pair, as well as retrieving the values of known keys. \cite{db-engine:1}
 
 \lstset{language=Bash, caption=Redis Set \& Get, label=lst:redisSetGet}
 \begin{lstlisting}
@@ -31,9 +31,9 @@ redis> GET mykey
 "Hello"
 \end{lstlisting}
 
-Is this simplicity that makes this technology very attractive to developers. The ease of use, its high performance and speed are key aspects in favour of this technologies. However, simply working with keys and values might not be enough to more complex applications, and that is why Key-Value store product developers are introducing new features in order to make them appealing to a broader mass of users, always keeping them lightweight and fast.
+Is this simplicity that makes this technology very attractive to developers. The ease of use, their high performance and speed are key aspects in favour of these technologies. However, simply working with keys and values might not be enough to more complex applications, and that is why Key-Value store product developers are introducing new features to make them appealing to a broader mass of users, always keeping them lightweight and fast.
 
-For that lightweight and fast attributes, most of the key-value stores work in the computer memory. This allows fast read and write operations as opposed to persistent disk storage. Although they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
+For that lightweight and fast attributes, most of the key-value stores work in computer memory. This allows fast read and write operations as opposed to persistent disk storage. Although they work mainly in memory, most of the solutions offer some persistent mechanism so we can make use of its performance but still persist data in case of a disaster, server failure or any crash.
 
 \glspl{KVS} have been evolving for years and some are now more than a single key-value store module. A lot of them are now supporting a multi-model storage. Meaning that a value can be more than a single integer or a string. For example, Redis \cite{redis:1} as a multi-model store is not only a key-value store, but also \cite{redis:2}:
 
@@ -46,27 +46,27 @@ For that lightweight and fast attributes, most of the key-value stores work in t
 
 So, the \gls{KVS} world is becoming more and more versatile as the years pass.
 
-In the next subsections its discussed and presented the overview of the current \gls{KVS} technology. We picked the some top KVSs technologies nowadays according to db-engines \cite{db-engine:2} website.
+In the next subsections, its discussed and presented the overview of the current \gls{KVS} technology. We picked some top KVSs technologies nowadays according to db-engines \cite{db-engine:2} website.
 
 \subsection{Memcached} % (fold)
 \label{ssec:memcached}
 
-Memcached \cite{memcached:1} is a free and open source key-value store released in 2003. It is described as a high performance distributed memory object caching system.
+Memcached \cite{memcached:1} is a free and open-source key-value store released in 2003. It is described as a high performance distributed memory object caching system.
 
-It is design to hold small chunks of data (strings and objects) to work as a cache for results of database calls, API calls, or page rendering. Its biggest use case is for use in speeding up dynamic web applications by alleviating database load.
+It is designed to hold small chunks of data (strings and objects) to work as a cache for results of database calls, API calls, or page rendering. Its biggest use case is for use in speeding up dynamic web applications by alleviating database load.
 
-This system lies on the simpler key-value store spectrum. It takes advantages of the simplicity of a key-value store to edge ease of development, and solving many problems facing large data caches. Its API is available for most popular languages. It has a \gls{LRU} eviction technique which means that items will expire after a specified amount of time if not used. 
+This system lies on the simpler key-value store spectrum. It takes advantages of the simplicity of a key-value store to edge ease of development and solving many problems facing large data caches. Its API is available for most popular languages. It has a \gls{LRU} eviction technique which means that items will expire after a specified amount of time if not used. 
 
-When it comes to system replication, availability and reliability, Memcached has an interesting approach. In order to keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronisation, no broadcasting, no replication. Adding servers will only increase the available memory.
+When it comes to system replication, availability and reliability, Memcached has an interesting approach. To keep it blazing fast, there is no communication between server instances in a cluster. Memcached servers are unaware of each other. There is no crosstalk, no synchronisation, no broadcasting, no replication. Adding servers will only increase the available memory.
 
-As for its security context, Memcached spends very little, if any, effort in securing the systems for random internet connections. The servers only have support for \gls{SASL} \cite{sasl:1} authentication mechanism. This method of authentication is not implemented as end-to-end encryption, it only provides restriction access to the daemon, but it does not hide communications over the network. That means it is not meant to be exposed to the internet or to any untrusted users \cite{memcached:2}.
+As for its security context, Memcached spends very little, if any, effort in securing the systems for random internet connections. The servers only have support for \gls{SASL} \cite{sasl:1} authentication mechanism. This method of authentication is not implemented as end-to-end encryption, it only provides restriction access to the daemon, but it does not hide communications over the network. That means it is not meant to be exposed to the internet or any untrusted users \cite{memcached:2}.
 
 \subsection{Redis} % (fold)
 \label{ssec:redis}
 
 Redis \cite{redis:1} is an in-memory data structure store that can be used as a database, cache and also a message broker. Redis focuses on performance, so most of its decisions prioritise high performance and very low latency.
 
-It has been benchmarked as the world's fastest database \cite{redis:3} and together with a their multi-model and its rich set of operations that can be performed over data it has been the leading key-value store according to use and popularity for a multiple set of years \cite{db-engine:2}.
+It has been benchmarked as the world's fastest database \cite{redis:3} and together with their multi-model and its rich set of operations that can be performed over data it has been the leading key-value store according to use and popularity for a multiple set of years \cite{db-engine:2}.
 
 \lstset{language=Bash, caption=How Fast is Redis, label=lst:redisBenchmark}
 \begin{lstlisting}
@@ -83,36 +83,36 @@ keep alive: 1
 113934.14 requests per second
 \end{lstlisting}
 
-As said before, Redis is now not a simple \gls{KVS}. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. It also has built-in replication, server side scripting, \gls{LRU} eviction, concept of transactions and different levels of persistence. It provides high availability and automatic partitioning as well.
+As said before, Redis is now not a simple \gls{KVS}. It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams. It also has built-in replication, server-side scripting, \gls{LRU} eviction, the concept of transactions and different levels of persistence. It provides high availability and automatic partitioning as well.
 
-Redis provides two modes of replication/availability. The master slave form of replication works with a single node (master node) where all writes occurring will be replicated to the other Redis instances (slave nodes). Writes on nodes other than the master will not be replicated. Redis provides a read-only setting that can be applied to slave nodes to prevent states differences between instances. The cluster mode of replication consists on partitioning the data between multiple master nodes. This mechanism does not provide replication as each data object is stored on one master node only, but will allow for lower dataset sizes on each node and therefor faster response times. This method is usually mixed with the first one to provide both performance and replication features, by adding slave nodes to each of the masters.
+Redis provides two modes of replication/availability. The master-slave form of replication works with a single node (master node) where all writes occurring will be replicated to the other Redis instances (slave nodes). Writes on nodes other than the master will not be replicated. Redis provides a read-only setting that can be applied to slave nodes to prevent state differences between instances. The cluster mode of replication consists of partitioning the data between multiple master nodes. This mechanism does not provide replication as each data object is stored on a single master node but will allow for lower dataset sizes on each node and therefore faster response times. This method is usually mixed with the first one to provide both performance and replication features, by adding slave nodes to each of the masters.
 
-Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimised for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is design to be accessed by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis (in its latest release 6.0.6 \cite{redis:5}) now implements an \gls{ACL} policy that allow the configuration of multiple users with different permissions over the dataset. It also added support for \gls{SSL} network communication security.
+Security is not Redis' primarily concern (just like others). \textit{"In general, Redis is not optimised for maximum security but for maximum performance and simplicity"} \cite{redis:4}. It is designed to be accessed by trusted clients inside trusted networks. This means that it is not supposed to be publicly exposed. Redis (in its latest release 6.0.6 \cite{redis:5}) now implements an \gls{ACL} policy that allow the configuration of multiple users with different permissions over the dataset. It also added support for \gls{SSL} network communication security.
 
-There are a few other security concerns that Redis addresses, but has we can now start to see, in this types of stores, security falls behind performance and usability.
+There are a few other security concerns that Redis addresses, but as we can now start to see, in these types of stores, security falls behind performance and usability.
 
 \subsection{Amazon Dynamo DB}
 \label{ssec:amazon_dynamo_db}
 
-Amazon Dynamo DB \cite{dynamo:1} is a fully managed NoSQL database service. It is a key-value store and a document store that is built based on the dynamo paper \cite{dynamo:2}. This paper describes a \gls{P2P} (peer-to-peer) network with high availability, eventual consistency and very easily scalable. It also successful handles server and data center failures and network partitions.
+Amazon Dynamo DB \cite{dynamo:1} is a fully managed NoSQL database service. It is a key-value store and a document store that is built based on the dynamo paper \cite{dynamo:2}. This paper describes a \gls{P2P} (peer-to-peer) network with high availability, eventual consistency and very easily scalable. It also successful handles server and data centre failures and network partitions.
 
-Amazon builds on this paper and offers DynamoDB as a service in their platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and it is fully managed. That means no need for low level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet-scale applications. Also, it offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on any given time. 
+Amazon builds on this paper and offers DynamoDB as a service in its platform. It is a hosted system in the Amazon Web Services \cite{aws:1} infrastructure and it is fully managed. That means no need for low-level server configurations or maintenance. It is all managed by the \gls{AWS} team and offered to the user with a nice configuration interface. It also means that it has built-in security, backup and restore and in-memory caching for internet-scale applications. Also, it offers seamless scalability by increasing the number of nodes/servers according to current traffic received by the application on any given time. 
 
 This technology focuses more on high availability but also achieves very high performances and very low latency and being fully managed it also takes advantages of the \gls{AWS} infrastructure full power. It currently sits second on the db-engines \cite{db-engine:2} most popular ranking.
 
 \subsection{Microsoft Azure Cosmos DB}
 \label{ssec:microsoft_azure_cosmos_db}
 
-Microsoft Azure Cosmos DB \cite{cosmos:1} is a fully managed database service provided by Microsoft Azure \cite{azure:1}. This service provides a global distributed, horizontally scalable, multi-model database. Its multi-model architecture can work as a key-value store, a Document Store, a graph \gls{DBMS} and a wide column store.
+Microsoft Azure Cosmos DB \cite{cosmos:1} is a fully managed database service provided by Microsoft Azure \cite{azure:1}. This service provides a globally distributed, horizontally scalable, multi-model database. Its multi-model architecture can work as a key-value store, a Document Store, a graph \gls{DBMS} and a wide column store.
 
-It's very proud and excels in the ease of global scale with the system call \textit{Turnkey global distribution}, providing transparent multi-master replication and a set of user configurable consistency options. It also strongly advertises a \textit{Multi-Model Multi-Api} feature where you can use multiple data types on this single database service. Cosmos DB automatically indexes all data and allows the user to use various NoSQL APIs to query the data.
+It's very proud and excels in the ease of global scale with the system call \textit{Turnkey global distribution}, providing transparent multi-master replication and a set of user-configurable consistency options. It also strongly advertises a \textit{Multi-Model Multi-Api} feature where you can use multiple data types on this single database service. Cosmos DB automatically indexes all data and allows the user to use various NoSQL APIs to query the data.
 
-As a fully managed service, Cosmos DB makes use, in the background, of the large infrastructure with almost unlimited resources and capabilities provided by Microsoft, which means it also has built-in security, fail-over mechanisms for disaster recovery, and high performance with single digit read and write latencies.
+As a fully managed service, Cosmos DB makes use, in the background, of the large infrastructure with almost unlimited resources and capabilities provided by Microsoft, which means it also has built-in security, fail-over mechanisms for disaster recovery, and high performance with single-digit read and write latencies.
 
 \subsection{Microsoft Azure Cache for Redis}
 \label{ssec:microsoft_azure_cache_for_redis}
 
-Microsoft Azure Cache for Redis \cite{cache-for-redis:1} is a service provided by Microsoft Azure that joins the open source world of Redis with the commercial side of a fully managed and hosted platform.
+Microsoft Azure Cache for Redis \cite{cache-for-redis:1} is a service provided by Microsoft Azure that joins the open-source world of Redis with the commercial side of a fully managed and hosted platform.
 
 It uses at its core the Redis server technology and provides ease of deployment and management, built-in global replication, Azures' infrastructure security and flexible scaling and Redis superior throughput and low latency performance.
 
@@ -128,40 +128,40 @@ Being in the Azure ecosystem provides nice integration with all Azures' services
 \subsection{Aerospike}
 \label{ssec:aerospike}
 
-Aerospike \cite{aerospike:1} is an enterprise-grade, high performance Key-Value Store. It is another \gls{KVS} technology currently available today. It promises a philosophy of \textit{"no data loss" } through Strong Consistency. Normal systems trade requiring this type of consistency usually trade performance for data integrity but Aerospike allows it  with minimal performance loss. That means it can be used for example in banking payments, retail and telecommunications use cases.
+Aerospike \cite{aerospike:1} is an enterprise-grade, high-performance Key-Value Store. It is another \gls{KVS} technology currently available today. It promises a philosophy of \textit{"no data loss" } through Strong Consistency. Normal systems trade requiring this type of consistency usually trade performance for data integrity but Aerospike allows it  with minimal performance loss. That means it can be used for example in banking payments, retail and telecommunications use cases.
 
-It also provides a dynamic cluster management and unique flexible storage. That enables very easy deployments and particularly very easy scalability, so it is able to meet any data volume needs and still maintaining low latencies across that wide range of data volumes, from low volumes until hundreds \gls{TB} of data.
+It also provides dynamic cluster management and unique flexible storage. That enables very easy deployments and particularly very easy scalability, so it is able to meet any data volume needs and still maintaining low latencies across that wide range of data volumes, from low volumes until hundreds \gls{TB} of data.
 
-As for security, it includes (the enterprise version) a database access management and audit trail logs. It also includes transport level encryption for client-server traffic and cross-datacenter traffic \cite{aerospike:2}.
+As for security, it includes (the enterprise version) a database access management and audit trail logs. It also includes transport-level encryption for client-server traffic and cross-data center traffic \cite{aerospike:2}.
 
 \subsection{Discussion}
 \label{ssec:s1_discussion}
 
-In this chapter we gathered information about the overview of the current Key-Value Store state of the art. It can be concluded that the most important feature of this technology is the performance and all of the above products mentioned do focus on that characteristic. Some of them even compromise in another features to achieve the best performance possible. Security is not the main concern and the most used measures in the current technologies being securities implementations at the network and transport level by using \gls{TLS} and also full disk encryption. 
+In this chapter, we gathered information about the overview of the current Key-Value Store state of the art. It can be concluded that the most important feature of this technology is the performance and all of the above products mentioned do focus on that characteristic. Some of them even compromise in other features to achieve the best performance possible. Security is not the main concern and the most used measures in the current technologies being securities implementations at the network and transport level by using \gls{TLS} and also full disk encryption. 
 
 Network and transport layer security is a must when implementing any system, and this thesis will also use those standards. 
 
-As for full disk encryption on the server, it opens up some attack vectors. Full disk encryption means that random users will not be able to query the data but credentialed users can. Although, anyone with full access to the database, for example database operators or/and administrators, can decrypt and access all information. This creates a risk of privacy breaking due to hackers wielding stolen credentials, rogue insiders who have been granted more access than they need or the well known honest-but-curious adversary model, where an administrator with full credentials does not have bad intentions, but, driven by curiosity, access information therefore breaking data privacy. A cloud based \gls{KVS} service like the ones talked above, this type of vulnerabilities can be a major concern for a use case with very sensitive data since the server would be off premises, there is no control over it when it comes to privacy of data.
+As for full disk encryption on the server, it opens up some attack vectors. Full disk encryption means that random users will not be able to query the data but credentialed users can. Although, anyone with full access to the database, for example, database operators or/and administrators, can decrypt and access all information. This creates a risk of privacy breaking due to hackers wielding stolen credentials, rogue insiders who have been granted more access than they need or the well known honest-but-curious adversary model, where an administrator with full credentials does not have bad intentions, but, driven by curiosity, access information, therefore, breaking data privacy. A cloud-based \gls{KVS} service like the ones talked above, this type of vulnerabilities can be a major concern for a use case with very sensitive data since the server would be off premises, there is no control over it when it comes to the privacy of data.
 
-This thesis will implemented a system based on Redis, the most popular and used Key-Value Store currently used and will try to solve some of the problems with security described above. It will compare the principle feature of a \gls{KVS}, the performance, of a simple and normal Redis server and a privacy-enhanced Redis solution so the user can calculate the trade-off between performance and security and applied the correspondent solution to their own use case.
+This thesis implemented a system based on Redis, the most popular and used Key-Value Store currently used and will try to solve some of the problems with security described above. It will compare the principal feature of a \gls{KVS}, the performance, of a simple and normal Redis server and a privacy-enhanced Redis solution so the user can calculate the trade-off between performance and security and applied the correspondent solution to their own use case.
 
 \section{Trusted  Computing Environments} % (fold)
 \label{sec:trusted_computing _environments}
 
 Modern data processing services hosted in the cloud are under constant attack from malicious system administrators, server administrators and hackers who exploit bugs on applications, operating systems or even the hypervisor. However, current days shows a massive trend of business moving to the cloud infrastructure looking for easy deployment, managed services with built-in replication and fault tolerance, fast and trivial scaling and predicted costs.
 
-With more and more data exposed in the cloud, hackers have a bigger desire to exploit and look for vulnerabilities. This results in frequent data breaches that reduce trust in online services. The need for cloud providers to ensure a level of security and trust to make the user comfortable of moving its data to the cloud has never been bigger, and with that need some solutions in the form of Trusted Computing Environments (\gls{TCE}) appeared.
+With more and more data exposed in the cloud, hackers have a bigger desire to exploit and look for vulnerabilities. This results in frequent data breaches that reduce trust in online services. The need for cloud providers to ensure a level of security and trust to make the user comfortable of moving its data to the cloud has never been bigger, and with that need, some solutions in the form of Trusted Computing Environments (\gls{TCE}) appeared.
 
 Trusted Computing is a concept that strives to provide strong confidentiality and integrity guarantees for applications running on untrusted platforms. It forces a certain machine to behave an expected way even if running on a remote or machine that is out of our control.
 
-\gls{TCE} will also provide a decrease of the Trusted Computing Base (\gls{TCB}) - the amount of components that the application needs to trust in order to run smoothly. By isolating the service running on this trusted environments (limiting the set of instructions available and encrypting data), it prevents the operating system, the hypervisor and even malicious system administrators (three components normally on the \gls{TCB}) to break data confidentiality and integrity within this environments.
+\gls{TCE} will also provide a decrease of the Trusted Computing Base (\gls{TCB}) - the number of components that the application needs to trust in order to run smoothly. By isolating the service running on this trusted environments (limiting the set of instructions available and encrypting data), it prevents the operating system, the hypervisor and even malicious system administrators (three components normally on the \gls{TCB}) to break data confidentiality and integrity within this environments.
 
-There are a few hardware/software based solutions to achieved a trusted computing environment, and they will be explained in the next sections.
+There are a few hardware/software-based solutions to achieve a trusted computing environment, and they will be explained in the next sections.
 
 \subsection{TPM – Trusted Platform Modules } % (fold)
 \label{ssec:trusted_platform_modules}
 
-A Trusted Platform Module, also known as a \gls{TPM}, is a technology proposed by the Trusted Computing Group (\gls{TCG}) designed to provide hardware-based security related functions. It's a chip embedded into the motherboard and includes multiple security mechanisms to make it tamper resistant to physical harm and malicious software is unable to mess with its security features \cite{tpm:1}. Some key advantages of using \glspl{TPM} are:
+A Trusted Platform Module, also known as a \gls{TPM}, is a technology proposed by the Trusted Computing Group (\gls{TCG}) designed to provide hardware-based security-related functions. It's a chip embedded into the motherboard and includes multiple security mechanisms to make it tamper-resistant to physical harm and malicious software is unable to mess with its security features \cite{tpm:1}. Some key advantages of using \glspl{TPM} are:
 
 \begin{itemize}
 	\item Generate, store, and limit the use of cryptographic keys
@@ -186,7 +186,6 @@ The first feature is used for every security and confidentiality aspects, mainly
 Authenticated Boot is the ability to boot the \gls{OS} in stages, assuring that each portion of OS, as it is loaded, is a version trusted and approved for use, detecting hardware and software changes on every stage to verify if the code loaded can be trusted. This boot sequence happens with the help Platform Configuration Registers (\gls{PCR}) that store the trusted software hashes.
 
 The attestation feature is a way for a client to remotely check the state of a machine and will be further explained in the next subsection.
-
 
 \subsection{TPM - Enabled Software Attestation} % (fold)
 \label{ssec:enabled_software_attestation}
@@ -218,9 +217,9 @@ A remote attestation procedure is described in image \ref{fig:remote-attestation
 
 An (\gls{HSM}) hardware security module is normally an external module that can be added to a system, in form of a \gls{USB} device or a component living in a secure network as a trusted server, instead of being embedded into the motherboard like a \gls{TPM}. It provides a dedicated system of hardware enable accelerated cryptographic functions like encryption, decryption, key generation and signing capabilities \cite{hsm:1}
 
-What makes this devices so secure, like the \gls{TPM}, is it can't be interfered with by external code, and it provides an array of protective mechanisms to detect and prevent external physical tampering like drill protection foil, resin-embedded chips as well as temperature and voltage sensors. Any detection of tampering will result in an alarm as well as countermeasures by the applications installed inside. \cite{hsm:2}.
+What makes these devices so secure, like the \gls{TPM}, is it can't be interfered with by external code, and it provides an array of protective mechanisms to detect and prevent external physical tampering like drill protection foil, resin-embedded chips as well as temperature and voltage sensors. Any detection of tampering will result in an alarm as well as countermeasures by the applications installed inside. \cite{hsm:2}.
 
-\gls{HSM} can have various applications and can be used in simple forms for example a specific bank dongle that generates \gls{OTP} (one-time password) for accessing your account or be a big corporation and enterprise appliance in various industries, e-health, automotive and \gls{IoT} systems.
+\gls{HSM} can have various applications and can be used in simple forms, for example, a specific bank dongle that generates \gls{OTP} (one-time password) for accessing your account or be a big corporation and enterprise appliance in various industries, e-health, automotive and \gls{IoT} systems.
 
 \subsection{Trusted Execution Environments} % (fold)
 \label{ssec:trusted_execution_environments}
@@ -240,7 +239,7 @@ A \gls{TEE} guarantees that:
 
 The threat model of a \gls{TEE} should include all software attacks and the physical attacks performed on the main memory and its non-volatile memory.
 
-"There are many interpretations of what is meant by Trust. In the \gls{TEE} it is used to imply that you may have a higher level of trust in validity, isolation and access control in items (assets) stored in this space, when compared to more general purpose software environments" \cite{tee:1}.
+"There are many interpretations of what is meant by Trust. In the \gls{TEE} it is used to imply that you may have a higher level of trust in validity, isolation and access control in items (assets) stored in this space, when compared to more general-purpose software environments" \cite{tee:1}.
 
 \subsection{Intel SGX} % (fold)
 \label{ssec:intel_sgx}
@@ -249,11 +248,11 @@ The threat model of a \gls{TEE} should include all software attacks and the phys
 
 These set of instructions are one of the latest iterations of trusted computing solutions and designs that tries to tackle the problem of securing remote computations by leveraging secure hardware on the remote host machine. The SGX processor enables a secure container called enclave which protects the confidentiality and integrity of the execution, such as code and data while relying on software attestation mechanisms.
 
-A \gls{SGX} can be though as a reverse sandbox. With a sandbox you are trying to protect the system from your application, but with \gls{SGX} you are trying to do the opposite and protect the application from the system. The system can be the \gls{OS}, the hypervisor, the BIOS, the firmware or even the drivers \cite{sgx:2}.
+A \gls{SGX} can be though as a reverse sandbox. With a sandbox, you are trying to protect the system from your application, but with \gls{SGX} you are trying to do the opposite and protect the application from the system. The system can be the \gls{OS}, the hypervisor, the BIOS, the firmware or even the drivers \cite{sgx:2}.
 
 A \gls{SGX} enabled application is broken into two parts, the untrusted and trusted parts. The trusted part of the application is all the processing that deals with any sensitive data the application is handling. This part will be run inside enclaves and be stored in protected memory. The rest will live in normal memory and not be protected.
 
-It provides this kind of security from the hardware by isolating all the private data from the outside, placing it into a restricted area of the memory called the \gls{PRM} more specifically in the \gls{EPC} (Enclave Page Cache) as shown on figure \ref{fig:sgx_memory_architecture}. The \gls{PRM} is a zone of the \gls{RAM} with guaranteed access management by the CPU where it will deny every external access and only allow access through the associated enclave. This region of the memory is also known as the private/protected memory or the trusted part of the application. The data managed in \glspl{EPC} is decrypted and verified when loaded to cpu caches and handled on plaintext while is present there, but is encrypted and integrity-protected when it leaves the cpu cache and is mapped in the external memory.
+It provides this kind of security from the hardware by isolating all the private data from the outside, placing it into a restricted area of the memory called the \gls{PRM} more specifically in the \gls{EPC} (Enclave Page Cache) as shown on figure \ref{fig:sgx_memory_architecture}. The \gls{PRM} is a zone of the \gls{RAM} with guaranteed access management by the CPU where it will deny every external access and only allow access through the associated enclave. This region of the memory is also known as the private/protected memory or the trusted part of the application. The data managed in \glspl{EPC} is decrypted and verified when loaded to CPU caches and handled on plaintext while is present there but is encrypted and integrity-protected when it leaves the CPU cache and is mapped in the external memory.
 
 \begin{figure}[htbp]
 	\centering
@@ -264,7 +263,7 @@ It provides this kind of security from the hardware by isolating all the private
 
 Because the \gls{SGX} enclaves execute within the virtual address space of a process, the translation of enclave addresses must be trusted. However, since it is the \gls{OS} that manages the translation between physical and virtual addresses (and the \gls{OS} cannot be trusted), \gls{SGX} maintains an internal data structure called the \gls{EPCM} (Enclave Page Cache Mapping) which tracks the referred mapping as well as the information described on figure \ref{fig:sgx_memory_architecture} \cite{sgx:5}.
 
-With all this information about enclave pages, the processor can now performed a controlled access management to the enclave page cache described in figure \ref{fig:sgx_access_control}, where it will denied access  not only from outside the enclave but as well as from enclaves that do not own the page of memory request creating then, an isolated memory region.
+With all this information about enclave pages, the processor can now perform and control access management to the enclave page cache described in figure \ref{fig:sgx_access_control}, where it will deny access not only from outside the enclave but as well as from enclaves that do not own the page of memory request creating then, an isolated memory region.
 
 \begin{figure}[htbp]
 	\centering
@@ -279,25 +278,25 @@ An enclave must expose an \gls{API} for the application to call in and advertise
 
 When running, the execution always happens in protected mode, and to prevent data leaking, the CPU will not directly address an interrupt, fault or VM exit, but will instead emit another specific instruction (EEXIT) to properly exit the enclave, save CPU state into the enclave and only then will service the fault.
 
-With all this properties, Intel® through \gls{SGX} set of instructions and implementation tries to achieve a secure and trusted environment with guarantees of code and data isolation, confidentiality and integrity from attackers such as the \gls{OS}, hypervisor, any hardware and even physical attacks \cite{cryptoeprint:2016:086}.
+With all these properties, Intel® through \gls{SGX} set of instructions and implementation tries to achieve a secure and trusted environment with guarantees of code and data isolation, confidentiality and integrity from attackers such as the \gls{OS}, hypervisor, any hardware and even physical attacks \cite{cryptoeprint:2016:086}.
 
 \subsection{Sanctum} % (fold)
 \label{ssec:sanctum}
 
-Sanctum \cite{cryptoeprint:2015:564} is an open-source project that shares the same as goal as Intel \gls{SGX}, providing strong provable software isolation to protected the data from external hardware and software, but claims to be simpler and protect against indirect attacks called side channel attacks \cite{Khan2014} such as cache timing attacks \cite{cachetimingattaks:1} that have been know to exist in \gls{SGX} \cite{Gtzfried2017, 2017arXiv170208719S}. These are additional software attacks that can infer private information by analysing a program’s memory access patterns.
+Sanctum \cite{cryptoeprint:2015:564} is an open-source project that shares the same as goal as Intel \gls{SGX}, providing strong provable software isolation to protected the data from external hardware and software, but claims to be simpler and protect against indirect attacks called side-channel attacks \cite{Khan2014} such as cache timing attacks \cite{cachetimingattaks:1} that have been known to exist in \gls{SGX} \cite{Gtzfried2017, 2017arXiv170208719S}. These are additional software attacks that can infer private information by analysing a program’s memory access patterns.
 
-Following the minimal and simple concepts, it uses minimal invasive hardware and it does not required any modifications to the CPU major blocks, but only adds hardware to the interfaces between blocks. This allows for a respectable overhead by maintaining normal clock speeds as it does not modify the CPU core critical execution path.
+Following the minimal and simple concepts, it uses minimal invasive hardware and it does not require any modifications to the CPU major blocks, but only adds hardware to the interfaces between blocks. This allows for a respectable overhead by maintaining normal clock speeds as it does not modify the CPU core critical execution path.
 
-Sanctum project builds on the \gls{SGX} programming model and implements an architecture that deviates as little as possible from the one built by Intel. Although it differs from \gls{SGX} by implementing the enclaves via a small combination of hardware extensions to RISC-V (an open source set of CPU instructions \cite{Waterman14therisc-v}) and a trusted piece of software called the security model, as SGX implements them via hardware microcode and presents a set of CPU instructions to manage the enclaves.
+Sanctum project builds on the \gls{SGX} programming model and implements an architecture that deviates as little as possible from the one built by Intel. Although it differs from \gls{SGX} by implementing the enclaves via a small combination of hardware extensions to RISC-V (an open-source set of CPU instructions \cite{Waterman14therisc-v}) and a trusted piece of software called the security model, as SGX implements them via hardware microcode and presents a set of CPU instructions to manage the enclaves.
 
-This security monitor is the core of the project and configures the hardware to enforce low-level rules that controls the enclaves's access policies. As explained in the Sanctum paper, "\textit{the security monitor checks the system software’s allocation decisions for correctness and commits them into the hardware’s configuration registers}". One of the examples and the main points of upgrade compared to \gls{SGX} is that Sanctum keeps the enclave page tables inside enclaves memory, protecting the system against the timing attacks referred above by keeping the page table dirty and accessed bits private. Their hardware extensions make sure that enclaves page tables only point to enclave memory and untrusted \gls{OS} tables only point to \gls{OS} memory regions and never to enclave private memory.
+This security monitor is the core of the project and configures the hardware to enforce low-level rules that control the enclaves’ access policies. As explained in the Sanctum paper, "\textit{the security monitor checks the system software’s allocation decisions for correctness and commits them into the hardware’s configuration registers}". One of the examples and the main points of an upgrade compared to \gls{SGX} is that Sanctum keeps the enclave page tables inside enclaves memory, protecting the system against the timing attacks referred above by keeping the page table dirty and accessed bits private. Their hardware extensions make sure that enclaves page tables only point to enclave memory and untrusted \gls{OS} tables only point to \gls{OS} memory regions and never to enclave private memory.
 
 Sanctum is also open to the public which makes easier for security researchers to audit and find vulnerabilities and to further encourage the analysis of the code, Sanctum security monitor is written in portable C++ code and can be used across different CPU implementations.
 
 \subsection{ARM Trust Zone} % fold
 \label{ssec:arm_trust_zone}
 
-ARM Trust Zone \cite{armtrustzone:1} is a technology that offers a system wide approach to security based on hardware enforced isolation built into the CPU \cite{armtrustzone:2}. The principle of the technology is to separate the trusted and untrusted by two virtual processors backed by hardware access control. The two states are referred as worlds, where the first is called the secure world (SW) and the other is the normal world (NW) like figure \ref{fig:armtrustzone_stack} shows.
+ARM Trust Zone \cite{armtrustzone:1} is a technology that offers a system-wide approach to security based on hardware-enforced isolation built into the CPU \cite{armtrustzone:2}. The principle of the technology is to separate the trusted and untrusted by two virtual processors backed by hardware access control. The two states are referred as worlds, where the first is called the secure world (SW) and the other is the normal world (NW) like figure \ref{fig:armtrustzone_stack} shows.
 
 \begin{figure}[htbp]
 	\centering
@@ -306,18 +305,18 @@ ARM Trust Zone \cite{armtrustzone:1} is a technology that offers a system wide a
 	\label{fig:armtrustzone_stack}
 \end{figure}
 
-The non-secure world (or normal world) is where the \gls{OS} and most of the software and applications will be running, as for the secure world is where more secure and sensitive software will run and will ensures that vital information is not intercepted by a third party. The security is enforced because each of the worlds acts isolated from the other as a runtime environment with separated resources such as memory, processor, cache, controllers, interrupts. The ARM hardware has separate copies of the registers for each worlds and cross-world register access is blocked. However the Secure Monitor shown in figure \ref{fig:armtrustzone_stack} can access non secure registers while running in secure world. This means that the monitor can then implement context switching between both worlds.
+The non-secure world (or normal world) is where the \gls{OS} and most of the software and applications will be running, as for the secure world is where more secure and sensitive software will run and will ensure that vital information is not intercepted by a third party. The security is enforced because each of the worlds acts isolated from the other as a runtime environment with separated resources such as memory, processor, cache, controllers, interrupts. The ARM hardware has separate copies of the registers for each world and cross-world register access is blocked. However, the Secure Monitor shown in figure \ref{fig:armtrustzone_stack} can access non-secure registers while running in the secure world. This means that the monitor can then implement context switching between both worlds.
 
-When in Normal World, the application calls a specific ARM instruction call SMC (Secure Monitor Call) to call back inside the secure world and execute in code in a secure manner.
+When in Normal World, the application calls a specific ARM instruction call SMC (Secure Monitor Call) to call back inside the secure world and securely execute the code.
 
 By keeping the worlds separated from each other, the ARM TrustZone can keep applications running in secure mode isolated from the normal world applications such as the OS and thus achieving another implementation of a \gls{TEE}.
 
 \subsection{Discussion}
 \label{ssec:s2_discussion}
 
-The \gls{TCB} (Trusted Computing Base) is the of set computer components (hardware), software and data that we need to trust and deem as not malicious in order to use a system. It's a group of various elements that are critical to a systems security in a way that any bug or vulnerability occurring from inside the \gls{TCB} components might compromise the security and privacy of the entire system. On the other hand, security flaws and bugs from outside of the ~\gls{TCB} should not become a security issue.
+The \gls{TCB} (Trusted Computing Base) is the set computer components (hardware), software and data that we need to trust and deem as not malicious in order to use a system. It's a group of various elements that are critical to a systems security in a way that any bug or vulnerability occurring from inside the \gls{TCB} components might compromise the security and privacy of the entire system. On the other hand, security flaws and bugs from outside of the ~\gls{TCB} should not become a security issue.
 
-Hardware security like \glspl{TPM} and \gls{TEE} technologies have the goal to drastically reduce the \gls{TCB} of a system, for example, remove the \gls{OS} from the trusted base to make sure that a remote compromised machine vulnerability does not affect the security and privacy of a application or system.
+Hardware security like \glspl{TPM} and \gls{TEE} technologies have the goal to drastically reduce the \gls{TCB} of a system, for example, remove the \gls{OS} from the trusted base to make sure that a remote compromised machine vulnerability does not affect the security and privacy of an application or system.
 
 By isolating the program from outside and uncontrollable sources like cloud infrastructures \glspl{OS}, hypervisors and hardware we can more safely deploy sensitive applications to those cloud providers.
 That is the goal of all different implementations of trusted execution environments like the Intel \gls{SGX} and the ARM TrustZone.
@@ -327,18 +326,18 @@ Although not free of some problems, \gls{SGX} implementation of a \gls{TEE} seem
 \section{TEE/SGX Enabled Key Value Stores} % (fold)
 \label{sec:sgx_enabled_key_value_stores}
 
-There has been an increase trend from developers to move their applications to the cloud. It provides dynamically and almost seamlessly scaling with predict cost. Although it also means that users need to rely on the cloud providers for securing and maintaining the integrity of their applications. That means the user must trust not only the provider's staff but also its globally distributed software and hardware not to expose their private data. Today's cloud providers only aim to protect their privileged code from the untrusted code (the user's code) and do not provide any guarantees about the opposite scenario.
+There has been an increasing trend from developers to move their applications to the cloud. It provides dynamically and almost seamlessly scaling with predict cost. Although it also means that users need to rely on the cloud providers for securing and maintaining the integrity of their applications. That means the user must trust not only the provider's staff but also its globally distributed software and hardware not to expose their private data. Today's cloud providers only aim to protect their privileged code from the untrusted code (the user's code) and do not provide any guarantees about the opposite scenario.
 
-To mitigate this use case, and after studying and discussing the Key-Value stores technologies and also the trusted platform modules as well as the trusted execution environments, in this chapter, it will be presented how are this two topics being combined and used together. 
+To mitigate this use case, and after studying and discussing the Key-Value store technologies and also the trusted platform modules as well as the trusted execution environments, in this chapter, it will be presented how are this two topics being combined and used together. 
 
-It will be more focused on the Intel SGX platform as it is the one that will be used throughout this thesis. Currently, there are a number of databases who leverage this technology to provide a more secure environment and service. In the this chapter it's presented how they work and operate, discussed the differences between them and also the how the work planned to be performed on this thesis will solve some of the problems and caveats. 
+It will be more focused on the Intel SGX platform as it is the one that will be used throughout this thesis. Currently, several databases that leverage this technology to provide a more secure environment and service. In this chapter, it's presented how they work and operate, discussed the differences between them and also the how the work planned to be performed on this thesis will solve some of the problems and caveats. 
 
 \subsection{Trusted Execution with Intel SGX}
 \label{ssec:trusted_execution_with_sgx}
 
 As explained before, Intel SGX provides a trusted execution environment by running code inside the enclaves. It creates an isolated environment where we can run some instructions as securely as possible, without \gls{OS} intervention.
 
-Key-Value Stores and other database type systems can leverage this secure and isolated environment to perform queries on very sensitive data that would otherwise be vulnerable to some attacks. There are a few techniques currently implemented to use isolated environments. Maintaining an encrypted database and using enclaves cryptographic capabilities to decrypt data and perform queries on plain text with the assurance of no data leaking is a possible use case. Also, maintaining a database fully on enclave memory, where it cannot be access by anyone other than the CPU is another way to keep the data secure by leveraging isolated and trusted execution environments. Different techniques will be furthermore discussed below. 
+Key-Value Stores and other database type systems can leverage this secure and isolated environment to perform queries on very sensitive data that would otherwise be vulnerable to some attacks. There are a few techniques currently implemented to use isolated environments. Maintaining an encrypted database and using enclaves cryptographic capabilities to decrypt data and perform queries on plain text with the assurance of no data leaking is a possible use case. Also, maintaining a database fully on enclave memory, where it cannot be accessed by anyone other than the CPU is another way to keep the data secure by leveraging isolated and trusted execution environments. Different techniques will be furthermore discussed below. 
 
 As we can see, isolated and trusted execution environments are an important feature when it comes to protecting the data from the \gls{OS} and Key-Values Store systems do benefit from them.
 
@@ -347,7 +346,7 @@ As we can see, isolated and trusted execution environments are an important feat
 
 There are a few limitations and challenges of the SGX platform that we address when programming for such technology.
 
-It starts with a big challenge of choosing and defining what parts of the program can benefit of the \gls{SGX} security. As it is known, it works with two major application components, the trusted and untrusted modules of or program. The limitations have to be thoroughly analysed so we can make that definition.  
+It starts with a big challenge of choosing and defining what parts of the program can benefit from the \gls{SGX} security. As it is known, it works with two major application components, the trusted and untrusted modules of or program. The limitations have to be thoroughly analysed so we can make that definition.  
 
 The main limitations are: 
 
@@ -358,15 +357,15 @@ The main limitations are:
 	\item \glspl{syscall}
 \end{itemize}
 
-In the \gls{KVS} world, as we extensively covered, performance is the major concern and there is no real way around this limitation. Using secure enclaves will definitely decrease the supposed blazing fast performance. Although, with intelligent partition between the untrusted code, which will be fast, and the trusted instructions, which will be slower we can limit the performance overhead. By separating and well defining both modules of the application, we can decrease the code that needs to run securely and find a fine compromised between security and performance. Homomorphic encryption is also a mechanism to speed up performance by performing queries directly over encrypted memory. Although, fully homomorphic encryption is not a possibility yet, so, by compromising some set of operations that are not possible, partial homomorphic encryption will speed up the performance.
+In the \gls{KVS} world, as we extensively covered, performance is the major concern and there is no real way around this limitation. Using secure enclaves will decrease the supposed blazing fast performance. Although, with an intelligent partition between the untrusted code, which will be fast, and the trusted instructions, which will be slower we can limit the performance overhead. By separating and well defining both modules of the application, we can decrease the code that needs to run securely and find a fine compromised between security and performance. Homomorphic encryption is also a mechanism to speed up performance by performing queries directly over encrypted memory. Although fully homomorphic encryption is not a possibility yet, so, by compromising some set of operations that are not possible, partial homomorphic encryption will speed up the performance.
 
-With the \gls{SGX} base support the access to \gls{EPC} from the owner enclave is efficiently processed by hardware en/decryption logics at cache-line granularity. This means that when the cache-line is brought from \gls{EPC} to the processor, it is decrypted. The hardware logic calculates the keyed hash value of the cache-line, and verifies it against the stored hash value of the address. Internally the integrity hash values are organised in data-structures similar to Merkle Trees, to allow sub-trees to be evicted from the on-chip storage securely \cite{cryptoeprint:2016:204}. Due to the space and time overhead of storing and processing security metadata at fine-grained cache-line granularity for \gls{EPC}, the \gls{EPC} capacity is unlikely to increase significantly. For example, a huge Merkle tree for tens gigabytes of main memory at cache-line granularity will necessarily increase the integrity verification latency intolerably, as an inefficient solution that will sacrifice throughput and latency \cite{Taassori2018VAULTRP}.
+With the \gls{SGX} base support the access to \gls{EPC} from the owner enclave is efficiently processed by hardware en/decryption logics at cache-line granularity. This means that when the cache-line is brought from \gls{EPC} to the processor, it is decrypted. The hardware logic calculates the keyed hash value of the cache-line and verifies it against the stored hash value of the address. Internally the integrity hash values are organised in data-structures similar to Merkle Trees, to allow sub-trees to be evicted from the on-chip storage securely \cite{cryptoeprint:2016:204}. Due to space and time overhead of storing and processing security metadata at fine-grained cache-line granularity for \gls{EPC}, the \gls{EPC} capacity is unlikely to increase significantly. For example, a huge Merkle tree for tens gigabytes of main memory at cache-line granularity will necessarily increase the integrity verification latency intolerably, as an inefficient solution that will sacrifice throughput and latency \cite{Taassori2018VAULTRP}.
 
 Memory sizing is also a limitation when using enclaves in \gls{SGX} technology. The amount of private secure data that can be maintained by the enclave is limited to the size of the enclave cache, which is around 128 \gls{MB}, being that only about 94 \gls{MB} are available to the application, with the rest reserved to metadata. In the future, with \gls{SGX} v2 and for some operation systems, mainly Linux because of paging swap support, it can be increased up to all the memory available in the system \cite{sgx:1} by swapping pages from the \gls{EPC} to main untrusted memory, with guaranteed of confidentiality, integrity and data freshness. When evicting pages from the \gls{EPC}, it is assigned a unique version number which is recorded in a new type of \gls{EPC} page and the contents of the page, metadata, and \gls{EPCM} information are encrypted and written out to system memory. When reloading a page back into \gls{EPC} the page is decrypted and has its version and integrity checked to make sure it was not tampered with.
 
-Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections. Another issue is \gls{EPC} fault handling, because \gls{EPC} limit requires exiting the enclave improving more the cost of paging.
+Although, page eviction to main untrusted memory introduces a big overhead because of encryption and decryption and integrity checks (2x - 2000x) \cite{scone:1}. Clever partitioning of the application into the untrusted and trusted modules will help to overcome this limitation as described in the next sections. Another issue is \gls{EPC} fault handling because \gls{EPC} limit requires exiting the enclave improving more the cost of paging.
 
-\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{Ecall} and \glspl{Ocall} (section \ref{ssec:intel_sgx} of this thesis), but they have to be accounted for when implementing the application. To address the problem, recent proposed solutions try to reduce the frequencies of enclave exits for system calls by running threads in untrusted execution for the interaction with the operating system, communicating with the enclave thread by sharing memory. Also, \glspl{Ecall} and \glspl{Ocall} require exiting and entering the enclave and that caries a big performance overhead, as encryption and decryption cycles must be done to maintain security guarantees, as well as some integrity checks.
+\gls{I/O} and \glspl{syscall} are limited by default on the enclave for security purposes, so it can't affect or be affected by the \gls{OS}. There is a way to perform and access \gls{I/O} and \glspl{syscall} through the aforementioned \glspl{Ecall} and \glspl{Ocall} (section \ref{ssec:intel_sgx} of this thesis), but they have to be accounted for when implementing the application. To address the problem, recently proposed solutions try to reduce the frequencies of enclave exits for system calls by running threads in untrusted execution for the interaction with the operating system, communicating with the enclave thread by sharing memory. Also, \glspl{Ecall} and \glspl{Ocall} require exiting and entering the enclave and that caries a big performance overhead, as encryption and decryption cycles must be done to maintain security guarantees, as well as some integrity checks.
 
 \subsection{SGX-Enabled Secure Databases}
 \label{ssec:sgx_enabled_secure_databases}
@@ -378,9 +377,9 @@ Next subsections present and discuss the overview of the current technology that
 \subsubsection{EnclaveDB}
 \label{sssec:enclave_db}
 
-EnclaveDB \cite{enclavedb:1} is a privacy enhanced and secure database that works alongside with Intel \gls{SGX} and provides a Structured Query Language (SQL). It uses its technology to maintain \textbf{all} sensitive information inside \gls{SGX} enclaves in order to keep them secure from a threat model of strong adversaries that can control the entire software stack  on the database server. It resists attack from the administrator server, the database administrator and attacker who may compromised the operating system, the hypervisor or the database server.
+EnclaveDB \cite{enclavedb:1} is a privacy-enhanced and secure database that works alongside with Intel \gls{SGX} and provides a Structured Query Language (SQL). It uses its technology to maintain \textbf{all} sensitive information inside \gls{SGX} enclaves in order to keep them secure from a threat model of strong adversaries that can control the entire software stack on the database server. It resists attack from the administrator server, the database administrator and attacker who may compromise the operating system, the hypervisor or the database server.
 
-Following Intel's application guidelines, EnclaveDB has a two part architecture: trusted (running on the enclave) and untrusted modules. The enclave hosts a query processing engine, natively compiled stored procedures and a trusted kernel which provides API's for sealing and remote attestation. The untrusted host process runs all other components of the database server. Figure \ref{fig:enclaveDB_architecture} shows the architecture of the enclaveDB server-side.
+Following Intel's application guidelines, EnclaveDB has a two-part architecture: trusted (running on the enclave) and untrusted modules. The enclave hosts a query processing engine, natively compiled stored procedures and a trusted kernel which provides API's for sealing and remote attestation. The untrusted host process runs all other components of the database server. Figure \ref{fig:enclaveDB_architecture} shows the architecture of the enclaveDB server-side.
 
 \begin{figure}[htbp]
 	\centering
@@ -389,23 +388,23 @@ Following Intel's application guidelines, EnclaveDB has a two part architecture:
 	\label{fig:enclaveDB_architecture}
 \end{figure}
 
-Leveraging \gls{TEE}, EnclaveDB then provides a database with a \gls{SQL} interface and guarantees confidentiality and integrity with low overhead. With its design it also reduces the \gls{TCB} to a smaller set than any other "normal" database.
+Leveraging \gls{TEE}, EnclaveDB then provides a database with a \gls{SQL} interface and guarantees confidentiality and integrity with low overhead. With its design, it also reduces the \gls{TCB} to a smaller set than any other "normal" database.
 
 \subsubsection{Pesos DB}
 \label{sssec:pesos_db}
 
-Pesos \cite{pesos:1} is a secure implementation of object storage services like Amazon S3 \cite{s3:1}, Azure Blob Storage \cite{azureStorage:1}, Google Cloud Storage \cite{googleStorage:1} among others. In these current large-scale services, due to their complexity, the risk of confidentiality and integrity violations increase significantly. This storage systems are characterised by multiple layers of software and hardware stacked together which means the access policies for ensuring confidentiality and integrity are scattered across different code paths and configurations, thus exposing the data to more security vulnerabilities. Furthermore, untrusted third-party cloud platforms expose an additional risk of unauthorised data access by a malicious administrator.
+Pesos \cite{pesos:1} is a secure implementation of object storage services like Amazon S3 \cite{s3:1}, Azure Blob Storage \cite{azureStorage:1}, Google Cloud Storage \cite{googleStorage:1} among others. In these current large-scale services, due to their complexity, the risk of confidentiality and integrity violations increase significantly. These storage systems are characterised by multiple layers of software and hardware stacked together which means the access policies for ensuring confidentiality and integrity are scattered across different code paths and configurations, thus exposing the data to more security vulnerabilities. Furthermore, untrusted third-party cloud platforms expose an additional risk of unauthorised data access by a malicious administrator.
 
-Pesos allows clients to specify per-object security policies concisely and separately from the remaining storage stack. It also provides cryptographic attestation for the stored objects and their associated policies to verify the policy enforcement.
+Pesos allows clients to specify per-object security policies concisely and separately from the remaining storage stack. It also provides cryptographic attestation for the stored objects and their associated policies to verify policy enforcement mechanisms.
 
-It enforces this policies by leveraging the Intel \gls{SGX} for trusted execution environments and Kinetic Object Storage \cite{kinetic:1} for trusted storage (secure persistent storage - not the focus of this thesis). It structures a policy-compiler, its binary-format interpreter, per-object policy metadata, and the enforcement logic into a single layer of the storage stack. With this unification, it drastically reduces the \gls{TCB} when compared to the order cloud services. Then it uses the trusted execution environment provided by \gls{SGX} to connect directly Kinetic disk through an encrypted Ethernet connection allowing for object transfer and policy enforcement securely without any intermediate layers in the storage stack.
+It enforces these policies by leveraging the Intel \gls{SGX} for trusted execution environments and Kinetic Object Storage \cite{kinetic:1} for trusted storage (secure persistent storage - not the focus of this thesis). It structures a policy-compiler, its binary-format interpreter, per-object policy metadata, and the enforcement logic into a single layer of the storage stack. With this unification, it drastically reduces the \gls{TCB} when compared to the order cloud services. Then it uses the trusted execution environment provided by \gls{SGX} to connect directly Kinetic disk through an encrypted Ethernet connection allowing for object transfer and policy enforcement securely without any intermediate layers in the storage stack.
 
 \subsubsection{Speicher}
 \label{sssec:speicher}
 
 Speicher \cite{speicher:1} is a secure \gls{LSM}-based (Log-Structured Merge Tree) Key-Value store that uses Intel \gls{SGX} and it ensures not only strong confidentiality and integrity properties, but also data freshness to protect against rollback/forking attacks. It leverages \gls{SGX} technology to achieve those security characteristics focusing on providing a \textbf{persistent} service, tolerant to system faults and securely recovering from crashes. It also tackles in interesting ways, two of the major limitations of \gls{SGX}: Memory Limits and Performance.
 
-Implementing a Key-Value Store has a major requirement - High performance and low latency queries for big data structures. As already discussed, \gls{SGX} has some memory limits. The enclave memory is located in the Enclave Page Cache (\gls{EPC}) which is limited to 128 \gls{MB} with about 94 \gls{MB} available for application use (the rest being reserved for metadata). To allow creation of enclaves with bigger size than \gls{EPC}, the \gls{OS}  can use secure paging mechanism where it evicts pages to untrusted memory. Although with page encryption, decryption and integrity checks, this solution introduces high overheads (2× - 2000×) \cite{scone:1}.
+Implementing a Key-Value Store has a major requirement - High performance and low latency queries for big data structures. As already discussed, \gls{SGX} has some memory limits. The enclave memory is located in the Enclave Page Cache (\gls{EPC}) which is limited to 128 \gls{MB} with about 94 \gls{MB} available for application use (the rest being reserved for metadata). To allow the creation of enclaves with bigger size than \gls{EPC}, the \gls{OS}  can use secure paging mechanism where it evicts pages to untrusted memory. Although with page encryption, decryption and integrity checks, this solution introduces high overheads (2× - 2000×) \cite{scone:1}.
 
 To address this performance and memory problems, the developers of Speicher implemented the following custom features (from Speicher public paper):
 
@@ -422,11 +421,11 @@ The technology leverages \gls{SGX} with a clever partition between trusted and u
 \subsubsection{ShieldStore}
 \label{sssec:shieldstore}
 
-ShieldStore \cite{shieldstore:1} is a \textit{"(...) shielded in-memory Key-Value Storage with \gls{SGX}"}. It aims to provide a very fast and low latency queries over very large data trying to overcome the \gls{SGX} memory limitation. It accomplice's it by maintaining the majority of the data structures in the non-enclave memory region, addressing as well the performance issue by not relaying on the page-oriented enclave memory extension provided by \gls{SGX}.
+ShieldStore \cite{shieldstore:1} is a \textit{"(...) shielded in-memory Key-Value Storage with \gls{SGX}"}. It aims to provide a very fast and low latency queries over very large data trying to overcome the \gls{SGX} memory limitation. It accomplice's it by maintaining the majority of the data structures in the non-enclave memory region, addressing as well the performance issue by not relying on the page-oriented enclave memory extension provided by \gls{SGX}.
 
-ShieldStore runs server-side in the enclave to protect encryption keys and for remote attestation and it is used to perform all the \gls{KVS} logic. It uses a hashed index structured but places it in the unprotected memory region instead of the enclave \gls{EPC}. As the main data structure is not protected by the \gls{SGX} hardware, each data entry must be encrypted by ShieldStore in the enclave, and written to the main hash table.
+ShieldStore runs server-side in the enclave to protect encryption keys and for remote attestation and it is used to perform all the \gls{KVS} logic. It uses a hashed index structured but places it in the unprotected memory region instead of the enclave \gls{EPC}. As the main data structure is not protected by the \gls{SGX} hardware, each data entry must be encrypted by ShieldStore in the enclave and written to the main hash table.
 
-The main flow and architecture is as described on figure \ref{fig:shieldstore_overview}.
+The main flow and architecture are as described in figure \ref{fig:shieldstore_overview}.
 
 \begin{figure}[htbp]
 	\centering
@@ -435,46 +434,46 @@ The main flow and architecture is as described on figure \ref{fig:shieldstore_ov
 	\label{fig:shieldstore_overview}
 \end{figure}
 
-First the client remote attests the server-side (1) verifying \gls{SGX} support of the processor, the code, and other critical memory state of an enclave. In a second step, the client and the server exchange sessions keys (2) in order to establish a secure connection, using Intel \gls{SGX} libraries to do so. Using this newly generated session key, the client sends a request for an operation (3). The server deciphers and verifies the request and accesses the Key-Value Store (4). Clients do not access the server-side ciphertexts neither need to know the encryption key used by the server to encrypt the values. The server will then decrypt the data from the storage, encrypted it again with the session key and reply to the client (5). All accesses to the \gls{KVS} have integrity checks.
+First, the client remote attests the server-side (1) verifying \gls{SGX} support of the processor, the code, and other critical memory states of an enclave. In a second step, the client and the server exchange sessions keys (2) in order to establish a secure connection, using Intel \gls{SGX} libraries to do so. Using this newly generated session key, the client sends a request for an operation (3). The server deciphers and verifies the request and accesses the Key-Value Store (4). Clients do not access the server-side ciphertexts neither need to know the encryption key used by the server to encrypt the values. The server will then decrypt the data from the storage, encrypted it again with the session key and reply to the client (5). All accesses to the \gls{KVS} have integrity checks.
 
 \subsection{Discussion}
 \label{ssec:s3_discussion}
 
-Concluding, EnclaveDB (section \ref{sssec:enclave_db}) and Pesos (section \ref{sssec:pesos_db}) presents secure databases and objects storage systems respectively, using \gls{SGX}, but EnclaveDB assumes that \gls{SGX} supports large enclaves whose size is an order of several hundred \glspl{GB} and Pesos restricts the size of data structure to the size of \gls{EPC}. On the other hand, Speicher (section \ref{sssec:speicher}) and ShieldStore (section \ref{sssec:shieldstore}) proposes a store that alleviates the memory limitation of Intel \gls{SGX} by storing encrypted data on untrusted memory regions. Speicher and ShieldStore have similar architectures, but the former is primarily design for persistence storage and the latter is focused on a fast in-memory key-value store.
+Concluding, EnclaveDB (section \ref{sssec:enclave_db}) and Pesos (section \ref{sssec:pesos_db}) presents secure databases and objects storage systems respectively, using \gls{SGX}, but EnclaveDB assumes that \gls{SGX} supports large enclaves whose size is an order of several hundred \glspl{GB} and Pesos restricts the size of data structure to the size of \gls{EPC}. On the other hand, Speicher (section \ref{sssec:speicher}) and ShieldStore (section \ref{sssec:shieldstore}) proposes a store that alleviates the memory limitation of Intel \gls{SGX} by storing encrypted data on untrusted memory regions. Speicher and ShieldStore have similar architectures, but the former is primarily designed for persistence storage and the latter is focused on a fast in-memory key-value store.
 
 We can now conclude that the clever partitioning of the application into trusted and untrusted parts is really important when programming with Intel \gls{SGX}. It directly affects \glspl{syscall} and \gls{I/O}, performance and memory of the service. 
 
-The long goal of this thesis is to implement a system with characteristics from the databases present above. In terms of performance we plan to implement partial homomorphic encryption, so it allows to perform operations directly over in-memory encrypted data. This will be a challenge, as fully homomorphic encryption is not yet practical \cite{homomorphic:1}, so adaptations must be made, but performance increase are expected  over the databases presented above, by not needing to decrypt the data in secure execution. Persistence will also be a requirement just like some of the databases presented.
+The long-term goal of this thesis is to implement a system with characteristics from the databases present above. In terms of performance, we implemented partial homomorphic encryption, so it allows to perform operations directly over in-memory encrypted data. This will be a challenge, as fully homomorphic encryption is not yet practical \cite{homomorphic:1}, so adaptations must be made, but performance increases are expected over the databases presented above, by not needing to decrypt the data in secure execution. Persistence will also be a requirement just like some of the databases presented.
 
 For trusted execution with \gls{SGX}, extensive research is needed to partition the application in the two necessary modes to circumvent persistence, performance and memory \gls{SGX} limitations. It will also be researched and tested the ability to provide built-in replication and availability with \gls{SGX}.
 
 \section{SGX Virtualisation Frameworks}
 \label{sec:sgx_virtualisation_frameworks}
 
-Virtualisation is the mechanism that relies on software to simulate hardware components and with the objective of creating a simulated ("virtual") computer system. It means that multiple virtual machines can run inside the same physical machine, and although sharing psychical resources between them - cpu, memory, disks, run completely separated from one another.
+Virtualisation is the mechanism that relies on software to simulate hardware components and with the objective of creating a simulated ("virtual") computer system. It means that multiple virtual machines can run inside the same physical machine, and although sharing psychical resources between them - CPU, memory, disks, run completely separated from one another.
 
-With the broader adoption of virtualisation and \gls{SGX} over the years, developers are working on ways to leverage virtualisation with the secure enclave technologies.
+With the broader adoption of virtualisation and \gls{SGX} over the years, developers are working on ways to leverage virtualisation with these secure enclave technologies.
 
-Also, container-based virtualisation has become very popular in the last few years. Container can use the capabilities of a secure and trusted environment to achieve a fast, highly portable, faster to deploy, and small \gls{SGX} environment that can run mainly unmodified applications without a big performance overhead.
+Also, container-based virtualisation has become very popular in the last few years. Containers can use the capabilities of a secure and trusted environment to achieve a fast, highly portable, faster to deploy, and small \gls{SGX} environment that can run mainly unmodified applications without a big performance overhead.
 
 \subsection{KVM-SGX}
 \label{ssec:KVM-SGX}
 
 \textit{"\gls{KVM} (for Kernel-based Virtual Machine) is a full virtualisation solution for Linux on x86 hardware containing virtualisation extensions (Intel VT or AMD-V). It consists of a loadable kernel module, kvm.ko, that provides the core virtualisation infrastructure and a processor specific module, kvm-intel.ko or kvm-amd.ko"} \cite{kvm:1}.
 
-The \gls{KVM} framework allows to run multiple virtual machines with unmodified Linux or Windows images. Each \gls{VM} will be assign their own virtual private resources like the network cards, disks graphic adapters, etc...
+The \gls{KVM} framework allows the running of multiple virtual machines with unmodified Linux or Windows images. Each \gls{VM} will be assigned their own virtual private resources like the network cards, disks graphic adapters, etc...
 
 The KVM-SGX project is a module KVM/Linux module to support SGX virtualisation on \gls{KVM}. It exposes a private virtual SGX that can be used by the guest \gls{OS}.
 To fully virtualise \gls{SGX}, \gls{EPC} must be assigned to the guest \gls{OS}. Although, since the \gls{EPC} is a system resource, the management of this physical \gls{EPC} - that backs the virtual \gls{EPC}, its owned by the kernel. The kernel exposes a device /dev/sgx/virt\_epc that allows the guest \gls{VM} to make a system call that creates and assigns its own virtual \gls{EPC} section.
 
-To recap, the guest \gls{VM} does not have to deal with \gls{PRM} or even \gls{EPCM} because those resources ares sitting below it on the hardware. The guest has a virtual Enclave Page Cache managed by the hardware that it can use at will to store secure code and data.
+To recap, the guest \gls{VM} does not have to deal with \gls{PRM} or even \gls{EPCM} because those resources are sitting below it on the hardware. The guest has a virtual Enclave Page Cache managed by the hardware that it can use at will to store secure code and data.
 
 The Linux \gls{SGX} \gls{KVM} module is still in its development phase but can already be used to virtualise \gls{SGX} platforms onto virtual machines \cite{kvm-sgx:1, kvm-sgx:2, kvm-sgx:3}.
 
 \subsection{Graphene-SGX}
 \label{ssec:graphene-sgx}
 
-Graphene \cite{graphene:1, graphene:2, graphene:4} is a guest OS design to run a single unmodified application with minimal host requirements. It bridges the gap of portability by abstracting the \gls{OS} making it easier to port applications to different \glspl{OS}. Like a \gls{VM}, Graphene provides an isolated environment for application to run in, and, by not running a complete operating system it has a much lighter footprint, and generally low memory requirements and performance overheads. Also, developers are working to supply graphene as a containerised application \cite{graphene_container:1}. 
+Graphene \cite{graphene:1, graphene:2, graphene:4} is a guest OS design to run a single unmodified application with minimal host requirements. It bridges the gap of portability by abstracting the \gls{OS} making it easier to port applications to different \glspl{OS}. Like a \gls{VM}, Graphene provides an isolated environment for the application to run in, and, by not running a complete operating system it has a much lighter footprint, and generally low memory requirements and performance overheads. Also, developers are working to supply graphene as a containerised application \cite{graphene_container:1}. 
 
 As an extension, Graphene is working to provide integration with Intel's \gls{SGX} processors where applications could run unmodified with the additional security guarantees of the secure enclave technology \cite{graphene:2}.
 
@@ -485,7 +484,7 @@ Since it is a library OS, Graphene takes advantage of its lightweight form facto
 
 The SCONE \cite{scone:1} (Secure CONtainer Environment) platform facilitates always encrypted execution using Intel's \gls{SGX} secure enclaves to run encrypted code not even accessible to system administrators or root users. It supports this kind of execution running inside Docker containers and even managed Kubernetes clusters.
 
-Although containers can have a big \gls{TCB} and a weaker isolation, the design of scones leads to a small \gls{TCB} by exposing a small C standard library that allows for system call to execute outside the enclave, but maintaining security guarantees by seamlessly and transparently encrypting/decrypting application data. Files stored outside of the enclave are therefore encrypted, and network communication is protected by \gls{TLS}. SCONE also implements a \textit{user-level} threading that maximizes the time that the thread spends inside the enclave. Combined with the asynchronous system where OS threads outside the enclave execute system calls, it minimises a big enclave overhead - \textbf{enclave entry/exit}.
+Although containers can have a big \gls{TCB} and weaker isolation, the design of scones leads to a small \gls{TCB} by exposing a small C standard library that allows for system call to execute outside the enclave but maintaining security guarantees by seamlessly and transparently encrypting/decrypting application data. Files stored outside of the enclave are therefore encrypted, and network communication is protected by \gls{TLS}. SCONE also implements a \textit{user-level} threading that maximizes the time that the thread spends inside the enclave. Combined with the asynchronous system where OS threads outside the enclave execute system calls, it minimises a big enclave overhead - \textbf{enclave entry/exit}.
 
 \subsection{Asylo}
 \label{ssec:asylo}
@@ -494,23 +493,23 @@ Asylo \cite{asylo:1} is an open and flexible framework for developing enclave se
 
 \begin{itemize}
   \item The ability to execute trusted workloads in an untrusted environment, inheriting the confidentiality and integrity guarantees from the security backend, i.e., the underlying enclave technology.
-  \item Ready-to-use containers, an open source API, libraries, and tools so you can develop and run applications that use one or more enclaves.
+  \item Ready-to-use containers, an open-source API, libraries, and tools so you can develop and run applications that use one or more enclaves.
   \item A choice of security backends.
   \item Portability of your application's source code across security backends
 \end{itemize}
 
-Asylo does not lock their technology with Intel's \gls{SGX}, but instead leaves it open to multiple secure enclave frameworks. In Asylo, the majority of user developed logic lives inside the enclave. However, due to security and portability reasons, this framework does not support direct interactions between the enclave and the \gls{OS}. All of enclave-to-OS interactions must be mediated through code that runs on the outside of the enclave but Asylo provides most of the code for creating, exiting and interacting with the enclave and the \gls{OS}.
+Asylo does not lock their technology with Intel's \gls{SGX} but instead leaves it open to multiple secure enclave frameworks. In Asylo, the majority of user-developed logic lives inside the enclave. However, due to security and portability reasons, this framework does not support direct interactions between the enclave and the \gls{OS}. All of the enclave-to-OS interactions must be mediated through code that runs on the outside of the enclave but Asylo provides most of the code for creating, exiting and interacting with the enclave and the \gls{OS}.
 
 \subsection{Discussion}
 \label{ssec:s4_discussion}
 
-Virtualisation was a game changing technology when it was first created and, to this day, its still evolving and it has become the core of cloud computing. With each iteration, more and more components can be virtualised and simulated to be used freely by their guest \glspl{OS} and virtualised SGX's processors are starting to appear. The \gls{KVM} \gls{SGX} module and Graphene are a more low level types of virtualisation that can use \gls{SGX} to provide a even more isolated an secure environment for application to run. However, with its fast shipping and deployment and highly portable applications, containerisation follows the same path, as it becomes more and more popular to developers and SCONE and the Asylo frameworks work beautifully to combine the power of a secure enclave with the characteristics of a container-based application.
+Virtualisation was a game-changing technology when it was first created and, to this day, it is still evolving and it has become the core of cloud computing. With each iteration, more and more components can be virtualised and simulated to be used freely by their guest \glspl{OS} and virtualised SGX's processors are starting to appear. The \gls{KVM} \gls{SGX} module and Graphene are more low-level types of virtualisation that can use \gls{SGX} to provide an even more isolated an secure environment for the application to run. However, with its fast shipping and deployment and highly portable applications, containerisation follows the same path, as it becomes more and more popular to developers and SCONE and the Asylo frameworks work beautifully to combine the power of a secure enclave with the characteristics of a container-based application.
 
 In this thesis, we will use SCONE technology to run an unmodified Redis system secured with Intel's latest Software Guard Extensions (\gls{SGX}) to expose a seamless secure application to the client with fast deployment speeds and high portability and scalability.
 
 \section{Related Work Balance and Critical Analysis}
 \label{sec:related_work_balance_and_critical_analysis}
 
-In the current days, computer scientists are always looking for a secure, fast and cheap environment to develop applications. As we know, it is not feasible to have all three of this elements working flawlessly without any compromises. Although, by combining in-memory key value stores, trusted remote execution environments and cloud providers, developers can now have a practical example of what would be to develop for a privacy enhanced secure system with reduce costs by using cloud providers and with better reassurances that the hardware and software that it's out of the control of the user will have a minimal impact on sensitive data and code of an application. By adding the performance benefits of an in-memory key value store and all of its technology, like built-in security, built-in replication and persistence we can in the best of our abilities today, combine the best of the three worlds without compromising too much on any of them.
+In the current days, computer scientists are always looking for a secure, fast and cheap environment to develop applications. As we know, it is not feasible to have all three of these elements working flawlessly without any compromises. However, by combining in-memory key-value stores, trusted remote execution environments and cloud providers, developers can now have a practical example of what would be to develop for a privacy-enhanced secure system with reduced costs by using cloud providers and with better reassurances that the hardware and software that it's out of the control of the user will have a minimal impact on sensitive data and code of an application. By adding the performance benefits of an in-memory key-value store and all of its technology, like built-in security, built-in replication and persistence we can in the best of our abilities today, combine the best of the three worlds without compromising too much on any of them.
 
-In this thesis we will compare different kinds of approaches to implement a fast system with the assurance of a secure data flow that can easily be deployed into the cloud without fear of any components out of our control.
+In this thesis, we will compare different kinds of approaches to implement a fast system with the assurance of a secure data flow that can easily be deployed into the cloud without fear of any components out of our control.

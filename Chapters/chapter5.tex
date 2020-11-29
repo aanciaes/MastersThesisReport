@@ -14,7 +14,7 @@ The last section, section \ref{sec:summary_and_findings} contains a summary of a
 \section{Testbench Environments}
 \label{sec:testbench_environment}
 
-The prototype was evaluated in multiple different system configurations to achieve a complete coverage of all the proposed solutions and all the relevant metrics. 
+The prototype was evaluated in multiple different system configurations to achieve complete coverage of all the proposed solutions and all the relevant metrics. 
 
 The first test is a representative test of the overhead introduced not only of additional security features like \gls{TLS} and authentication but also the \gls{SGX} hardware isolation. It will run the \textit{redis-benchmark} tool both externally to the server and internally directly against a single standalone Redis instance bypassing the proxy server. Secondly, and more real-life tests, test are run against the proxy exposed \gls{API} and a single standalone Redis instance composes the storage server. Then, the same tests were run in the same environment but with a cluster of Redis instances composing the backend storage. The fourth testbench measures the performance of homomorphic operations on a standalone Redis instance running on unprotected memory, and finally, it is presented the metrics for the two different attestation operations on Redis instances deployed on protected memory and isolated through \gls{SGX}.
 
@@ -36,9 +36,9 @@ The tests measure several different relevant metrics that can be compared with e
 \section{Performance Evaluation for Redis-Benchmark tool}
 \label{sec:performance_evaluation_redis_benchmark_tool}
 
-The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official redis-benchmark release does not support TLS test. The Redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses it appears to be a final version of the tool. All benchmarks tests used the same version.} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set}, and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
+The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official Redis-benchmark release does not support TLS test. The Redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses, it appears to be a final version of the tool. All benchmarks tests used the same version.} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set}, and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
 
-Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3 byte payload when running the benchmark tool on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload.
+Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3-byte payload when running the benchmark tool on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload.
 
 \begin{figure}[htbp]
   \centering
@@ -73,7 +73,7 @@ The results corroborate the initial tests but the differences between security l
 
 This testbench configuration tests a standalone architecture with a single proxy instance and a single Redis instance. Both the proxy and the Redis components will be tested in different deployment configurations, running inside and outside \gls{SGX} enclaves. When Redis is running outside the isolated environment, it will run both in a vulnerable configuration, without any security properties and in its encrypted format, where the proxy server enabled encrypted values.
 
-The tests will run one single thread, making as many \textit{gets} and \textit{sets} requests as possible during 10 minutes with a 20 byte key and a 100 byte value. Figure \ref{fig:standalone_throughput_results} presents the throughput obtained from the tests for the different configurations.
+The tests will run one single thread, making as many \textit{gets} and \textit{sets} requests as possible during 10 minutes with a 20-byte key and a 100-byte value. Figure \ref{fig:standalone_throughput_results} presents the throughput obtained from the tests for the different configurations.
 
 \begin{figure}[htbp]
   \centering
@@ -86,7 +86,7 @@ The tests will run one single thread, making as many \textit{gets} and \textit{s
   \label{fig:standalone_throughput_results}
 \end{figure}
 
-The throughputs measured from the different system configurations show a higher count of operations per second on the normal and vulnerable Proxy \& Redis configuration. When running the components on an \gls{SGX} enclave, performance takes a 20\%-25\% hit. Keeping the proxy running inside enclaves, but extracting the Redis to unprotected memory sees 18\%-22\% loss in performance. Even though the storage service is running faster outside enclaves, the proxy needs to perform extra work in order to maintain data privacy and integrity.
+The throughputs measured from the different system configurations show a higher count of operations per second on the normal and vulnerable Proxy \& Redis configuration. When running the components on an \gls{SGX} enclave, the performance takes a 20\%-25\% hit. Keeping the proxy running inside enclaves, but extracting the Redis to unprotected memory sees 18\%-22\% loss in performance. Even though the storage service is running faster outside enclaves, the proxy needs to perform extra work in order to maintain data privacy and integrity.
  
 The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_results} support the throughput measurements.
 
@@ -108,7 +108,7 @@ The latency results summarised on table \ref{tab:proxy_redis_standalone_latency_
 \section{Performance Evaluation for Cluster Redis}
 \label{sec:performance_evaluation_cluster_redis}
 
-Clustering on Redis is distributed out of the box on the latest Redis versions. It combines the Master-Slave model and an event bus to provide replication and sharding and coordination between the nodes. This test uses a configuration with one proxy server, and six Redis nodes, with three masters and three slaves. The tests run were the same of the standalone system configuration presented on section \ref{sec:performance_evaluation_standalone_redis} to maintain consistency between tests, and it runs a single thread, making as many requests as possible during 10 minutes, using random 20 byte keys with a 100 byte random value. Figure \ref{fig:cluster_throughput_results} shows the throughput results on the sets and get operations.
+Clustering on Redis is distributed out of the box on the latest Redis versions. It combines the Master-Slave model and an event bus to provide replication and sharding and coordination between the nodes. This test uses a configuration with one proxy server, and six Redis nodes, with three masters and three slaves. The tests run were the same of the standalone system configuration presented on section \ref{sec:performance_evaluation_standalone_redis} to maintain consistency between tests, and it runs a single thread, making as many requests as possible during 10 minutes, using random 20-byte keys with a 100-byte random value. Figure \ref{fig:cluster_throughput_results} shows the throughput results on the sets and get operations.
 
 \begin{figure}[htbp]
   \centering
@@ -140,7 +140,7 @@ Again, as expected, the vulnerable Redis configuration is the fastest since it d
 
 Table \ref{tab:proxy_redis_cluster_latency_results} shows the latency results of the same tests, and it shows a correlation with the tests and the evaluation made above.
 
-By observing both throughputs and latencies of the standalone and the cluster configurations we can compared them and observe similarities. Both tests seem to have a similar result on all system configurations and that might be due to the consistency guarantee of the cluster. Although a Redis cluster does provide replication, automatically split data among multiple nodes and some availability during network partitions, it is not able to guarantee \textbf{strong consistency}. This means that under some specific conditions the Redis cluster can lose writes that were acknowledged to the user by the system. This happens because Redis uses asynchronous replication, where it responds to the client before replicating the results to the replica instances. This configuration explains the similarity in performance since the proxy will only communicate with one instance at a time and that instance will respond before replicate the given command, just like a standalone node.
+By observing both throughputs and latencies of the standalone and the cluster configurations we can compare them and observe similarities. Both tests seem to have a similar result on all system configurations and that might be due to the consistency guarantee of the cluster. Although a Redis cluster does provide replication, automatically split data among multiple nodes and some availability during network partitions, it is not able to guarantee \textbf{strong consistency}. This means that under some specific conditions the Redis cluster can lose writes that were acknowledged to the user by the system. This happens because Redis uses asynchronous replication, where it responds to the client before replicating the results to the replica instances. This configuration explains the similarity in performance since the proxy will only communicate with one instance at a time and that instance will respond before replicating the given command, just like a standalone node.
 
 \section{Performance Evaluation for Homomorphic Operations}
 \label{sec:performance_evaluation_homomorphic_operations}
@@ -178,9 +178,9 @@ The \textit{Sum} tests were run over a dataset of 5000 key-pairs and over 5 minu
 \end{tabular}
 \end{table}
 
-As expected, a non encrypted Redis is the fastest configuration, however, the results on the encrypted configurations of the \textit{Sum} operation were not as anticipated. We were not able to achieve better performance by performing \textit{Sum} operations over encrypted data. This result maybe due to the size of the \textit{Sum} operation values, since we are working within the range of integers, standard \gls{AES} encryption is very fast. As we can see on the \textit{Search} operations, since values are strings, they are much bigger than a single integer and the encryption and decryption cycles are much more costly, making its performance about 35\% worst than the homomorphic encryption \textit{Search} operation.
+As expected, a non-encrypted Redis is the fastest configuration, however, the results on the encrypted configurations of the \textit{Sum} operation were not as anticipated. We were not able to achieve better performance by performing \textit{Sum} operations over encrypted data. This result may be due to the size of the \textit{Sum} operation values, since we are working within the range of integers, standard \gls{AES} encryption is very fast. As we can see on the \textit{Search} operations since values are strings, they are much bigger than a single integer and the encryption and decryption cycles are much more costly, making its performance about 35\% worst than the homomorphic encryption \textit{Search} operation.
 
-On the other hand, homomorphic encryption can enable operations that are not possible with the standard encryption like maintaining encrypted data in order and searching through finding values between certain boundaries. Other very important feature that is enabled by homomorphic encryption is that the plain text value is never present in memory, since the operations do not need to decrypt the value in order to proceeded.
+On the other hand, homomorphic encryption can enable operations that are not possible with the standard encryption like maintaining encrypted data in order and searching through finding values between certain boundaries. Another very important feature that is enabled by homomorphic encryption is that the plain text value is never present in memory, since the operations do not need to decrypt the value in order to proceed.
 
 \section{Evaluation of the Attestation Protocol}
 \label{sec:evaluation_attestation_protocol}
@@ -206,7 +206,7 @@ Table \ref{tab:sgx_attestation_results} shows the comparison between startup tim
 
 The Redis and the Proxy instances have very big startup differences and there is a reason for that. SCONE provides default Heap and Stack limits for each curated images they provide. When running Redis, SCONE provided about 64\gls{MB} to the Redis enclave and to run a java program is requests about 4\gls{GB} or heap memory. Since memory must be allocated at startup, there is a big gap in size between the heap memory that is requested by the different processes and it explains the startup time and attestation time differences.
 
-On the other attestation type, the proxy will contact the Redis instance and get a signed quote of important aspects of the system such as the binary and configuration file, \gls{OS} kernel information and \gls{CPU} core count and processor type. It also attests itself and returns the quotes to the client. This processes was also measured by requesting as much attestation quotes in 10 minutes and collected throughputs and latency values described on table \ref{tab:custom_attestation_results}.
+On the other attestation type, the proxy will contact the Redis instance and get a signed quote of important aspects of the system such as the binary and configuration file, \gls{OS} kernel information and \gls{CPU} core count and processor type. It also attests itself and returns the quotes to the client. This process was also measured by requesting as much attestation quotes in 10 minutes and collected throughputs and latency values described on table \ref{tab:custom_attestation_results}.
 
 \begin{table}[ht]
 	\caption{Custom Attestation Results}
@@ -237,7 +237,7 @@ During the standalone tests, \gls{CPU} and memory values of the containers and p
   \label{fig:average_cpu_load}
 \end{figure}
 
-By cross referencing the tests made directly into Redis with the help of the Redis-Benchmark tool and the ones performed through the proxy that regardless of the configuration, the network and the proxy impose a significant overhead that allows the Redis server to never really reaching a problematic \gls{CPU} load. However, running the proxy inside a secure enclave also incurs an increase of \gls{CPU} load during testing. Also, running alongside the protected redis is a small attestation service that measures at about 2\%-2.5\% of the total 8\% measured. When it comes to the Proxy server, the same conclusions were reached, where a service running protected by a secure enclave seams to run a higher \gls{CPU} load during performance testing.
+By cross-referencing the tests made directly into Redis with the help of the Redis-Benchmark tool and the ones performed through the proxy that regardless of the configuration, the network and the proxy impose a significant overhead that allows the Redis server to never really reaching a problematic \gls{CPU} load. However, running the proxy inside a secure enclave also incurs an increase of \gls{CPU} load during testing. Also, running alongside the protected Redis is a small attestation service that measures at about 2\%-2.5\% of the total 8\% measured. When it comes to the Proxy server, the same conclusions were reached, where a service running protected by a secure enclave seams to run a higher \gls{CPU} load during performance testing.
 
 Higher \gls{CPU} loads can be explained with encryption and decryption of data in order to maintain it secure, as well as stronger access control checks, and protected memory page swapping that requires more encryption, decryption and integrity checks and system calls that slow down the system and required exiting and entering the enclaves.
 
@@ -263,18 +263,18 @@ The graphs show a normal progression, with a clear distinction between the \text
   \label{fig:redis_sgx_memory}
 \end{figure}
 
-Graph \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instance running on an Intel's secure enclave, and although the total Redis memory and dataset size follow the same lines as the previous configurations, the \gls{RSS} memory starts very high, and maintains that value all throughout the test. This can be explain by the lack of ability that an application running inside of Intel's \gls{SGX}v1 secure enclave to dynamically resize allocated memory. Nevertheless, used memory and dataset memory of the Redis seams to be about the same of an unprotected Redis running on standard \gls{RAM}.
+Graph \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instance running on an Intel's secure enclave, and although the total Redis memory and dataset size follow the same lines as the previous configurations, the \gls{RSS} memory starts very high and maintains that value all throughout the test. This can be explained by the lack of ability that an application running inside of Intel's \gls{SGX}v1 secure enclave to dynamically resize allocated memory. Nevertheless, used memory and dataset memory of the Redis seems to be about the same of an unprotected Redis running on standard \gls{RAM}.
 
 \subsection{Exhausting Protected Memory}
 \label{ssec:exhausting_protected_memory}
 
-The performance of a process that runs inside an isolated enclave is directly dependent of the locality of memory access. When the process necessary memory does not fit in the \gls{EPC}, the process will suffer page faults. When a page fault occurs, the \gls{SGX} driver selects a page from the \gls{EPC}, re-encrypts it for freshness and stores it in main unprotected memory. The page swap process takes some time, and the overhead of the application grows with the page fault rate. With the increase size of an application, the page fault rate also increases, and the performance overhead will also increase correspondingly.  
+The performance of a process that runs inside an isolated enclave is directly dependent on the locality of memory access. When the process necessary memory does not fit in the \gls{EPC}, the process will suffer page faults. When a page fault occurs, the \gls{SGX} driver selects a page from the \gls{EPC}, re-encrypts it for freshness and stores it in main unprotected memory. The page swap process takes some time, and the overhead of the application grows with the page fault rate. With the increasing size of an application, the page fault rate also increases, and the performance overhead will also increase correspondingly.  
 
 Also, as previously mentioned on section \ref{ssec:protected_heap_and_stack_memory}, the lack of ability of dynamically resizing and allocating memory when running on a secure enclave is an \gls{SGX}1 problem, but, a second generation of the processor, the \gls{SGX}2, with the objective to overcome this problem, is already a work-in-progress \cite{Xing2016}.
 
-This means that application \textit{heap} and \textit{stack} memory parameters should be tuned at enclave startup and are fixed and not resizable at runtime. When running any datastore application, this parameters are very important because, depending on the use case, the size which the database size will rise are not very predictable and reaching the \textit{heap} or \textit{stack} limits will kill the process with a \gls{OOM} (Out of Memory) error.
+This means that application \textit{heap} and \textit{stack} memory parameters should be tuned at enclave startup and are fixed and not resizable at runtime. When running any datastore application, these parameters are very important because, depending on the use case, the size which the database size will rise is not very predictable and reaching the \textit{heap} or \textit{stack} limits will kill the process with a \gls{OOM} (Out of Memory) error.
 
-Through testing we were able to confirm this limitation, by inserting data continuously until reaching the default \textit{SCONE Heap} limit of 64\gls{MB}, the container where Redis was running gets killed by a \gls{OOM} error. By tuning the \textit{SCONE Heap} parameter through the provided environment variable, Redis was able to surpass the 64\gls{MB} limit and also the 128\gls{MB} physical limit of the \gls{EPC}.
+Through testing, we were able to confirm this limitation, by inserting data continuously until reaching the default \textit{SCONE Heap} limit of 64\gls{MB}, the container where Redis was running gets killed by a \gls{OOM} error. By tuning the \textit{SCONE Heap} parameter through the provided environment variable, Redis was able to surpass the 64\gls{MB} limit and also the 128\gls{MB} physical limit of the \gls{EPC}.
 
 \subsection{Performance and Payload Size}
 \label{ssec:performance_and_payload_size}
@@ -294,7 +294,7 @@ The graph shows the average response times in running the different configuratio
 
 A plain and normal configuration, an \gls{SGX} enabled architecture and an hybrid system are the three most prominent configurations available and all were tested on the same test benches and on the same conditions to provide a clear conclusion of the work performed in order to achieve and reach the expected goals and contributions of this thesis, but also for those who are able to choose a system architecture based on security, can make an informed decision and tailored to their use case.
 
-The test revealed that, as expected, additional security measures incur on a performance overhead to the system but risk managing is an important part of any project planing and the performance drawback can be worth it for some use cases.
+The test revealed that, as expected, additional security measures incur on a performance overhead to the system but risk managing is an important part of any project planning and the performance drawback can be worth it for some use cases.
 
 Referencing the \gls{SGX} secure enclaves, we saw a performance drop of about 18\% to approximately 25\%, because the performance of an application running on an enclave depends on these three main points:
 
@@ -305,4 +305,3 @@ Referencing the \gls{SGX} secure enclaves, we saw a performance drop of about 18
 \textbf{Threading}: SCONE uses asynchronous application threading in order to allow switching to another application thread if another one is waiting for some system event, without exiting the enclave, which can speed up the performance.
 
 We also found out that the bigger the application enclave is, the more page swapping it has to perform and also, with \gls{SGX}1, the lack of dynamically resizing enclaves makes a great case for an hybrid approach, where the storage server lives on unprotected memory but is secured by encryption mechanism enabled by the proxy, which can itself run inside an enclave, making sure that the encryption and decryption cycles are hardware protected.
-
