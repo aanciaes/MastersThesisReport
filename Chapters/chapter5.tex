@@ -38,15 +38,15 @@ The tests measure several different relevant metrics that can be compared with e
 
 The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official redis-benchmark release does not support TLS test. The Redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses it appears to be a final version of the tool. All benchmarks tests used the same version.} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set}, and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
 
-Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3 byte payload when running the benchmark tool on a Macbook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload.
+Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3 byte payload when running the benchmark tool on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload.
 
 \begin{figure}[htbp]
   \centering
   \subcaptionbox{Redis-Benchmark Latency\label{fig:redis_latency_external}}%
     {\includegraphics[width=0.5\linewidth]{redis_latency_external}}%
     %\hspace{1em}
-  \subcaptionbox{Redis-Benchmark Throughput\label{fig:redis_throughput_external_2}}%
-    {\includegraphics[width=0.5\linewidth]{redis_throughput_external_2}}%
+  \subcaptionbox{Redis-Benchmark Throughput\label{fig:redis_throughput_external}}%
+    {\includegraphics[width=0.5\linewidth]{redis_throughput_external}}%
   \caption{Redis Benchmark External Client Metrics}
   \label{fig:redis_benchmark_external_metrics}
 \end{figure}
@@ -246,12 +246,12 @@ Graphs \ref{fig:redis_plain_memory}, \ref{fig:encrypted_redis_memory} and \ref{f
 \begin{figure}[htbp]
 \hspace*{-8mm}
   \centering
-  \subcaptionbox{Redis Plain Memory\label{fig:redis_plain_memory}}%
+  \subcaptionbox{Plain Redis Memory Usage\label{fig:redis_plain_memory}}%
     {\includegraphics[width=0.55\linewidth]{redis_plain_memory}}%
     %\hspace{1em}
-  \subcaptionbox{Encrypted Redis Memory\label{fig:encrypted_redis_memory}}%
+  \subcaptionbox{Encrypted Redis Memory Usage\label{fig:encrypted_redis_memory}}%
     {\includegraphics[width=0.55\linewidth]{redis_enc_memory}}%
-  \caption{Redis Plain Memory Usage}
+  \caption{Plain/Encrypted Redis Memory Usage}
   \label{fig:redis_plain_enc_memory_results}
 \end{figure}
 
@@ -259,7 +259,7 @@ The graphs show a normal progression, with a clear distinction between the \text
 
 \begin{figure}[htbp]
   \centering{\includegraphics[width=0.6\linewidth]{redis_sgx_memory}}%
-  \caption{Redis SGX Memory Usage}
+  \caption{SGX Redis Memory Usage}
   \label{fig:redis_sgx_memory}
 \end{figure}
 

@@ -71,25 +71,26 @@ The system planned has certain assumptions and aspects that are considered to be
 \subsection{Countermeasures for Privacy-Preservation}
 \label{ssec:contermeaseures_for_privacy_preservation}
 
-Under the described threat model and system assumptions, the system has some measures to achieved the desired security and trustability level.
+Under the described threat model and system assumptions, the system has implemented and deployed several measures to achieved the desired security and trustability level.
 
 All instances of the datastore are running in a containerised solution which means that each container is not only isolated from the host but they are also isolated from each other. Data is kept in memory at all times unless persistent disk storage is turned on. Data in main memory is secure when running both in protected and unprotected mode. 
 
-Privacy, integrity and authenticity when running in protected mode are always ensured by the \gls{SGX}'s technology under their threat model and assumptions. But when the system is running in unprotected memory, outside the trusted execution environment, the system will always keep data always encrypted with strong and standard state of the art cryptography algorithms, therefor preserving privacy of data. 
+Privacy, integrity and authenticity when running in protected mode are always ensured by the \gls{SGX}'s technology under their threat model and assumptions, but when the storage server is running in unprotected memory, outside the trusted execution environment, the system will always keep data encrypted with strong and standard state of the art cryptography algorithms, therefore preserving privacy of data. 
 
-For data integrity preservation, all values are appended with standard checksums calculations and integrity check algorithms. Authenticity is preserved by performing strong and standard cryptographic signing algorithms.
+Although data might be private, the preservation of integrity of that data is also very important and to assure data integrity, all values are appended with standard checksums calculations and integrity check algorithms. Authenticity is preserved by performing strong and standard cryptographic digital signature algorithms.
 
-As for the application security, the system provides a secured \gls{API} that only allows authenticated requests and it contains a role based segmentation authorisation with secure and strong passwords and cryptographic keys. This system also applies the principle of least privilege \cite{polp:1} to all actions, where users never have more privileges that they require.
+When it comes to the overall security of the exposed application, the system provides an \gls{API} that only allows authenticated requests and it contains a role based segmentation authorisation with secure and strong passwords and cryptographic keys. This system also applies the principle of least privilege \cite{polp:1} to all actions, where users never have more privileges that they require.
 
-Privacy is also preserved on all communications with the use of the strongest transport layer security algorithms currently available, and established trust between all components with a trusted certificate chain.
+The same security principals must also be guaranteed on an in-transit level and so, all communications are secured with the use of the strongest transport layer security algorithms currently available, and established trust between all components with a trusted certificate chain.
+
+\textbf{Security by Design} means that security is the the foundation of a project, and its tactics and patterns should be used as guideline principles for developers, baked into the project initial state, and enforced by the architecture design.
+
+The measures adopted to achieve data privacy, integrity and authenticity are a standard that the whole project followed since the beginning of the implementation, meaning that the security by design principle was adopted, and the whole architecture was shaped around security in order to achieve the a secure and correct system. 
 
 \section{System Model} % (fold)
 \label{sec:system_model}
 
-The main goal of this project is modelled in figure \ref{fig:system_model_overview}. As shown, the model can be divided in four main components - the \textbf{client}, the \textbf{proxy server}, the \textbf{key-value storage server} and the \textbf{authentication server}.
-
-% \subsection{General Overview}
-% \label{ssec:general_overview}
+The main goal of this project was to implemented the system that follows the model presented in figure\ref{fig:system_model_overview}. As shown, the it can be divided in four main components - the \textbf{client}, the \textbf{proxy server}, the \textbf{key-value storage server} and the \textbf{authentication server}.
 
 \begin{figure}[htbp]
   \centering{\includegraphics[width=1.0\linewidth]{FinalSystemModel}}%
@@ -99,14 +100,20 @@ The main goal of this project is modelled in figure \ref{fig:system_model_overvi
 
 The system complies with the adversary and threat model explained in section \ref{ssec:adversarial_model_definition}. The user is not aware of any implementation details and has seamless interaction with the system despite the architecture and implementation provided by the backend, meaning that all solution expose the same \gls{API} and support an interface as equal as possible to the unprotected version of the key-value store. 
 
-All of the four main components will be explained in the subsections below.
+All of the four main components will be explained in the subsections that follow.
 
 \subsection{Key-Value Storage Server}
 \label{ssec:key-value_storage_server}
 
 The storage server is a key-value store meant to hold data required by the user. This data is kept in memory so it allows fast read, writes, updates and deletes.
 
-To circumvent the \gls{SGX} memory limitation, the dataset will be split into two different configurations. The \textbf{secured} and \textbf{unsecure} storage server. This nomenclature do not reflect the privacy, integrity and authenticity security problems as they are preserved on both components but it reflects the environment which they will run on.
+To circumvent the \gls{SGX} memory limitation, the dataset will be split into two different configurations. The \textbf{secured} and \textbf{unsecure} and the system model of the storage server is shown in figure \ref{fig:storage_server_model}. This nomenclature does not reflect the privacy, integrity and authenticity security properties as they are preserved on both components, but it reflects the environment which they will run on.
+
+\begin{figure}[htbp]
+  \centering{\includegraphics[width=1.0\linewidth]{Storage_Server_Model}}%
+  \caption{Storage Server Model}
+  \label{fig:storage_server_model}
+\end{figure}
 
 The \textbf{secure} storage runs on a trusted execution environment (trusted hardware) protected by a secure physical processor present on the host machine. This processor provides the security features that allow for memory to be operated in plain text without breaking privacy or data security as explained in section \ref{sec:trusted_computing _environments}.
 
