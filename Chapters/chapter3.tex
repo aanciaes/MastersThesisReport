@@ -119,7 +119,7 @@ The \textbf{secure} storage runs on a trusted execution environment (trusted har
 
 As for the \textbf{unsecure} storage, it describes a storage service that runs on unprotected memory regions and untrusted hardware. This means that data must be actively secured by encryption, integrity checks and authentication features in order to provide and preserve privacy.
 
-We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated datacenters) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of the scope of our planned dissertation).
+We must mention that the above system model addresses the replication facilities as leveraged from the Redis solution and tries to offer the same availability conditions as the original Redis service. Both secure and unsecure configurations will provide availability by running replicated Redis instances in a cluster. This availability provided by the replication of Redis instances that can run as cloud service instances (that can be distributed among different cloud providers and geo-replicated data centers) only offers consistency guarantees under a fail-stop model (not extended to byzantine fault tolerance or byzantine intrusion tolerance, that are conditions out of the scope of our planned dissertation).
 
 Every Redis instance running on a secure configuration will also provide an API for remote attestation, going forward known as the attestation service, so their hardware stack and software can be attested by remote parties, to provide trust to the users.
 
@@ -182,7 +182,7 @@ The system by default rejects all unauthenticated requests, which means, users n
 
 As explained before, user management is performed by the external authentication server, and each user has a role assigned. Different roles can do different actions on the system and role-based authorisation can be completely customised.
 
-In this thesis, we operate with the principle of least privileges and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a read-only user) and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role-basedauthorisation that the system performs before accepting a request into the server and can be further configured (or new roles added) for a finer-grained authorisation mechanism.
+In this thesis, we operate with the principle of least privileges and came up with two different roles: a \textbf{BasicUser} which can only perform read operations and cannot alter the system state (basically a read-only user) and an \textbf{Administrator} which can perform all actions on the system. These roles are just a representation of the role-based authorisation that the system performs before accepting a request into the server and can be further configured (or new roles added) for a finer-grained authorisation mechanism.
 
 \subsection{Key-Value Storage Operations}
 \label{ssec:key-value_storage_operations}
