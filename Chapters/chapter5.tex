@@ -18,7 +18,7 @@ The prototype was evaluated in multiple different system configurations to achie
 
 The first test is a representative test of the overhead introduced not only of additional security features like \gls{TLS} and authentication but also the \gls{SGX} hardware isolation. It will run the \textit{redis-benchmark} tool both externally to the server and internally directly against a single standalone Redis instance bypassing the proxy server. Secondly, and more real-life tests, test are run against the proxy exposed \gls{API} and a single standalone Redis instance composes the storage server. Then, the same tests were run in the same environment but with a cluster of Redis instances composing the backend storage. The fourth testbench measures the performance of homomorphic operations on a standalone Redis instance running on unprotected memory, and finally, it is presented the metrics for the two different attestation operations on Redis instances deployed on protected memory and isolated through \gls{SGX}.
 
-All tests performed on the secure prototype are measured several times, averaged and compared with a standard Redis deployment so the overhead of extra security can be evaluated and analysed. 
+All tests performed on the prototype were performed on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload and an effort was made to maintain the same conditions on every tests. Additionally, all tests were measured several times, averaged and compared with a standard Redis deployment so the overhead of extra security can be evaluated and analysed. 
 
 \section{Relevant Evaluation Criteria}
 \label{sec:revelant_evaluation_criteria}
@@ -38,15 +38,15 @@ The tests measure several different relevant metrics that can be compared with e
 
 The first testbench is performed directly against the Redis server bypassing the proxy. This test was performed with the \textbf{redis-benchmark} \footnote{Since Redis TLS is fairly new, the latest official Redis-benchmark release does not support TLS test. The Redis benchmark used comes from the Redis unstable branch (commit a0576bd), but after some analyses, it appears to be a final version of the tool. All benchmarks tests used the same version.} tool and evaluates the latency and throughput of a basic set of operations - \textit{ping}, \textit{set}, and \textit{get}. It compares three different deployed Redis configurations, where the first one is completely default and open, the second one implements the built-in security features of Redis such as \gls{TLS} and authentication and the third one, not only using the built-in features but also running isolated inside an \gls{SGX} enclave.
 
-Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3-byte payload when running the benchmark tool on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload.
+Figure \ref{fig:redis_benchmark_external_metrics} presents the latency and throughput results over one hundred thousand requests with 50 multiple concurrent clients and a 3-byte payload. This test is meant as a first reference test, to understand the sole Redis instance capacity without any gateway or proxy overhead and so, the payload size is not relevant.
 
 \begin{figure}[htbp]
   \centering
   \subcaptionbox{Redis-Benchmark Latency\label{fig:redis_latency_external}}%
-    {\includegraphics[width=0.5\linewidth]{redis_latency_external}}%
+    {\includegraphics[width=0.5\linewidth]{redis_latency_external_bigger}}%
     %\hspace{1em}
   \subcaptionbox{Redis-Benchmark Throughput\label{fig:redis_throughput_external}}%
-    {\includegraphics[width=0.5\linewidth]{redis_throughput_external}}%
+    {\includegraphics[width=0.5\linewidth]{redis_throughput_external_bigger}}%
   \caption{Redis Benchmark External Client Metrics}
   \label{fig:redis_benchmark_external_metrics}
 \end{figure}
@@ -58,10 +58,10 @@ Figure \ref{fig:redis_benchmark_internal_metrics} shows the results of the same 
 \begin{figure}[htbp]
   \centering
   \subcaptionbox{Redis-Benchmark Latency\label{fig:redis_latency_internal}}%
-    {\includegraphics[width=0.5\linewidth]{redis_latency_internal}}%
+    {\includegraphics[width=0.5\linewidth]{redis_latency_internal_bigger}}%
     %\hspace{1em}
   \subcaptionbox{Redis-Benchmark Throughput\label{fig:redis_throughput_internal}}%
-    {\includegraphics[width=0.5\linewidth]{redis_throughput_internal}}%
+    {\includegraphics[width=0.5\linewidth]{redis_throughput_internal_bigger}}%
   \caption{Redis Benchmark Internal Client Metrics}
   \label{fig:redis_benchmark_internal_metrics}
 \end{figure}
@@ -77,11 +77,12 @@ The tests will run one single thread, making as many \textit{gets} and \textit{s
 
 \begin{figure}[htbp]
   \centering
+  \hspace*{-7mm}
   \subcaptionbox{Get throughput\label{fig:standalone_get_throughput}}%
-    {\includegraphics[width=0.5\linewidth]{standalone_get_throughput}}%
+    {\includegraphics[width=0.55\linewidth]{standalone_get_throughput}}%
     %\hspace{1em}
   \subcaptionbox{Set throughput\label{fig:standalone_set_throughput}}%
-    {\includegraphics[width=0.5\linewidth]{standalone_set_throughput}}%
+    {\includegraphics[width=0.55\linewidth]{standalone_set_throughput}}%
   \caption{Standalone Throughput Results}
   \label{fig:standalone_throughput_results}
 \end{figure}
@@ -112,11 +113,12 @@ Clustering on Redis is distributed out of the box on the latest Redis versions. 
 
 \begin{figure}[htbp]
   \centering
+  \hspace*{-7mm}
   \subcaptionbox{Get throughput\label{fig:cluster_get_throughput}}%
-    {\includegraphics[width=0.5\linewidth]{cluster_get_throughput}}%
+    {\includegraphics[width=0.55\linewidth]{cluster_get_throughput}}%
     %\hspace{1em}
   \subcaptionbox{Set throughput\label{fig:cluster_set_throughput}}%
-    {\includegraphics[width=0.5\linewidth]{cluster_set_throughput}}%
+    {\includegraphics[width=0.55\linewidth]{cluster_set_throughput}}%
   \caption{Cluster Throughput Results}
   \label{fig:cluster_throughput_results}
 \end{figure}
@@ -151,11 +153,12 @@ The \textit{Sum} tests were run over a dataset of 5000 key-pairs and over 5 minu
 
 \begin{figure}[htbp]
   \centering
+  \hspace*{-8mm}
   \subcaptionbox{\textit{Sum} Throughput\label{fig:sum_throughput_results}}%
-    {\includegraphics[width=0.5\linewidth]{sum_operation_throughput}}%
+    {\includegraphics[width=0.55\linewidth]{sum_operation_throughput_bigger}}%
     %\hspace{1em}
   \subcaptionbox{\textit{Search} Throughput\label{fig:search_throughput_results}}%
-    {\includegraphics[width=0.5\linewidth]{search_operation_throughput}}%
+    {\includegraphics[width=0.55\linewidth]{search_operation_throughput_bigger}}%
   \caption{Homomorphic Encryption Throughput Results}
   \label{fig:homomorphic_encryption_throughput_results}
 \end{figure}
