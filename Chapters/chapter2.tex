@@ -484,7 +484,13 @@ Since it is a library OS, Graphene takes advantage of its lightweight form facto
 
 The SCONE \cite{scone:1} (Secure CONtainer Environment) platform facilitates always encrypted execution using Intel's \gls{SGX} secure enclaves to run encrypted code not even accessible to system administrators or root users. It supports this kind of execution running inside Docker containers and even managed Kubernetes clusters.
 
-Although containers can have a big \gls{TCB} and weaker isolation, the design of scones leads to a small \gls{TCB} by exposing a small C standard library that allows for system call to execute outside the enclave but maintaining security guarantees by seamlessly and transparently encrypting/decrypting application data. Files stored outside of the enclave are therefore encrypted, and network communication is protected by \gls{TLS}. SCONE also implements a \textit{user-level} threading that maximizes the time that the thread spends inside the enclave. Combined with the asynchronous system where OS threads outside the enclave execute system calls, it minimises a big enclave overhead - \textbf{enclave entry/exit}.
+Although containers can have a big \gls{TCB} and weaker isolation, the design of SCONE leads to a small \gls{TCB} by exposing a small C standard library that allows for system call to execute outside the enclave but maintaining security guarantees by seamlessly and transparently encrypting/decrypting application data. Files stored outside of the enclave are therefore encrypted, and network communication is protected by \gls{TLS}. SCONE also implements a \textit{user-level} threading that maximises the time that the thread spends inside the enclave. Combined with the asynchronous system where OS threads outside the enclave execute system calls, it minimises a big enclave overhead - \textbf{enclave entry/exit}.
+
+It also provides seamless and transparent attestation of enclaves, to make sure applications run inside secure enclaves and also, that the process running is secure and correct. Combined with the attestation feature, it also provides a secret management \gls{API} that can store or even generate secrets (encryption keys, \gls{TLS} certificates, passwords and others) keeping them secure, also stored inside enclaves, and invisible to any human, and guarantees that only the correct enclave can access them.
+
+SCONE also ensures better compatibility with Linux than library \glspl{OS} and is hardware independent meaning that their implementation can easily be portable to another \gls{TEE} without any user application code changes.
+
+SCONE is a tool that helps to run \textbf{unmodified} applications by abstracting the \gls{TEE} technology behind and helps to better integrate a user's custom application to a secure environment without application changes, guaranteeing an extra layer of security with a small performance overhead.
 
 \subsection{Asylo}
 \label{ssec:asylo}

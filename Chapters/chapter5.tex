@@ -66,7 +66,7 @@ Figure \ref{fig:redis_benchmark_internal_metrics} shows the results of the same 
   \label{fig:redis_benchmark_internal_metrics}
 \end{figure}
 
-The results corroborate the initial tests but the differences between security levels are much more visible. The main objective of this comparison is to point out that the network jitter and latency overhead will affect the performance results going forward to the next tests.
+The results corroborate the initial tests but the differences between security levels are much more visible. The main objective of this comparison is to point out that the network jitter and latency overhead will affect the performance of the results. However, since the realistic use case relies with a client running on a different machine than the backend, all the next tests made on the system are performed with an external client to make them more realistic and close to the normal use case meant for the system.
 
 \section{Performance Evaluation for Standalone Redis}
 \label{sec:performance_evaluation_standalone_redis}
@@ -272,7 +272,7 @@ Graph \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instan
 When running Redis instances in a cluster configuration, the total dataset memory usage by each node is somewhat different and the results are presented in table \ref{tab:cluster_instances_dataset_memory_usage}.
 
 \begin{table}[ht]
-	\caption{Cluster Instances Dataset Memory Usage}
+	\caption{Cluster Instances Dataset Memory Usage (MB)}
 	\label{tab:cluster_instances_dataset_memory_usage}
 \centering
 \hspace*{-5mm}
