@@ -1,7 +1,7 @@
 %!TEX root = ../template.tex
 
 \chapter{Prototype Implementation}
-\label{cha:elaboration_plan}
+\label{cha:prototype_implementation}
 
 This chapter presents a detailed explanation of the implementation of the prototype - A Trusted and Privacy-Enhanced In-Memory Data Store, and all the implementation details that helped the system to achieve a secure state according to the adversary model.
 
@@ -101,7 +101,7 @@ To record memory and \gls{CPU} statistics, a script, written in bash, was implem
 \subsection{Authentication Server}
 \label{ssec:implementation_authentication_server}
 
-The external authentication server is Keycloak v10.0.2 \cite{keycloak:1}, open-sourceidentity and access management from Red Hat. This service implements the current standards for single sing-on, authentication and authorisation security.
+The external authentication server is Keycloak v10.0.2 \cite{keycloak:1}, an open-source identity and access management system from Red Hat. This service implements the current standards for single sing-on, authentication and authorisation security.
 
 Communication is performed over encrypted \gls{HTTPS} channels, and the client logins directly against this server to obtain the access token necessary to access the proxy.
 
@@ -177,7 +177,7 @@ The security-performance tradeoff is not a static line, and it moves depending o
 \section{Summary}
 \label{sec:chapter4_summary}
 
-To recap, Redis will server as a storage server and runs on an isolated environment using Intel's \gls{SGX} secure processor and also runs on normal unprotected memory. However, both solutions preserve privacy and integrity, either by \gls{SGX}'s guarantees or by proxy enabled encryption and security properties. The proxy enables some Redis out-of-the-box operations, but also some additional operations. When Redis is running in unprotected mode, the proxy enables the performance of operations over encrypted memory, sparing encryption and decryption cycles.
+To recap, Redis will serve as a storage server and runs on an isolated environment using Intel's \gls{SGX} secure processor and also runs on normal unprotected memory. However, both solutions preserve privacy and integrity, either by \gls{SGX}'s guarantees or by proxy enabled encryption and security properties. The proxy enables some Redis out-of-the-box operations, but also some additional operations. When Redis is running in unprotected mode, the proxy enables the performance of operations over encrypted memory, sparing encryption and decryption cycles.
 
 Both Redis and the Proxy Server are attested at start-up, by requesting application secrets held by a third party server that implements strong access policies to make sure each secret is injected to the correct enclave. 
 
