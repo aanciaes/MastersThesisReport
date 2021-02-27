@@ -9,10 +9,10 @@ It is also explained how the different security features are implemented into th
 
 Section \ref{sec:refinement_of_objectives_and_contributions} provides a small recap and refinement of the objectives and contributions of this thesis and the used \gls{TEE} technology.
 
-In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions need for our system to work securely. The threat model is a very important part of any security-related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and security properties are out of scoped and not addressed in the project.
+In section \ref{sec:threat_model_and_security_properties} we describe the basic security assumptions and the needs for our system to work securely. The threat model is a very important part of any security-related project as it provides a clear overview of what attacks the system is able to protect against, presents the trustability chain and \gls{TCB} as well as what components and security properties are out of scoped and not addressed in the project.
 Sections \ref{sec:system_model} and \ref{sec:system_architecture} presents an high level view of the system model and implemented architecture of the system. Then, in section \ref{sec:supported_operations} and \ref{sec:operation_flow} we expose the application-specific operations supported both key-value store specific operations and custom operations implemented by the proxy and also an interaction flow that represents a user interaction with the system.
 
-Finally, as always, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:prototype_implementation}, which will present all implementation-specific details performed to achieve the described system.
+Finally, section \ref{sec:chapter3_summary} we summarise all the findings and provide a clear transition into chapter \ref{cha:prototype_implementation}, which will present all implementation-specific details performed to achieve the described system.
 
 \section{Refinement of Objectives and Contributions} % (fold)
 \label{sec:refinement_of_objectives_and_contributions}
@@ -26,16 +26,16 @@ In the next subsections, we will align the implementation ideas starting by refi
 \subsection{\gls{SGX} Limitations Refinement}
 \label{ssec:sgx_limitations_refinement}
 
-Section \ref{ssec:circumvention_of_sgx_limitations} describes in detail the limitations of \gls{SGX}. In our approach we will intend to design a solution that can be leveraged from conventional reference KVS technology, giving the possibility to manage small datasets but also larger datasets (directly mapped in non-protected memory). To circumvent the problem our solution must combine the possibility to use the internal capabilities native to SGX with the possibility of supporting operations managing datasets encrypted in memory, with such operations executed directly over encrypted data. This facility will be provided by the use of partial homomorphic encryption constructions, with data initially encrypted and submitted to the key-value-store solution with cryptographic keys only managed in the client-side. Our solution will be designed in order to be possible the support for fine-grained key-value encryption, driven form the application requirements. Our target is the support of a variety of operations provided in a typical KVS API, taking REDIS as the reference solution and to support a considerable number of queries currently used by many REDIS-supported applications.
+Section \ref{ssec:circumvention_of_sgx_limitations} describes in detail the limitations of \gls{SGX}. In our approach we will intend to design a solution that can be leveraged from conventional reference KVS technology, giving the possibility to manage small datasets but also larger datasets (directly mapped in non-protected memory). To circumvent the problem our solution must combine the possibility to use the internal capabilities native to SGX with the possibility of supporting operations managing datasets encrypted in memory, with such operations executed directly over encrypted data. This facility will be provided by the use of partial homomorphic encryption constructions, with data initially encrypted and submitted to the key-value-store solution with cryptographic keys only managed in the client-side. Our solution will be designed in order to be possible the support for fine-grained key-value encryption, driven from the application requirements. Our target is the support of a variety of operations provided in a typical KVS API, taking REDIS as the reference solution and to support a considerable number of queries currently used by many REDIS-supported applications.
 
 \section{Threat Model and Security Properties}
 \label{sec:threat_model_and_security_properties}
 
 The threat model and security properties definition describe the conditions of how we define a secure system. However, to ensure a basic secure system, we must achieve a few key goals and objectives:
  
-\textbf{Data Privacy} - Data must remain private to its owner.
+\textbf{Data Privacy} - Data must remain private to its owner;
 
-\textbf{Data Integrity} - Data must not be compromised, modified or corrupted.
+\textbf{Data Integrity} - Data must not be compromised, modified or corrupted;
 
 \textbf{Authenticity} - Data and system interactions should be authentic and not spoofed by unauthorised users.
 
@@ -48,9 +48,9 @@ As the baseline, our threat model will lie on the protection overview stated in 
 
 \textbf{Isolation by trusted containerisation from malicious code}: The system performs and protects its data from an attacker capable of compromising the system through another application installed on the same system or malicious code existent or injected in the OS or OS hypervisor layers;
 
-\textbf{Privacy protection against insider "Honest but Curious" System Administrators}: The system must be able to protect from an attacker with root access to the machine, with permissions to access and monitor memory-mapped data. This is relevant because we will target our solution as a candidate solution to protect data privacy in a cloud-based key-value store solution as a service, preventing data-leakage vulnerabilities exploitable by insider incorrect users or system-administrators.
+\textbf{Privacy protection against insider "Honest but Curious" System Administrators}: The system must be able to protect from an attacker with root access to the machine, with permissions to access and monitor memory-mapped data. This is relevant because we will target our solution as a candidate solution to protect data privacy in a cloud-based key-value store solution as a service, preventing data-leakage vulnerabilities exploitable by insider incorrect users or system-administrators;
 
-\textbf{Network Attacks:} All communication to and from the system (supporting client-service operations) should be secure, using proper strong cryptographic parameterisations for \gls{TLS} 1.3, mutually authenticated handshakes and TLS endpoint executions isolated in SGX-enabled \gls{TLS} tunnels in communication containers, avoiding attacks against the authentication of the service endpoints, as well as, attacks against the integrity and confidentiality of data flows supporting \gls{REST}/\gls{HTTPS} operations.
+\textbf{Network Attacks:} All communication to and from the system (supporting client-service operations) should be secure, using proper strong cryptographic parameterisations for \gls{TLS} 1.3, mutually authenticated handshakes and TLS endpoint executions isolated in SGX-enabled \gls{TLS} tunnels in communication containers, avoiding attacks against the authentication of the service endpoints, as well as, attacks against the integrity and confidentiality of data flows supporting \gls{REST}/\gls{HTTPS} operations;
 
 \textbf{File system and memory access attacks:} All sensitive data residing outside protected memory should be encrypted and operated in the encrypted form. An attacker can access the physical disks and hardware without the sensitive data being exposed.
 	
@@ -62,10 +62,10 @@ With the above security baseline considered for the threat model assumptions, th
 The system planned has certain assumptions and aspects that are considered to be out of scope for this dissertation:
 
 \begin{itemize}
-	\item \textbf{Trusted Client} - The client side is assumed to be completely trusted and correct.
-	\item \textbf{\gls{DoS} and \gls{DDoS}} attacks are out of scope.
-	\item \textbf{Side Channel Attacks} - It is out of scope any side channel attacks or any related attack not present in \gls{SGX}'s threat model.
-	\item \textbf{Physical and Hardware attacks} exploring the \gls{SGX} processing model and its isolation guarantees are out of scope, namely those presented above initially addressed in chapter \ref{cha:related_work}, section \ref{sec:trusted_computing _environments}.
+	\item \textbf{Trusted Client} - The client side is assumed to be completely trusted and correct;
+	\item \textbf{\gls{DoS} and \gls{DDoS}} attacks are out of scope;
+	\item \textbf{Side Channel Attacks} - It is out of scope any side channel attacks or any related attack not present in \gls{SGX}'s threat model;
+	\item \textbf{Physical and Hardware attacks} exploring the \gls{SGX} processing model and its isolation guarantees are out of scope, namely those presented above initially addressed in chapter; \ref{cha:related_work}, section \ref{sec:trusted_computing _environments}.
 \end{itemize}
 
 \subsection{Countermeasures for Privacy-Preservation}
@@ -126,7 +126,7 @@ Every Redis instance running on a secure configuration will also provide an API 
 \subsection{Proxy Server}
 \label{ssec:system_model_proxy_server}
 
-The proxy server serves as a gateway to the storage instances. It is a single point of entry to the system which as some advantages. Not only it provides an abstraction to a backend which can be replicated across multiple instances across multiple geo-locations, but it also can add additional features to the system. 
+The proxy server serves as a gateway to the storage instances. It is a single point of entry to the system which has some advantages. Not only it provides an abstraction to a backend which can be replicated across multiple instances across multiple geo-locations, but it also can add additional features to the system. 
 
 With a centralised gateway, we have centralised access management with authentication and authorisation features. Not only that, but the connection to multiple instances of secure data storages with different authentication mechanisms and secrets can also be centralised in one place, which allows the user to have just a single username/password pair to connect to all the storage instances.
 
@@ -192,12 +192,12 @@ The system is ready to perform a set of operations from the key-value storage of
 The supported operations are as follow:
 
 \begin{itemize}
-  \item \textbf{Set} - Stores a value into the database associated with a key.
-  \item \textbf{Get} - Retrieves a value associated with the provided key.
-  \item \textbf{Set on List} - Creates a list of values associated with a key.
-  \item \textbf{Get List} - Retrieves all values associated with the given key.
-  \item \textbf{Set on List with Score} - Creates a list of values associated with a key. Each value has associated a score (integer)
-  \item \textbf{Get on List between Score} - Retrieves all values associated with the given key with scores between provided scores. 
+  \item \textbf{Set} - Stores a value into the database associated with a key;
+  \item \textbf{Get} - Retrieves a value associated with the provided key;
+  \item \textbf{Set on List} - Creates a list of values associated with a key;
+  \item \textbf{Get List} - Retrieves all values associated with the given key;
+  \item \textbf{Set on List with Score} - Creates a list of values associated with a key. Each value has associated a score (integer);
+  \item \textbf{Get on List between Score} - Retrieves all values associated with the given key with scores between provided scores.
 \end{itemize}
 
 \subsection{Proxy Enabled Operations}

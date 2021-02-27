@@ -15,18 +15,18 @@ Cloud computing adoptions keeps growing with every year that passes and companie
 The implementation of this dissertation had multiple objectives and contributions that were explained in chapter \ref{cha:introduction} and the main solution proposed was the \textbf{design and implementation of a cloud-enabled privacy-enhanced solution}, with all-in-the-box planned features, and able to be used as a “cloud-platform as a service” solution, providing:
 
 \begin{itemize}
-	\item \textbf{Trust-ability, security and privacy}.
-	\item \textbf{Software attestation}.
- 	\item \textbf{Replication Mechanism}.
-  	\item \textbf{Drastically reduced TCB}.
-  	\item \textbf{Complete analysis report}. 
+	\item \textbf{Trust-ability, security and privacy};
+	\item \textbf{Software attestation};
+ 	\item \textbf{Replication Mechanism};
+  	\item \textbf{Drastically reduced TCB};
+  	\item \textbf{Complete analysis report}.
 \end{itemize}
 
 Given the objectives and contributions proposed, we were able to successfully design and implement a system, leveraging Intel's \gls{SGX} trusted environment execution processor, and provide a trusted and privacy-enhanced in-memory data store, using container technology for the deployment and easy portability, providing remote attestation in order to guarantee software and hardware correctness, drastically reducing the \gls{TCB}, maintaining data secure and private while operating on a remote machine.
 
 Limitations of the secure enclave technology were considered, and the use of a dataset operating in unprotected memory but maintaining data private with the help of partial homomorphic encryption with operations performed over encrypted data, can be used to overcome some of those limitations. Also, the implemented secure system can be replicated over multiple instances and the data sharding and splitting can remove stress from each node of the replicated cluster, improving availability, reliability and also performance.
 
-The SCONE framework helped to run an unmodified version of Redis and with combination of a trusted execution environment for code and data security and isolation, the implemented system seams viable and offers a balanced and moderate trade-off between security and performance.
+The SCONE framework helped to run an unmodified version of Redis and with combination of a trusted execution environment for code and data security and isolation, the implemented system is viable and offers a balanced and moderate trade-off between security and performance.
 
 \section{Open Issues and Limitations}
 \label{sec:open_issues_and_limitations}
@@ -40,15 +40,15 @@ One important issue that was found in the implementation of the system is that R
 \section{Future Work Directions}
 \label{sec:future_work_directions}
 
-After all the work performed and all some limitations and issues catalogued the following are future work that can be performed to improve a trusted and privacy-enhanced in-memory datastore:
+After all the work performed and some limitations and issues catalogued the following is future work that can be performed to improve a trusted and privacy-enhanced in-memory datastore:
 
 The use of the still in progress but already available second version of the secure processor, the \textbf{\gls{SGX}2} will help to overcome some memory limitations and problems by providing dynamic memory swapping and allocation and dynamic enclave resizing at runtime, something that was not possible to test in this dissertation, but will improve not only in enclave memory but also startup times and the whole system resources consumptions.
 
-The \textbf{proxy server} is identified as a single point of failure, and although no tested in the current project, the replication of the proxy server can help not only with performance but also with system availability.
+The \textbf{proxy server} is identified as a single point of failure, and although it was not tested in the current project, the replication of the proxy server can help not only with performance but also with system availability.
 
 Also, although the proxy and the system can support multiple users with multiple roles, it does not offer \textbf{multi-tenant support}, meaning that all data is secured with the same encryption and decryption keys. The usage of different keys per user/tenant, proxy generated or user-supplied keys and also a key rotation system can help privacy and improve the overall security of the system.
 
-The implemented system allows for the user to request software and hardware stack information on demand, but the trusted \gls{SGX} attestation procedure, only happens at enclave startup. Some investigation is necessary but, the implementation of an \textbf{on-demand \gls{SGX} enabled attestation} mechanism is very interesting and an important asset to the system.
+The implemented system allows for the user to request software and hardware stack information on demand, but the trusted \gls{SGX} attestation procedure only happens at enclave startup. Some investigation is necessary but, the implementation of an \textbf{on-demand \gls{SGX} enabled attestation} mechanism is very interesting and an important asset to the system.
 
 Mentioning the limitations described in section \ref{sec:open_issues_and_limitations}, fixing the \textbf{backup issue} would be a really important improvement for the system, to allow for data backup and system recovery in the event of a crash of terminal failure.
 

@@ -49,7 +49,7 @@
   secondcover=false,     % false=don't true=include the aftercover file (even if exists)
   aftercover=false,     % false=don't true=include the aftercover file (even if exists)
   linkscolor=darkblue,  % darkblue, black (Set to 'black' for PRINTING)
-  printcommittee=false,  % set to 'false' from submitted versins who should not have 
+  printcommittee=true,  % set to 'false' from submitted versins who should not have 
                         % the list of committee memebers
   spine=false,          % (Set to 'true' for PRINTING the book spine)
   cdcover=false,         % (Set to 'true' for PRINTING the CD cover)
@@ -193,7 +193,7 @@
 % Advisers
 % use "\\&" if necessary to break the lines in the apprpriate place
 % use [f] for female and [m] for male
-\adviser[m]{Henrique João Lopes Domingos}{\\&DI-FCT-UNL}{NOVA LINCS}
+\adviser[m]{Dr. Henrique João Lopes Domingos}{\\&DI-FCT-UNL}{NOVA LINCS}
 % you may use "\newline" to force a new line
 % \adviser[m]{John Doe Male Adviser Name}{Associate\\& Professor}{Some University Somewhere}
 % \adviser[m]{John Doe Third Adviser Name}{Associate\\& Professor}{Some University Somewhere}
@@ -208,16 +208,13 @@
 % committee (maximum of 9 elements)
 % Use [c] for chair, [r] for raporteurs, [a] for advisers, [m] or nothing for remaining members
 % Chair of the committee
-\committee[c,m]{Name of the committee chairperson}
+\committee[c,m]{Dr. João Carlos Gomes Moura Pires}
 % Main raporteurs
-\committee[r,f]{Name of a raporteur}
-\committee[r,f]{Name of another raporteur}
+\committee[r,m]{Dr. Pedro Morais Ricardo Inácio}
 % Advisers
-\committee[a,f]{Name of an adviser}
-\committee[a,f]{Name of another adviser}
+\committee[a,m]{Dr. Henrique João Lopes Domingos}
 % Other members of the committee - include the Adviser in this list
-\committee[m,m]{Another member of the committee}
-\committee[m,f]{Yet another member of the committee}
+\committee[m,m]{Dr. Henrique João Lopes Domingos}
 
 %%------------------------------------------------------------
 %% All the names inside braces below sould correspond to a file

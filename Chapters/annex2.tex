@@ -25,7 +25,6 @@ There are two enclaves on the same platform, referred to as Enclave A and Enclav
 	\item A uses EREPORT instruction to produce a report for B using B’s MRENCLAVE. Then A sends this report back to B. A can also include Diffie-Hellman Key Exchange data in the REPORT as user data for trusted channel creation in the future.
 	\item After B receives the REPORT from A, B calls EGETKEY instruction to get REPORT KEY to verify the REPORT. If the REPORT can be verified with the REPORT KEY, then B assures that A is on the same platform as B because the REPORT KEY is specific to the platform.
 	\item Then B use the MRENCLAVE received from A’s REPORT to create another REPORT for A and sends the REPORT to A.
-A then also can do the same as step 4 to verity B is on the same platform as A.
 	\item A then also can do the same as step 4 to verity B is on the same platform as A.
 	\item By utilising the user data field of the REPORT, A and B can create a secure channel using Diffie-Hellman Key Exchange. Information exchange can be encrypted by the shared symmetric key.
 \end{enumerate}

@@ -16,9 +16,9 @@ The last section, section \ref{sec:summary_and_findings} contains a summary of a
 
 The prototype was evaluated in multiple different system configurations to achieve complete coverage of all the proposed solutions and all the relevant metrics. 
 
-The first test is a representative test of the overhead introduced not only of additional security features like \gls{TLS} and authentication but also the \gls{SGX} hardware isolation. It will run the \textit{redis-benchmark} tool both externally to the server and internally directly against a single standalone Redis instance bypassing the proxy server. Secondly, and more real-life tests, test are run against the proxy exposed \gls{API} and a single standalone Redis instance composes the storage server. Then, the same tests were run in the same environment but with a cluster of Redis instances composing the backend storage. The fourth testbench measures the performance of homomorphic operations on a standalone Redis instance running on unprotected memory, and finally, it is presented the metrics for the two different attestation operations on Redis instances deployed on protected memory and isolated through \gls{SGX}.
+The first test is a representative test of the overhead introduced not only of additional security features like \gls{TLS} and authentication but also the \gls{SGX} hardware isolation. It will run the \textit{redis-benchmark} tool both externally to the server and internally directly against a single standalone Redis instance bypassing the proxy server. Secondly, and closer to real-life, tests are run against the proxy exposed \gls{API} and a single standalone Redis instance composes the storage server. Then, the same tests were run in the same environment but with a cluster of Redis instances composing the backend storage. The fourth testbench measures the performance of homomorphic operations on a standalone Redis instance running on unprotected memory, and finally, it is presented some metrics for the two different attestation operations on Redis instances deployed on protected memory and isolated through \gls{SGX}.
 
-All tests performed on the prototype were performed on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and internet connection averaging the 500Mb/s download and 100Mb/s upload and an effort was made to maintain the same conditions on every tests. Additionally, all tests were measured several times, averaged and compared with a standard Redis deployment so the overhead of extra security can be evaluated and analysed. 
+All tests performed on the prototype were performed on a MacBook Pro 2018 2,3 GHz Quad-Core Intel Core i5 and an Internet connection averaging the 500Mb/s download and 100Mb/s upload and an effort was made to maintain the same conditions on every tests. Additionally, all tests were measured several times, averaged and compared with a standard Redis deployment so the overhead of extra security can be evaluated and analysed. 
 
 \section{Relevant Evaluation Criteria}
 \label{sec:revelant_evaluation_criteria}
@@ -26,10 +26,10 @@ All tests performed on the prototype were performed on a MacBook Pro 2018 2,3 GH
 The tests measure several different relevant metrics that can be compared with each other: 
 
 \begin{itemize}
-  \item \textbf{Latency} - Measured in milliseconds (ms) and evaluate the round trip response times between the client and the server.
-  \item \textbf{Throughput} - Measured in operations per seconds (ops/s) indicates the number of operations the client performed in one second.
-  \item \textbf{Startup Times} - Measured in seconds (s) is particularly important to analyse the \gls{SGX} attestation that happens at startup
-  \item \textbf{Memory Consumption} - Extracted in megabytes (MB) or a percentage, and measured alongside the tests.
+  \item \textbf{Latency} - Measured in milliseconds (ms) and evaluate the round trip response times between the client and the server;
+  \item \textbf{Throughput} - Measured in operations per seconds (ops/s) indicates the number of operations the client performed in one second;
+  \item \textbf{Startup Times} - Measured in seconds (s) is particularly important to analyse the \gls{SGX} attestation that happens at startup;
+  \item \textbf{Memory Consumption} - Extracted in megabytes (MB) or a percentage, and measured alongside the tests;
   \item \textbf{\gls{CPU} Consumption} - Extracted in megabytes in a percentage, and also measured alongside the tests.
 \end{itemize}
 
@@ -147,7 +147,7 @@ By observing both throughputs and latencies of the standalone and the cluster co
 \section{Performance Evaluation for Homomorphic Operations}
 \label{sec:performance_evaluation_homomorphic_operations}
 
-The implementation of homomorphic encryption is a way to speed up performance by performing arithmetic operations over encrypted data. This test runs a proxy server inside an \gls{SGX} enclave and a single Redis instance running on unprotected memory. To maintain data privacy and integrity on an unprotected Redis instance, the proxy enables encryption and only stores encrypted data on Redis. This test compares latency and throughputs of the \textit{Sum} and \textit{Search} operations of the system. There are three configurations to test, one where the proxy does not encrypted data (the plain Redis), a second where the proxy enables encryption with homomorphic ciphers, and the last one, where proxy encrypts data with standard \textit{AES} encryption. With homomorphic encryption, the operations are performed over the encrypted value, meaning that, unlike standard encryption, it does not need to decrypt the current value for the \textit{SUM} operation to succeed.
+The implementation of homomorphic encryption is a way to speed up performance by performing arithmetic operations over encrypted data. This test runs a proxy server inside an \gls{SGX} enclave and a single Redis instance running on unprotected memory. To maintain data privacy and integrity on an unprotected Redis instance, the proxy enables encryption and only stores encrypted data on Redis. This test compares latency and throughputs of the \textit{Sum} and \textit{Search} operations of the system. There are three configurations to test, one where the proxy does not encrypted data (the plain Redis), a second where the proxy enables encryption with homomorphic ciphers, and the last one, where proxy encrypts data with standard \textit{AES} encryption. With homomorphic encryption, the operations are performed over the encrypted value, meaning that, unlike standard encryption, it does not need to decrypt the current value for the \textit{Sum} operation to succeed.
 
 The \textit{Sum} tests were run over a dataset of 5000 key-pairs and over 5 minutes making as many requests as possible and the \textit{Search} test run over a dataset with 1 list with 1000 values with about 140 bytes per line. The tests were run multiple times with multiple payload sizes and the average throughputs and latencies are presented in figure \ref{fig:homomorphic_encryption_throughput_results} and table \ref{tab:sum_latency_results}.
 
@@ -189,7 +189,7 @@ On the other hand, homomorphic encryption can enable operations that are not pos
 \section{Evaluation of the Attestation Protocol}
 \label{sec:evaluation_attestation_protocol}
 
-The two different attestation types are evaluated in two different ways. Since \gls{SGX} hardware attestation is a SCONE feature and it happens automatically on startup, there is not an accurate way to measure the attestation time, so it is extrapolated from the startup times of different components configurations.
+The two different attestation types are evaluated in two different ways. Since \gls{SGX} hardware attestation is a SCONE feature and it happens automatically on startup, there is no accurate way to measure the attestation time, so it is extrapolated from the startup times of different components configurations.
 
 Table \ref{tab:sgx_attestation_results} shows the comparison between startup times of the Redis instance and Proxy instance, using a component that does not run on an enclave, the component running on enclave but not performing attestation, and one running within enclaves with startup \gls{SGX} hardware attestation.
 
@@ -208,7 +208,7 @@ Table \ref{tab:sgx_attestation_results} shows the comparison between startup tim
 \end{tabular}
 \end{table}
 
-The Redis and the Proxy instances have very big startup differences and there is a reason for that. SCONE provides default Heap and Stack limits for each curated images they provide. When running Redis, SCONE provided about 64\gls{MB} to the Redis enclave and to run a java program is requests about 4\gls{GB} or heap memory. Since memory must be allocated at startup, there is a big gap in size between the heap memory that is requested by the different processes and it explains the startup time and attestation time differences.
+The Redis and the Proxy instances have very big startup differences and there is a reason for that. SCONE provides default Heap and Stack limits for each curated images they provide. When running Redis, SCONE provided about 64\gls{MB} to the Redis enclave and to run a java program it requests about 4\gls{GB} or heap memory. Since memory must be allocated at startup, there is a big gap in size between the heap memory that is requested by the different processes and it explains the startup time and attestation time differences.
 
 On the other attestation type, the proxy will contact the Redis instance and get a signed quote of important aspects of the system such as the binary and configuration file, \gls{OS} kernel information and \gls{CPU} core count and processor type. It also attests itself and returns the quotes to the client. This process was also measured by requesting as much attestation quotes in 10 minutes and collected throughputs and latency values described on table \ref{tab:custom_attestation_results}.
 
@@ -259,7 +259,7 @@ Graphs \ref{fig:redis_plain_memory}, \ref{fig:encrypted_redis_memory} and \ref{f
   \label{fig:redis_plain_enc_memory_results}
 \end{figure}
 
-The graphs show a normal progression, with a clear distinction between the \textit{sets} and \textit{gets} operations on the test. All metrics climb steadily while data is being inserted into Redis, and maintain their value when the test changes to the \textit{get} operation portion of the test. With the additional information that is stored with the value on an encrypted configuration, such as digital signatures and integrity check hashes, the memory used was expected to be higher, and the tests confirmed that expectation with a 35\% to 40\% memory usage increase.
+The charts show a normal progression, with a clear distinction between the \textit{sets} and \textit{gets} operations on the test. All metrics climb steadily while data is being inserted into Redis, and maintain their value when the test changes to the \textit{get} operation portion of the test. With the additional information that is stored with the value on an encrypted configuration, such as digital signatures and integrity check hashes, the memory used was expected to be higher, and the tests confirmed that expectation with a 35\% to 40\% memory usage increase.
 
 \begin{figure}[htbp]
   \centering{\includegraphics[width=0.6\linewidth]{redis_sgx_memory}}%
@@ -267,7 +267,7 @@ The graphs show a normal progression, with a clear distinction between the \text
   \label{fig:redis_sgx_memory}
 \end{figure}
 
-Graph \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instance running on an Intel's secure enclave, and although the total Redis memory and dataset size follow the same lines as the previous configurations, the \gls{RSS} memory starts very high and maintains that value all throughout the test. This can be explained by the lack of ability that an application running inside of Intel's \gls{SGX}v1 secure enclave to dynamically resize allocated memory. Nevertheless, used memory and dataset memory of the Redis seems to be about the same of an unprotected Redis running on standard \gls{RAM}.
+Chart \ref{fig:redis_sgx_memory} shows the memory evaluation of the Redis instance running on an Intel's secure enclave, and although the total Redis memory and dataset size follow the same lines as the previous configurations, the \gls{RSS} memory starts very high and maintains that value all throughout the test. This can be explained by the lack of ability that an application running inside of Intel's \gls{SGX}v1 secure enclave to dynamically resize allocated memory. Nevertheless, used memory and dataset memory of the Redis seems to be about the same of an unprotected Redis running on standard \gls{RAM}.
 
 When running Redis instances in a cluster configuration, the total dataset memory usage by each node is somewhat different and the results are presented in table \ref{tab:cluster_instances_dataset_memory_usage}.
 
@@ -293,7 +293,7 @@ When running Redis instances in a cluster configuration, the total dataset memor
 \end{tabular}
 \end{table}
 
-The hash of the inserted key is the metric that determines the node where the key-pair is stored, and with randomly generated keys used by the tests, we can see a very equal distribution of key-pairs among the available masters. When a key-pair is written on a mater, the operation is forwarded to the corresponding slave, and, by analysing the table, we can even determine which slave replicates each master since slaves are a complete replica of the master node, they hold the same data.
+The hash of the inserted key is the metric that determines the node where the key-pair is stored, and with randomly generated keys used by the tests, we can see a very equal distribution of key-pairs among the available masters. When a key-pair is written on a master, the operation is forwarded to the corresponding slave, and, by analysing the table, we can even determine which slave replicates each master since slaves are a complete replica of the master node, they hold the same data.
 
 It was also determined that, although each node contains a portion of the data of the complete dataset, the sum of all the dataset memory of each node adds up to bigger in size than the same dataset \footnote{Datasets might not be exactly the same, because keys are generated randomly through the tests, but the key-pair size is maintained} on a standalone configuration. This can be traced to the default metadata that each Redis node contains at startup so it can function correctly but also metadata about each node currently on the cluster, synchronisation properties and key mapping data structure. Each Redis cluster instance holds an internal data structure that maps each key in the cluster to its designated slot. This carries a memory penalty for each node and the more keys the cluster holds, the bigger the overhead.
 
